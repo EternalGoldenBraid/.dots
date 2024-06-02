@@ -15,11 +15,7 @@ swap_uuid=$(blkid -s UUID -o value /dev/nvme0n1p3)
 efibootmgr --create --disk ${efi_disk} --part ${efi_part} \
             --label "EFISTUB Arch" \
             --loader /vmlinuz-linux \
-            --unicode "root=${root_uuid} \
-                resume=${swap_uuid} \
-                resume_offset=${resume_offset} \
-                rw initrd=\\${cpu}-ucode.img \
-                initrd=\initramfs-linux.img"
+            --unicode "root=${root_uuid} resume=${swap_uuid} resume_offset=${resume_offset} rw initrd=\\${cpu}-ucode.img initrd=\initramfs-linux.img"
 
 # Create fallback entry
 # efibootmgr --create --disk $efi_disk --part $efi_part \
