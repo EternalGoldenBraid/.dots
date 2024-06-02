@@ -90,6 +90,7 @@ echo "Creating Pacman hook to automatically copy kernel and initramfs to EFI dir
 mkdir -p /mnt/etc/pacman.d/hooks
 
 # Create the hook file
+mkdir -p /mnt/boot/efi/EFI
 cat <<EOF > /mnt/etc/pacman.d/hooks/copy-kernel-to-efi.hook
 [Trigger]
 Operation = Install
@@ -101,7 +102,7 @@ Target = linux
 Description = Copying kernel and initramfs to EFI directory
 When = PostTransaction
 Exec = /usr/bin/cp /boot/vmlinuz-linux /mnt/boot/efi/EFI/
-Exec = /usr/bin/cp /boot/initramfs-linux.img /mnt/boot/efi/EFI/
+Exec = /usr/bin/cp /boot/initramfs-linux.img /boot/efi/EFI/
 EOF
 echo "Pacman hook created successfully."
  

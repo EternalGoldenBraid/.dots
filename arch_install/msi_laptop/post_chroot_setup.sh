@@ -47,10 +47,11 @@ echo "Generating locales..."
 echo "fi_FI.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 
+# Set hostname
+echo "Setting hostname..."
+echo $hostname > /etc/hostname
+
 # Set root password
 echo "Set root password..."
 passwd
 
-# Set hostname
-echo "Setting hostname..."
-echo $hostname > /etc/hostname
