@@ -26,9 +26,9 @@ echo "Cloning dotfiles for $USER_NAME..."
 sudo -u $USER_NAME git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${dot_dir}
 
 # Symbolic link the dotfiles
-ln -s $dot_dir/.bashrc /home/$USER_NAME/.bashrc
-ln -s $dot_dir/.bash_profile /home/$USER_NAME/.bash_profile
-ln -s $dot_dir/.bash_aliases /home/$USER_NAME/.bash_aliases
+ln -sf $dot_dir/.bashrc /home/$USER_NAME/.bashrc
+ln -sf $dot_dir/.bash_profile /home/$USER_NAME/.bash_profile
+ln -sf $dot_dir/.bash_aliases /home/$USER_NAME/.bash_aliases
 
-ln -s $dot_dir/.config/nvim /home/$USER_NAME/.config/nvim
-ln -s $dot_dir/.config/i3 /home/$USER_NAME/.config/
+ln -sf $dot_dir/.config/nvim /home/$USER_NAME/.config/nvim
+ln -sf $dot_dir/.config/i3 /home/$USER_NAME/.config/i3
