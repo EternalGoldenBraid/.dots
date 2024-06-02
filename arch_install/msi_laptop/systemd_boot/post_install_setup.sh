@@ -14,14 +14,14 @@ passwd $USER_NAME
 
 # Create ssh keys for the new user
 echo "Creating ssh keys for $USER_NAME..."
-sudo -u $USER_NAME ssh-keygen -t rsa -b 4096 -f /home/$USER_NAME/.ssh/id_rsa -C "$USER_NAME@$(hostname)"
+sudo -u $USER_NAME ssh-keygen -t rsa -b 4096 -f /home/$USER_NAME/.ssh/id_rsa -C "$USER_NAME@$(HOSTNAME)"
 
 # Optional: Clone dotfiles from GitHub
+dot_dir="/home/$USER_NAME/.dots"
 echo "Cloning dotfiles for $USER_NAME..."
-sudo -u $USER_NAME git clone https://github.com/$GITHUB_USERNAME/.dots.git /home/$USER_NAME/.
+sudo -u $USER_NAME git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${dot_dir}
 
 # Symbolic link the dotfiles
-dot_dir="/home/$USER_NAME/.dots"
 ln -s $dot_dir/.bashrc /home/$USER_NAME/.bashrc
 ln -s $dot_dir/.bash_profile /home/$USER_NAME/.bash_profile
 ln -s $dot_dir/.bash_aliases /home/$USER_NAME/.bash_aliases

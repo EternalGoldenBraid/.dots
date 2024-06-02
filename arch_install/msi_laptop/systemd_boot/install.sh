@@ -110,10 +110,5 @@ function run_chrooted( ) {
     echo "Finished running ${filename} in chroot."
 }
 
-# arch-chroot /mnt /bin/bash /chrooted_setup.sh
 run_chrooted chrooted_setup.sh
-
-# echo "Copying post_install_setup.sh to /mnt..."
-# cp "${SCRIPT_DIR}/post_install_setup.sh" /mnt/.
-# arch-chroot /mnt /bin/bash /post_install_setup.sh
 run_chrooted post_install_setup.sh
