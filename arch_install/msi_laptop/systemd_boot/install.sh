@@ -56,11 +56,11 @@ create_swap_file() {
 install_system() {
     echo "Pacstrap installation..."
     pacstrap -K /mnt base base-devel linux linux-firmware ${cpu_manufacturer}-ucode \
+        kitty git
         # sway swaylock swayidle swaybg waybar wofi \
         # networkmanager network-manager-applet \
         # nm-connection-editor \
         # neovim vim vifm obsidian firefox nemo \
-        kitty git
     genfstab -U /mnt >> /mnt/etc/fstab
 }
 
