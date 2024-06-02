@@ -55,9 +55,9 @@ create_swap_file() {
 
 install_system() {
     echo "Pacstrap installation..."
+    # sway swaylock swayidle swaybg waybar wofi \
     pacstrap -K /mnt base base-devel \
         linux linux-firmware ${cpu_manufacturer}-ucode \
-        # sway swaylock swayidle swaybg waybar wofi \
         networkmanager network-manager-applet \
         nm-connection-editor \
         neovim vim vifm obsidian firefox nemo \
