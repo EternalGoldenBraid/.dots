@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # Script to create and format partitions on a specified device using parted
+swap_size=12G
+# root_size=30G
 
 # Exit on any error
 set -e
@@ -54,3 +56,7 @@ mkfs.ext4 ${DEVICE}p3
 mkfs.ext4 ${DEVICE}p4
 
 echo "Partitioning and formatting complete."
+
+# Create the swap file
+echo "Creating swap file..."
+mkswp -U clear --size $swap_size /swapfile
