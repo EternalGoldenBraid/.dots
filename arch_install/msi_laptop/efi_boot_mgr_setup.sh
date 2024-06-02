@@ -1,3 +1,5 @@
+set -e
+
 cpu=intel
 # cpu=amd
 

@@ -48,8 +48,8 @@ echo "fi_FI.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 
 # Set root password
-echo "Setting root password..."
-echo "root:password" | chpasswd
+echo "Set root password..."
+passwd
 
 # Set hostname
 echo "Setting hostname..."
