@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ### Add resume hook to mkinitcpio configuration for suspend-to-disk support
 
 # Path to mkinitcpio configuration

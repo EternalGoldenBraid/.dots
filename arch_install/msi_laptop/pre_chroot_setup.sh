@@ -74,10 +74,10 @@ mount_partition() {
     fi
 }
 
-mount_partition /dev/nvme0n1p1 /mnt/boot/efi
-mount_partition /dev/nvme0n1p2 /mnt/boot
-mount_partition /dev/nvme0n1p3 /mnt
-mount_partition /dev/nvme0n1p4 /mnt/home
+mount_partition ${DEVICE}p1 /mnt/boot/efi
+mount_partition ${DEVICE}p2 /mnt/boot
+mount_partition ${DEVICE}p3 /mnt
+mount_partition ${DEVICE}p4 /mnt/home
 echo "All partitions mounted successfully."
 
 if [ "$create_swapfile" = true ]; then
