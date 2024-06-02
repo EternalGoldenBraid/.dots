@@ -39,10 +39,10 @@ done
 echo "Partitioning new GPT partition table on $DEVICE..."
 parted --script $DEVICE \
     mklabel gpt \
-    mkpart "EFI System partition" fat32 1MiB 1025MiB\
+    mkpart primary fat32 1MiB 1025MiB\
     set 1 esp on \
-    mkpart "root partition" ext4 1025MiB 41025MiB\
-    mkpart "home" ext4 41025MiB 100%
+    mkpart primary ext4 1025MiB 41025MiB\
+    mkpart primary ext4 41025MiB 100%
 
 # Wait for the kernel to recognize the new partitions
 sleep 2
