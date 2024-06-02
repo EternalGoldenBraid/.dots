@@ -61,8 +61,9 @@ install_system() {
         networkmanager network-manager-applet \
         nm-connection-editor \
         neovim vim vifm obsidian firefox nemo \
-        kitty git \
-        i3 i3status i3lock i3-gaps rofi rofi-calc
+        kitty git rsync
+        i3 i3status i3lock i3-gaps rofi rofi-calc \
+        xorg xorg-xinit xorg-xrandr arandr
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
