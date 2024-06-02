@@ -94,7 +94,12 @@ echo "Initiating chroot setup..."
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 echo "SCRIPT_DIR: $SCRIPT_DIR"
 
-function run_chrooted( filename ) {
+function run_chrooted( ) {
+    filename=$1
+    if [ ! -f "${SCRIPT_DIR}/${filename}" ]; then
+        echo "Error: file ${filename} not found in ${SCRIPT_DIR}. Exiting."
+        exit 1
+    fi
     echo "Copying ${filename} to /mnt..."
     cp "${SCRIPT_DIR}/${filename}" /mnt/.
     arch-chroot /mnt /bin/bash /${filename}
