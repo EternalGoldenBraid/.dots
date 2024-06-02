@@ -11,4 +11,5 @@ echo "fi_FI.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 
 # Set root password
-echo "Set root password with `passwd`"
+echo "Setting root password..."
+echo "root:password" | chpasswd
