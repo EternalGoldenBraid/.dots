@@ -70,8 +70,8 @@ mount_partition() {
     fi
 }
 
-mount_partition ${DEVICE}p1 /mnt/boot
 mount_partition ${DEVICE}p2 /mnt
+mount_partition ${DEVICE}p1 /mnt/boot
 mount_partition ${DEVICE}p3 /mnt/home
 echo "All partitions mounted successfully."
 
