@@ -92,7 +92,7 @@ pacstrap -K /mnt base base-devel linux linux-firmware ${cpu_manufacturer}-ucode\
     sway swaylock swayidle waybar wofi \
     networkmanager network-manager-applet nm-connection-editor \
     neovim vim vifm \
-    obsidian
+    obsidian firefox nemo
 
 # Generate fstab
 genfstab -U /mnt >> /mnt/etc/fstab
