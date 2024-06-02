@@ -29,9 +29,15 @@ fi
 
 # Unmount any mounted partitions of the device
 for PART in $(ls ${DEVICE}* 2>/dev/null); do
-    if mount | grep -q ${PART}; then
-        echo "Unmounting $PART..."
-        umount ${DEVICE}p${PART}
+    # Get the mount point of the partition
+    MOUNT_POINT=$(mount | grep "${PART}" | awk '{ print $3 }')
+    if [ ! -z "${MOUNT_POINT}" ]; then
+        echo "Unmounting ${PART} from ${MOUNT_POINT}..."
+        umount ${MOUNT_POINT}
+        if [ $? -ne 0 ]; then
+            echo "Failed to unmount ${PART} from ${MOUNT_POINT}. Exiting."
+            exit 1
+        fi
     fi
 done
 
