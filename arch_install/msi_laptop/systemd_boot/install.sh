@@ -62,7 +62,7 @@ install_system() {
         nm-connection-editor \
         neovim vim vifm obsidian firefox nemo \
         kitty git \
-        i3 i3status i3lock i3-gaps rofrofi-calc
+        i3 i3status i3lock i3-gaps rofi rofi-calc
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
