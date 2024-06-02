@@ -3,6 +3,8 @@
 set -e
 
 add_resume_hook() {
+    ### Add resume hook to mkinitcpio configuration 
+    ### for suspend-to-disk support
 
     # Ensure the script is run as root
     if [[ $EUID -ne 0 ]]; then
@@ -56,6 +58,29 @@ locale-gen
 # Set hostname
 echo "Setting hostname..."
 echo $hostname > /etc/hostname
+
+echo "Installing systemd-boot..."
+bootctl --path=/boot install
+
+echo "Configuring loader entries..."
+# Create loader.conf
+cat <<EOF > /boot/loader/loader.conf
+default arch.conf
+timeout 4
+console-mode max
+editor no
+EOF
+
+# Create arch.conf
+cat <<EOF > /boot/loader/entries/arch.conf
+title   Arch Linux
+linux   /vmlinuz-linux
+initrd  /intel-ucode.img
+initrd  /initramfs-linux.img
+options root=UUID=$(blkid -s UUID -o value /dev/nvme0n1p2) resume=UUID=$(blkid -s UUID -o value /dev/nvme0n1p2) resume_offset=$(filefrag -v /swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}') rw
+EOF
+
+echo "Systemd-boot installation complete."
 
 # Set root password
 echo "Set root password..."
