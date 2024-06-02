@@ -84,7 +84,29 @@ if [ "$create_swapfile" = true ]; then
     echo "Creating swap file..."
     mkswap -U clear --size $swap_size --file /mnt/swapfile
 fi
+
+echo "Creating Pacman hook to automatically copy kernel and initramfs to EFI directory..."
+
+# Create the directory for Pacman hooks in the new system
+mkdir -p /mnt/etc/pacman.d/hooks
+
+# Create the hook file
+cat <<EOF > /mnt/etc/pacman.d/hooks/copy-kernel-to-efi.hook
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = linux
+
+[Action]
+Description = Copying kernel and initramfs to EFI directory
+When = PostTransaction
+Exec = /usr/bin/cp /boot/vmlinuz-linux /mnt/boot/efi/EFI/
+Exec = /usr/bin/cp /boot/initramfs-linux.img /mnt/boot/efi/EFI/
+EOF
+echo "Pacman hook created successfully."
  
+echo "Pacstrap installation..."
 # Pacstrap defaults
 pacstrap -K /mnt base base-devel linux linux-firmware ${cpu_manufacturer}-ucode\
     sway swaylock swayidle waybar wofi \
