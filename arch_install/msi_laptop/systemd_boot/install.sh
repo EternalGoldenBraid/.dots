@@ -56,10 +56,10 @@ create_swap_file() {
 install_system() {
     echo "Pacstrap installation..."
     pacstrap -K /mnt base base-devel linux linux-firmware ${cpu_manufacturer}-ucode \
-        sway swaylock swayidle swaybg waybar wofi \
-        networkmanager network-manager-applet \
-        nm-connection-editor \
-        neovim vim vifm obsidian firefox nemo \
+        # sway swaylock swayidle swaybg waybar wofi \
+        # networkmanager network-manager-applet \
+        # nm-connection-editor \
+        # neovim vim vifm obsidian firefox nemo \
         kitty git
     genfstab -U /mnt >> /mnt/etc/fstab
 }
@@ -92,8 +92,20 @@ echo "Partitioning, formatting and mounting complete."
 echo "Initiating chroot setup..."
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-cp "${SCRIPT_DIR}/chrooted_setup.sh" /mnt/.
-arch-chroot /mnt /bin/bash /chrooted_setup.sh
+echo "SCRIPT_DIR: $SCRIPT_DIR"
 
-cp "${SCRIPT_DIR}/post_install_setup.sh" /mnt/.
-arch-chroot /mnt /bin/bash /post_install_setup.sh
+function run_chrooted( filename ) {
+    echo "Copying ${filename} to /mnt..."
+    cp "${SCRIPT_DIR}/${filename}" /mnt/.
+    arch-chroot /mnt /bin/bash /${filename}
+    rm /mnt/${filename}
+    echo "Finished running ${filename} in chroot."
+}
+
+# arch-chroot /mnt /bin/bash /chrooted_setup.sh
+run_chrooted chrooted_setup.sh
+
+# echo "Copying post_install_setup.sh to /mnt..."
+# cp "${SCRIPT_DIR}/post_install_setup.sh" /mnt/.
+# arch-chroot /mnt /bin/bash /post_install_setup.sh
+run_chrooted post_install_setup.sh
