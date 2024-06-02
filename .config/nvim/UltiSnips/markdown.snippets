@@ -1,0 +1,384 @@
+# UltiSnips for LaTeX in Markdown
+snippet mk "Inline" A
+$$1$
+endsnippet
+
+snippet dm "Math mode" A
+$$
+$1
+$$
+endsnippet
+
+snippet beg "Description" w
+\\begin{$1}
+$0
+\\end{$1}
+endsnippet
+
+# Greek letters
+
+snippet @a "Greek letter" A
+\alpha
+endsnippet
+
+snippet @A "Greek letter" mA
+\Alpha
+endsnippet
+
+snippet @b "Greek letter" mA
+\beta
+endsnippet
+
+snippet @B "Greek letter" mA
+\Beta
+endsnippet
+
+snippet @c "Greek letter" mA
+\chi
+endsnippet
+
+snippet @C "Greek letter" mA
+\Chi
+endsnippet
+
+snippet @U "Greek letter" mA
+\Upsilon
+endsnippet
+
+snippet ome "Greek letter" mA
+\omega
+endsnippet
+
+snippet @o "Greek letter" mA
+\omega
+endsnippet
+
+snippet @O "Greek letter" mA
+\Omega
+endsnippet
+
+snippet @u "Greek letter" mA
+\upsilon
+endsnippet
+
+snippet @U "Greek letter" mA
+\Upsilon
+endsnippet
+
+
+# Operations
+#{trigger: "te", replacement: "\\text{$0}", options: "m"},
+snippet te "Text" 
+\text{$1}
+endsnippet
+
+#{trigger: "bf", replacement: "\\mathbf{$0}", options: "mA"},
+snippet bf "Bold"
+\mathbf{$1}
+endsnippet
+
+#{trigger: "sr", replacement: "^{2}", options: "mA"},
+snippet sr "Square"
+^{2}
+endsnippet
+
+#{trigger: "cb", replacement: "^{3}", options: "mA"},
+snippet cb "Cube"
+^{3}
+endsnippet
+
+#{trigger: "rd", replacement: "^{$0}$1", options: "mA"},
+snippet rd "Power" i
+^{$1}$2
+endsnippet
+
+#{trigger: "_", replacement: "_{$0}$1", options: "mA"},
+snippet _ "Subscript" i
+_{$1}$2
+endsnippet
+
+#{trigger: "sts", replacement: "_\\text{$0}", options: "rmA"},
+snippet sts "Subscript text"
+_{\text{$1}}
+endsnippet
+
+#{trigger: "sq", replacement: "\\sqrt{ $0 }$1", options: "mA"},
+snippet sq "Square root"
+\sqrt{ $1 }$2
+endsnippet
+
+#{trigger: "//", replacement: "\\frac{$0}{$1}$2", options: "mA"},
+snippet // "Fraction" iA
+\frac{ $1 }{ $2 }$3
+endsnippet
+
+#{trigger: "ee", replacement: "e^{ $0 }$1", options: "mA"},
+snippet ee "Exponential"
+e^{ $1 }$2
+endsnippet
+
+#{trigger: "rm", replacement: "\\mathrm{$0}$1", options: "mA"},
+snippet rm "Roman"
+\mathrm{$1}
+endsnippet
+
+#{trigger: "conj", replacement: "^{*}", options: "mA"},
+#{trigger: "trace", replacement: "\\mathrm{Tr}", options: "mA"},
+#{trigger: "det", replacement: "\\det", options: "mA"},
+snippet det "Determinant"
+\det
+endsnippet
+
+#{trigger: "re", replacement: "\\mathrm{Re}", options: "mb"},
+#{trigger: "im", replacement: "\\mathrm{Im}", options: "mb"},
+
+
+snippet bar "Math operator" mA
+\bar{$1}
+endsnippet
+
+# Symbols
+snippet ooo "Infinite symbol"
+\infty
+endsnippet
+
+snippet sum "Summation"
+\sum
+endsnippet
+
+snippet prod "Product"
+\prod
+endsnippet
+
+snippet lim "Limit"
+\lim_{ $1 \to $2 } $3
+endsnippet
+
+snippet pm "Plus-minus"
+\pm
+endsnippet
+
+snippet mp "Minus-plus"
+\mp
+endsnippet
+
+snippet "..." "dots" i
+\dots $1
+endsnippet
+
+snippet "<->" "Left right arrow"
+\leftrightarrow
+endsnippet
+
+snippet "->" "Right arrow"
+\to
+endsnippet
+
+snippet "!>" "Maps to"
+\mapsto
+endsnippet
+
+snippet invs "Inverse"
+^{-1}
+endsnippet
+
+snippet \\\\\\ "Set minus"
+\\setminus
+endsnippet
+
+snippet "||" "Mid symbol"
+\mid
+endsnippet
+
+snippet and "Intersection"
+\cap
+endsnippet
+
+snippet orr "Union"
+\cup
+endsnippet
+
+snippet inn "Element of"
+\in
+endsnippet
+
+snippet notin "Not element of"
+\not\in
+endsnippet
+
+snippet "subseteq" "Subset equal"
+\subseteq
+endsnippet
+
+snippet eset "Empty set"
+\emptyset
+endsnippet
+
+snippet sett "Set"
+\\{ $1 \\}$2
+endsnippet
+
+snippet "=>" "Implies"
+\implies
+endsnippet
+
+snippet "=<" "Implied by"
+\impliedby
+endsnippet
+
+snippet iff "If and only if"
+\iff
+endsnippet
+
+snippet "e\\xi sts" "Exists" 
+\exists
+endsnippet
+
+snippet "===" "Equivalent"
+\equiv
+endsnippet
+
+snippet Sq "Square"
+\square
+endsnippet
+
+snippet "!=" "Not equal"
+\neq
+endsnippet
+
+snippet ">=" "Greater or equal"
+\geq
+endsnippet
+
+snippet "<=" "Lesser or equal"
+\leq
+endsnippet
+
+snippet ">>" "Much greater than"
+\gg
+endsnippet
+
+snippet "<<" "Much lesser than"
+\ll
+endsnippet
+
+snippet "~~" "Similar to"
+\sim
+endsnippet
+
+snippet "\\sim ~" "Approximately equal"
+\approx
+endsnippet
+
+snippet prop "Proportional to"
+\propto
+endsnippet
+
+snippet nabl "Nabla"
+\nabla
+endsnippet
+
+snippet del "Nabla"
+\nabla
+endsnippet
+
+snippet xx "Times" i
+\times $1 $2
+endsnippet
+
+snippet "**" "Dot"
+\cdot
+endsnippet
+
+snippet para "Parallel"
+\parallel
+endsnippet
+
+snippet xnn "x subscript n"
+x_{n}
+endsnippet
+
+snippet xii "x subscript i"
+x_{i}
+endsnippet
+
+snippet xjj "x subscript j"
+x_{j}
+endsnippet
+
+snippet xp1 "x subscript n plus one"
+x_{n+1}
+endsnippet
+
+snippet ynn "y subscript n"
+y_{n}
+endsnippet
+
+snippet yii "y subscript i"
+y_{i}
+endsnippet
+
+snippet yjj "y subscript j"
+y_{j}
+endsnippet
+
+snippet mcal "Mathcal"
+\mathcal{$1}$2
+endsnippet
+
+snippet mbb "Mathbb"
+\mathbb{$1}$2
+endsnippet
+
+snippet ell "Lowercase script l"
+\ell
+endsnippet
+
+snippet lll "Lowercase script l"
+\ell
+endsnippet
+
+snippet LL "Script L"
+\mathcal{L}
+endsnippet
+
+snippet HH "Script H"
+\mathcal{H}
+endsnippet
+
+snippet CC "Complex numbers"
+\mathbb{C}
+endsnippet
+
+snippet RR "Real numbers"
+\mathbb{R}
+endsnippet
+
+snippet ZZ "Integers"
+\mathbb{Z}
+endsnippet
+
+snippet NN "Natural numbers"
+\mathbb{N}
+endsnippet
+
+snippet II "Identity"
+\mathbb{1}
+endsnippet
+
+snippet "\\mathbb{1}I" "Hat identity"
+\hat{\mathbb{1}}
+endsnippet
+
+snippet AA "Script A"
+\mathcal{A}
+endsnippet
+
+snippet BB "Bold B"
+\mathbf{B}
+endsnippet
+
+snippet EE "Bold E"
+\mathbf{E}
+endsnippet
+

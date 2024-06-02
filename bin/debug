@@ -1,0 +1,24 @@
+#!/bin/bash
+
+DEFAULT_TERM="kitty"
+
+name="debug"
+# Source logging functions
+source ~/bin/logging.sh
+log_file="$HOME/bin/logs/$name.log"
+
+# Log the start of the script
+log_message "INFO" "Starting $name script" $log_file
+
+# Command
+echo "Default term: $DEFAULT_TERM " > $log_file
+
+# kitty nvim
+$DEFAULT_TERMINAL nvim  2>&1 | tee -a $log_file
+
+if [ $? -ne 0 ]; then
+    log_message "ERROR" "Failed to start nvim in kitty" $log_file
+fi
+
+# Log completion of the script
+log_message "INFO" "Completed $name script" $log_file

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd ~/Projects/finance
+code .
+
+cd ~/Projects/finance/config_finance
+code .

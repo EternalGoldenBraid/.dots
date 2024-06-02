@@ -1,0 +1,41 @@
+=============== Feb 2, 2024 (EET) ===============
+08:25:42.014690 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:25:42.021980 db@open opening
+08:25:42.023073 version@stat F·[] S·0B[] Sc·[]
+08:25:42.025933 db@janitor F·2 G·0
+08:25:42.025972 db@open done T·3.95249ms
+08:32:41.498585 db@close closing
+08:32:41.498692 db@close done T·107.331µs
+=============== Feb 15, 2024 (EET) ===============
+08:27:19.452603 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:27:19.453021 version@stat F·[] S·0B[] Sc·[]
+08:27:19.453027 db@open opening
+08:27:19.453055 journal@recovery F·1
+08:27:19.454777 journal@recovery recovering @1
+08:27:19.464185 memdb@flush created L0@2 N·18 S·136KiB "che..tes,v2":"metadata,v1"
+08:27:19.464415 version@stat F·[1] S·136KiB[136KiB] Sc·[0.25]
+08:27:19.473328 db@janitor F·3 G·0
+08:27:19.473364 db@open done T·20.329572ms
+08:27:36.020015 db@close closing
+08:27:36.020191 db@close done T·175.209µs
+=============== Feb 15, 2024 (EET) ===============
+08:27:43.679715 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+08:27:43.679931 version@stat F·[1] S·136KiB[136KiB] Sc·[0.25]
+08:27:43.679939 db@open opening
+08:27:43.679969 journal@recovery F·1
+08:27:43.681832 journal@recovery recovering @3
+08:27:43.683722 version@stat F·[1] S·136KiB[136KiB] Sc·[0.25]
+08:27:43.697197 db@janitor F·3 G·0
+08:27:43.697242 db@open done T·17.286693ms
+15:39:18.833265 db@close closing
+15:39:18.839960 db@close done T·6.689723ms
+=============== Feb 16, 2024 (EET) ===============
+06:51:40.392782 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+06:51:40.393179 version@stat F·[1] S·136KiB[136KiB] Sc·[0.25]
+06:51:40.393185 db@open opening
+06:51:40.393214 journal@recovery F·1
+06:51:40.394452 journal@recovery recovering @5
+06:51:40.397745 memdb@flush created L0@7 N·48 S·3KiB "jgj..map,v67":"jgj..map,v20"
+06:51:40.397865 version@stat F·[2] S·140KiB[140KiB] Sc·[0.50]
+06:51:40.409241 db@janitor F·4 G·0
+06:51:40.409268 db@open done T·16.072035ms
