@@ -8,6 +8,10 @@ GITHUB_USERNAME="EternalGoldenBraid"
 echo "Creating user $USER_NAME..."
 useradd -m -G wheel -s /bin/bash $USER_NAME
 
+# Add the new user to the sudoers file via visudo
+echo "Adding $USER_NAME to the sudoers file..."
+echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
+
 # Set password for the new user
 echo "Set password for $USER_NAME..."
 passwd $USER_NAME
