@@ -14,7 +14,7 @@ passwd $USER_NAME
 
 # Create ssh keys for the new user
 echo "Creating ssh keys for $USER_NAME..."
-sudo -u $USER_NAME ssh-keygen -t rsa -b 4096 -f /home/$USER_NAME/.ssh/id_rsa -C "$USER_NAME@$(HOSTNAME)"
+sudo -u $USER_NAME ssh-keygen -t rsa -b 4096 -f /home/$USER_NAME/.ssh/id_rsa -C "$USER_NAME@${HOSTNAME}"
 
 # Optional: Clone dotfiles from GitHub
 dot_dir="/home/$USER_NAME/.dots"
@@ -27,4 +27,4 @@ ln -s $dot_dir/.bash_profile /home/$USER_NAME/.bash_profile
 ln -s $dot_dir/.bash_aliases /home/$USER_NAME/.bash_aliases
 
 ln -s $dot_dir/.config/nvim /home/$USER_NAME/.config/nvim
-ln -s $dot_dir/.config/i3 /home/$USER_NAME/.config/sway
+ln -s $dot_dir/.config/i3 /home/$USER_NAME/.config/
