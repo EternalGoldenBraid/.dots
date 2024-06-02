@@ -31,6 +31,7 @@ fi
 for PART in $(ls ${DEVICE}* 2>/dev/null); do
     if mount | grep -q ${PART}; then
         echo "Unmount ${PART} first."
+        exit 1
     fi
 done
 
@@ -84,27 +85,6 @@ if [ "$create_swapfile" = true ]; then
     mkswap -U clear --size $swap_size --file /mnt/swapfile
 fi
 
-echo "Creating Pacman hook to automatically copy kernel and initramfs to EFI directory..."
-
-# Create the directory for Pacman hooks in the new system
-mkdir -p /mnt/etc/pacman.d/hooks
-
-# Create the hook file
-mkdir -p /mnt/boot/efi/EFI
-cat <<EOF > /mnt/etc/pacman.d/hooks/copy-kernel-to-efi.hook
-[Trigger]
-Operation = Install
-Operation = Upgrade
-Type = Package
-Target = linux
-
-[Action]
-Description = Copying kernel and initramfs to EFI directory
-When = PostTransaction
-Exec = /usr/bin/cp /boot/vmlinuz-linux /mnt/boot/efi/EFI/
-Exec = /usr/bin/cp /boot/initramfs-linux.img /boot/efi/EFI/
-EOF
-echo "Pacman hook created successfully."
  
 echo "Pacstrap installation..."
 # Pacstrap defaults
