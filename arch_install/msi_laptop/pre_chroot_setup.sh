@@ -31,7 +31,7 @@ fi
 for PART in $(ls ${DEVICE}* 2>/dev/null); do
     if mount | grep -q ${PART}; then
         echo "Unmounting $PART..."
-        umount ${PART}
+        umount ${DEVICE}p${PART}
     fi
 done
 
