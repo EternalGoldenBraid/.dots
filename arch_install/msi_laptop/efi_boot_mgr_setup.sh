@@ -1,32 +1,32 @@
 set -e
 
-printf "Creating Pacman hook to automatically copy kernel and initramfs to EFI directory..."
-
-# Create the directory for Pacman hooks in the new system
-mkdir -p /mnt/etc/pacman.d/hooks
-
-# Create the hook file
-mkdir -p /mnt/boot/efi/EFI
-cat <<EOF > /mnt/etc/pacman.d/hooks/copy-kernel-to-efi.hook
-[Trigger]
-Operation = Install
-Operation = Upgrade
-Type = Package
-Target = linux
-
-[Action]
-Description = Copying kernel and initramfs to EFI directory
-When = PostTransaction
-Exec = /usr/bin/cp /boot/vmlinuz-linux /mnt/boot/efi/EFI/
-Exec = /usr/bin/cp /boot/initramfs-linux.img /boot/efi/EFI/
-EOF
-printf "Pacman hook created successfully."
-
-# Copy the kernel and initramfs to the EFI directory
-cp /mnt/boot/vmlinuz-linux /mnt/boot/efi/EFI/
-cp /mnt/boot/initramfs-linux.img /mnt/boot/efi/EFI/
-printf "Kernel and initramfs copied to EFI directory." \
-    "Check that they are copied after reboot and pacman -Syu linux."
+# printf "Creating Pacman hook to automatically copy kernel and initramfs to EFI directory..."
+#
+# # Create the directory for Pacman hooks in the new system
+# mkdir -p /mnt/etc/pacman.d/hooks
+#
+# # Create the hook file
+# mkdir -p /mnt/boot/efi/EFI
+# cat <<EOF > /mnt/etc/pacman.d/hooks/copy-kernel-to-efi.hook
+# [Trigger]
+# Operation = Install
+# Operation = Upgrade
+# Type = Package
+# Target = linux
+#
+# [Action]
+# Description = Copying kernel and initramfs to EFI directory
+# When = PostTransaction
+# Exec = /usr/bin/cp /boot/vmlinuz-linux /mnt/boot/efi/EFI/
+# Exec = /usr/bin/cp /boot/initramfs-linux.img /boot/efi/EFI/
+# EOF
+# printf "Pacman hook created successfully."
+#
+# # Copy the kernel and initramfs to the EFI directory
+# cp /mnt/boot/vmlinuz-linux /mnt/boot/efi/EFI/
+# cp /mnt/boot/initramfs-linux.img /mnt/boot/efi/EFI/
+# printf "Kernel and initramfs copied to EFI directory." \
+#     "Check that they are copied after reboot and pacman -Syu linux."
 
 
 printf "Creating EFI boot entry..."

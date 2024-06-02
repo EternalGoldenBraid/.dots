@@ -36,16 +36,14 @@ for PART in $(ls ${DEVICE}* 2>/dev/null); do
 done
 
 # Create partition table
-echo "Creating new GPT partition table on $DEVICE..."
-parted -s $DEVICE mklabel gpt
-
-# Create partitions
-echo "Creating partitions..."
-parted -s $DEVICE -- mkpart primary fat32 1MiB 513MiB
-parted -s $DEVICE -- set 1 esp on
-parted -s $DEVICE -- mkpart primary ext4 513MiB 1025MiB
-parted -s $DEVICE -- mkpart primary ext4 1025MiB 43025MiB
-parted -s $DEVICE -- mkpart primary ext4 43025MiB 100%
+echo "Partitioning new GPT partition table on $DEVICE..."
+parted --script $DEVICE \
+    mklabel gpt \
+    mkpart primary fat32 1MiB 513MiB \
+    set 1 esp on \
+    mkpart primary ext4 513MiB 1025MiB \
+    mkpart primary ext4 1025MiB 43025MiB \
+    mkpart primary ext4 43025MiB 100%
 
 # Wait for the kernel to recognize the new partitions
 sleep 2
