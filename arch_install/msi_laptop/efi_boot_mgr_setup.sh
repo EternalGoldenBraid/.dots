@@ -2,7 +2,7 @@ cpu=intel
 # cpu=amd
 
 swapfile=/mnt/swapfile
-resume_offset=$(filefrag -v swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}')
+resume_offset=$(filefrag -v $swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}')
 
 efi_disk=/dev/nvme0n1
 efi_part=1
