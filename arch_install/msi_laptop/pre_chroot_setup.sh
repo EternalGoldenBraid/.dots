@@ -62,11 +62,6 @@ mkfs.ext4 ${DEVICE}p4
 
 echo "Partitioning and formatting complete."
 
-if [ "$create_swapfile" = true ]; then
-    echo "Creating swap file..."
-    mkswap -U clear --size $swap_size /swapfile
-fi
-
 # Function to mount a partition with error checking
 mount_partition() {
     local partition=$1
@@ -84,6 +79,11 @@ mount_partition /dev/nvme0n1p2 /mnt/boot
 mount_partition /dev/nvme0n1p3 /mnt
 mount_partition /dev/nvme0n1p4 /mnt/home
 echo "All partitions mounted successfully."
+
+if [ "$create_swapfile" = true ]; then
+    echo "Creating swap file..."
+    mkswap -U clear --size $swap_size --file /mnt/swapfile
+fi
  
 # Pacstrap defaults
 pacstrap -K /mnt base base-devel linux linux-firmware ${cpu_manufacturer}-ucode\
