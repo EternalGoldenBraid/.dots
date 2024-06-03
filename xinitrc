@@ -8,7 +8,15 @@ sysmodmap=/etc/X11/xinit/.Xmodmap
 # merge in defaults and keymaps
 
 if [ -f $sysresources ]; then
+
+
+
+
+
+
+
     xrdb -merge $sysresources
+
 fi
 
 if [ -f $sysmodmap ]; then
@@ -16,23 +24,30 @@ if [ -f $sysmodmap ]; then
 fi
 
 if [ -f "$userresources" ]; then
+
+
+
+
+
+
+
     xrdb -merge "$userresources"
+
 fi
 
 if [ -f "$usermodmap" ]; then
     xmodmap "$usermodmap"
 fi
-#
-## start some nice programs
-#
-##twm &
-xbindkeys
-setxkbmap -layout us,fi
-setxkbmap -option 'grp:alt_shift_toggle'
-source ~/.screenlayout/dual_27_24.sh
 
-# vscode
-eval $(/usr/bin/gnome-keyring-daemon --start)
-export SSH_AUTH_SOCK
+# start some nice programs
 
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+ for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+  [ -x "$f" ] && . "$f"
+ done
+ unset f
+fi
+
+
+kitty &
 exec i3
