@@ -3,20 +3,15 @@
 ## Things to add
 
 - gnome-keyring
-  - paru -Sy gnome-keyring libsecret seahorse
+  - paru -Sy 
 
-- eduvpn
-
-- 1password ssh setups
-  - paru -S 1password 1password-cli
 
 - link all configs present in .dotfiles/.config
 
 - tmux config
   - tmux source ~/.config/tmux.conf
 
-- slac
-  - paru -S slack
+paru -S eduvpn 1password ssh setups slack-desktop
 
 
 # On ssh configs and configs setup with 1password:
