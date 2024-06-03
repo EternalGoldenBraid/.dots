@@ -27,7 +27,13 @@
 - pull privete ssh configs (requires the above key) `git submodule update --init --recursive`
 - remove old .ssh dir: `rm -r ~/.ssh`
 - link the .ssh dir: `ln -sf ~/.dotfiles/.ssh ~/.ssh`
+- Create a main config at: `~/.ssh/config` containing:
+```
+Include ~/.ssh/.ssh_configs/1password_config
+```
+- Test ssh-agent acess to 1password keys with: `ssh -T git@github.com`. Should prompt for password.
 
-At this points you should have a acess to 1pass ssh keys.
+
+At this points you should have a acess to 1password ssh keys.
 Include any of the configs in .ssh/private_configs to get **stuff** done.
 
