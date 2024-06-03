@@ -30,21 +30,23 @@ ln -sf $dot_dir/.bashrc /home/$USER_NAME/.bashrc
 ln -sf $dot_dir/.bash_profile /home/$USER_NAME/.bash_profile
 ln -sf $dot_dir/.bash_aliases /home/$USER_NAME/.bash_aliases
 
+ln -sf $dot_dir/xinitrc /home/$USER_NAME/.xinitrc
+
 mkdir -p /home/$USER_NAME/.config
 ln -sf $dot_dir/.config/nvim /home/$USER_NAME/.config/.
 ln -sf $dot_dir/.config/i3 /home/$USER_NAME/.config/.
 
-# Time synchronization
-systemctl enable --now systemd-timesyncd.service
-
-### Pacman Configuration
-# Check if ParallelDownloads is already set
-if grep -q "^ParallelDownloads" /etc/pacman.conf; then
-    # Update the existing line
-    sudo sed -i 's/^ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-else
-    # Add ParallelDownloads setting
-    echo "ParallelDownloads = 5" | sudo tee -a /etc/pacman.conf
-fi
-
-echo "Parallel downloads enabled for Pacman."
+# # Time synchronization
+# systemctl enable --now systemd-timesyncd.service
+#
+# ### Pacman Configuration
+# # Check if ParallelDownloads is already set
+# if grep -q "^ParallelDownloads" /etc/pacman.conf; then
+#     # Update the existing line
+#     sudo sed -i 's/^ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+# else
+#     # Add ParallelDownloads setting
+#     echo "ParallelDownloads = 5" | sudo tee -a /etc/pacman.conf
+# fi
+#
+# echo "Parallel downloads enabled for Pacman."

@@ -63,7 +63,8 @@ install_system() {
         neovim vim vifm obsidian firefox nemo \
         kitty git rsync \
         i3 i3status i3lock i3-gaps rofi rofi-calc \
-        xorg xorg-xinit xorg-xrandr arandr
+        xorg xorg-xinit xorg-xrandr arandr \
+        nvidia nvidia-utils nvidia-settings \
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
