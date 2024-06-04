@@ -1,3 +1,6 @@
 [submodule ".ssh/.ssh_configs"]
 	path = .ssh/.ssh_configs
 	url = git@github.com:EternalGoldenBraid/.ssh_configs.git
+[submodule ".ssh/ssh_configs"]
+	path = .ssh/ssh_configs
+	url = git@github.com:EternalGoldenBraid/.ssh_configs.git

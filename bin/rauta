@@ -1,0 +1,22 @@
+#!/usr/bin/expect -f
+
+# Fetch the OTP and password using `op`
+set otp [exec op item get "tuni ssh" --otp]
+set password [exec op item get "tuni.fi" --vault private --fields password]
+
+# Define the SSH command
+set ssh_command "ssh rauta"
+
+# Start the SSH connection
+spawn {*}$ssh_command
+
+# Handle the OTP prompt
+expect "Verification code:"
+send "$otp\r"
+
+# Handle the password prompt
+expect "Password:"
+send "$password\r"
+
+# Hand over control to the user
+interact
