@@ -2,16 +2,10 @@
 
 ## Things to add
 
-- gnome-keyring
-  - paru -Sy 
-
-
-- link all configs present in .dotfiles/.config
-
 - tmux config
   - tmux source ~/.config/tmux.conf
 
-paru -S eduvpn 1password ssh setups slack-desktop
+paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop
 
 
 # On ssh configs and configs setup with 1password:

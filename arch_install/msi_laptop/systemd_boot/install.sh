@@ -65,7 +65,8 @@ install_system() {
         i3 i3status i3lock i3-gaps rofi rofi-calc \
         xorg xorg-xinit xorg-xrandr arandr \
         nvidia nvidia-utils nvidia-settings \
-        gnome-keyring libsecret
+        gnome-keyring libsecret \
+        maim
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }

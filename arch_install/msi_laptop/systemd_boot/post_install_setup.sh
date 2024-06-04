@@ -3,6 +3,8 @@ set -e
 
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
+HOME= /home/$USER_NAME
+DOT_DIR=${HOME}/.dotfiles
 
 # Create a new user
 echo "Creating user $USER_NAME..."
@@ -21,24 +23,20 @@ echo "Creating ssh keys for $USER_NAME..."
 sudo -u $USER_NAME ssh-keygen -t rsa -b 4096 -f /home/$USER_NAME/.ssh/id_rsa -C "$USER_NAME@${HOSTNAME}"
 
 # Optional: Clone dotfiles from GitHub
-dot_dir="/home/$USER_NAME/.dots"
 echo "Cloning dotfiles for $USER_NAME..."
 sudo -u $USER_NAME git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${dot_dir}
+mv $HOME/.dots $HOME/.dotfiles
 
 # Symbolic link the dotfiles
 ln -sf $dot_dir/.bashrc /home/$USER_NAME/.bashrc
 # ln -sf $dot_dir/.bash_profile /home/$USER_NAME/.bash_profile # Don't have this
 ln -sf $dot_dir/.bash_aliases /home/$USER_NAME/.bash_aliases
-
 ln -sf $dot_dir/xinitrc /home/$USER_NAME/.xinitrc
 
 mkdir -p /home/$USER_NAME/.config
-# ln -sf $dot_dir/.config/nvim /home/$USER_NAME/.config/.
-# ln -sf $dot_dir/.config/i3 /home/$USER_NAME/.config/.
-# Link all files from dot_dir/.config to the user's .config directory
-for config_file in $dot_dir/.config/*; do
-    ln -sf "$config_file" "/home/$USER_NAME/.config/$(basename $config_file)"
-done
+mkdir $HOME/bin
+ln -s $DOT_DIR/.config/* /$HOME/.config/
+ln -s $DOT_DIR/bin/* /$HOME/bin
 
 # TODO Add Paru setup
 
