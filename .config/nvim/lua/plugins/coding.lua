@@ -72,17 +72,11 @@ return {
       }
     end
   },
-
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   cmd = "Copilot",
-  --   event = "InsertEnter",
-  --   config = function()
-  --     require("copilot").setup({
-  --       filetypes={
-  --         markdown = true,
-  --       }
-  --     })
-  --   end,
-  -- },
+  {
+    "folke/zen-mode.nvim",
+    opts = 
+    {
+      window = { width = 120, } 
+    }
+  },
 }

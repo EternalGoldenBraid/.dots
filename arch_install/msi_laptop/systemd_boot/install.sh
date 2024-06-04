@@ -66,7 +66,7 @@ install_system() {
         xorg xorg-xinit xorg-xrandr arandr \
         nvidia nvidia-utils nvidia-settings \
         gnome-keyring libsecret \
-        maim
+        maim ripgrep cmake
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
