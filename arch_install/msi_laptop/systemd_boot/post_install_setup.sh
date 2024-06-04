@@ -40,6 +40,8 @@ for config_file in $dot_dir/.config/*; do
     ln -sf "$config_file" "/home/$USER_NAME/.config/$(basename $config_file)"
 done
 
+# TODO Add Paru setup
+
 
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service
