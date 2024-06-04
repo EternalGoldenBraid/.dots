@@ -19,3 +19,6 @@ vim.g.slime_default_config = {
 
 -- Comment
 require('Comment').setup()
+
+-- Zen
+vim.api.nvim_set_keymap('n', '<leader>z', ':ZenMode<CR>', {silent = true})
