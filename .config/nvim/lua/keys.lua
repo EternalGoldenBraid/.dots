@@ -1,7 +1,7 @@
 -- keys.lua
 
 -- Clipboard copy and paste
--- vim.opt.clipboard = "unnamedplus" # Old way
+vim.opt.clipboard = "unnamedplus" # Old way
 -- vim.g.clipboard = {
 --   name = 'OSC 52',
 --   copy = {
