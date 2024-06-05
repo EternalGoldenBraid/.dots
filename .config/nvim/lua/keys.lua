@@ -1,7 +1,18 @@
 -- keys.lua
 
 -- Clipboard copy and paste
-vim.opt.clipboard = "unnamedplus"
+-- vim.opt.clipboard = "unnamedplus" # Old way
+-- vim.g.clipboard = {
+--   name = 'OSC 52',
+--   copy = {
+--     ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+--     ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+--   },
+--   paste = {
+--     ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+--     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+--   },
+-- }
 
 -- Set leader and localleader
 vim.g.mapleader = "-"
@@ -43,17 +54,17 @@ vim.api.nvim_set_keymap('n', '<leader>"', 'viw<esc>a"<esc>bi"<esc>lel', {noremap
 -- Escape from insert mode
 vim.api.nvim_set_keymap('i', 'jk', '<esc>', {noremap = true})
 
--- Toggle paste mode
-local function toggle_paste()
-    if vim.o.paste == false then
-        vim.o.paste = true
-        print("Paste Mode Enabled")
-    else
-        vim.o.paste = false
-        print("Paste Mode Disabled")
-    end
-end
-vim.api.nvim_set_keymap('n', '<leader>pa', '<cmd>lua toggle_paste()<cr>', {noremap = true})
+-- -- Toggle paste mode
+-- local function toggle_paste()
+--     if vim.o.paste == false then
+--         vim.o.paste = true
+--         print("Paste Mode Enabled")
+--     else
+--         vim.o.paste = false
+--         print("Paste Mode Disabled")
+--     end
+-- end
+-- vim.api.nvim_set_keymap('n', '<leader>pa', '<cmd>lua toggle_paste()<cr>', {noremap = true})
 
 -- Disable arrow keys in normal mode
 local disable_keys = {'<up>', '<down>', '<left>', '<right>'}
