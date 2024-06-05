@@ -6,6 +6,7 @@ set password [exec op item get "tuni.fi" --vault private --fields password]
 
 # Define the SSH command
 set ssh_command "ssh rauta"
+# set ssh_command "kitten ssh rauta" # TODO needs to update to support bold font?
 
 # Start the SSH connection
 spawn {*}$ssh_command

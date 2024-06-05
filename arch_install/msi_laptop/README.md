@@ -5,7 +5,9 @@
 - tmux config
   - tmux source ~/.config/tmux.conf
 
-paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop
+paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop auto-cpufreq teams-for-linux
+
+- sudo auto-cpufreq --install
 
 
 # On ssh configs and configs setup with 1password:
