@@ -3,6 +3,11 @@
 local home = os.getenv("HOME")
 local root = home .. "/.config/nvim"
 
+-- https://github.com/nvim-treesitter/nvim-treesitter/issues/3092
+local ts_path = '~/.config/nvim > ls /home/nicklas/.local/share/nvim/lazy/nvim-treesitter'
+vim.opt.runtimepath:prepend(ts_path)
+
+
 -- Check if running inside VSCode
 if vim.g.vscode then
     -- vim.cmd("source " .. home .. "/.config/nvim/vscode.vim")

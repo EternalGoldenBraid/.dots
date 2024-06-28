@@ -5,7 +5,9 @@
 - tmux config
   - tmux source ~/.config/tmux.conf
 
-paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop auto-cpufreq teams-for-linux
+paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop auto-cpufreq teams-for-linux \
+    pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol
+
 
 - sudo auto-cpufreq --install
 
