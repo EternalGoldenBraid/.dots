@@ -1,9 +1,46 @@
 -- ultisnips.lua
 return {
   {
+    "folke/zen-mode.nvim",
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      -- Set width
+      width = 200,
+    }
+  },
+  {
   "github/copilot.vim",
   config = function()
   end
+  },
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    branch = "canary",
+    dependencies = {
+      -- { "github/copilot.lua" }, -- or github/copilot.vim
+      { "github/copilot.vim" }, -- or github/copilot.vim
+      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+    },
+    opts = {
+      debug = false, 
+      window = {
+          layout = 'float',
+          relative = 'cursor',
+          width = 1,
+          height = 0.4,
+          row = 1
+    },
+    mappings = {
+      reset = {
+        normal = '',
+        insert = ''
+      }
+    }
+      -- See Configuration section for rest
+    },
+    -- See Commands section for default commands if you want to lazy load on them
   },
   {
       'numToStr/Comment.nvim',
@@ -36,6 +73,7 @@ return {
     },
     config = function() require('aerial').setup() end
   },
+
   {
     "ms-jpq/coq_nvim",
     branch = "coq",
@@ -50,6 +88,11 @@ return {
     event = "VimEnter"
     -- No specific Lua configuration required for artifacts, they just need to be included
   },
+  {
+    "ms-jpq/coq.thirdparty",
+    branch = "3p",
+  },
+
   {
     "dense-analysis/ale",
     event = "VimEnter",
@@ -72,11 +115,38 @@ return {
       }
     end
   },
+
+  -- Debugging
   {
-    "folke/zen-mode.nvim",
-    opts = 
-    {
-      window = { width = 120, } 
-    }
+    "mfussenegger/nvim-dap",
+    config = function()
+    end
   },
+  {
+    "mfussenegger/nvim-dap-python",
+    config = function()
+      require("dap").adapters.python = {
+        type = "executable",
+        command = "python",
+        args = { "-m", "debugpy.adapter" },
+      }
+      require("dap-python").setup("~/venvs/debugpy/bin/python")
+      require("dap-python").test_runner = "pytest"
+      require("dap-python").setup()
+    end
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"}
+  },
+  -- { 
+  --   "folke/neodev.nvim",
+  --   opts = {},
+  --   config = function()
+  --     require("neodev").setup({
+  --       library = { plugins = { "nvim-dap-ui" }, types = true },
+  --     })
+  --   end
+  -- },
+
 }
