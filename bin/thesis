@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # Opens up tmux and thesis writing environment
 
@@ -6,11 +7,13 @@ tmux_root="$HOME/Projects/thesis"
 main_file="main.tex"
 session="thesis-tex"
 
+cd $tmux_root
+
 # Start tmux server
-tmux -u start-server
+# tmux -u start-server
 
 # Create a new tmux session, detached, named after your session variable
-tmux new-session -d -s $session -c $tmux_root
+tmux new-session -A -s $session -c $tmux_root
 
 # Rename the first window to 'main'
 tmux rename-window -t $session:0 'main'
