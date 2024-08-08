@@ -1,0 +1,6 @@
+set recolor true
+set recolor-keephue true
+set recolor-darkcolor "#FFFFFF"
+set recolor-lightcolor "#000000"
+
+map r recolor

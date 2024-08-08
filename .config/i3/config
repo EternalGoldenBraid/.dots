@@ -128,21 +128,41 @@ set $ws10 "music"
 
 # Define monitor names.
 # Get monitor names from `xrandr --listmonitors`
-set $monitor_left "DP-4"
-set $monitor_mid "HDMI-0"
-set $monitor_right "DP-2"
+
+### Start office
+# set $monitor_left "DP-4"
+# set $monitor_mid "HDMI-0"
+# set $monitor_right "DP-2"
+#
+# #assign workspace to monitor
+# workspace $ws1 output $monitor_left
+# workspace $ws2 output $monitor_left
+# workspace $ws3 output $monitor_left
+# workspace $ws4 output $monitor_mid
+# workspace $ws5 output $monitor_mid
+# workspace $ws6 output $monitor_mid
+# workspace $ws7 output $monitor_mid
+# workspace $ws8 output $monitor_right
+# workspace $ws9 output $monitor_right
+# workspace $ws10 output $monitor_right
+### END office
+
+### Start Home
+set $monitor_right "DP-4"
+set $monitor_left "HDMI-0"
 
 #assign workspace to monitor
 workspace $ws1 output $monitor_left
 workspace $ws2 output $monitor_left
 workspace $ws3 output $monitor_left
-workspace $ws4 output $monitor_mid
-workspace $ws5 output $monitor_mid
-workspace $ws6 output $monitor_mid
-workspace $ws7 output $monitor_mid
+workspace $ws4 output $monitor_left
+workspace $ws5 output $monitor_left
+workspace $ws6 output $monitor_right
+workspace $ws7 output $monitor_right
 workspace $ws8 output $monitor_right
 workspace $ws9 output $monitor_right
 workspace $ws10 output $monitor_right
+### END Home
 
 # switch to workspace
 bindsym $mod+1 workspace $ws1
