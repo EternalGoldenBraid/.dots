@@ -9,17 +9,15 @@ session="thesis-tex"
 
 cd $tmux_root
 
-# Start tmux server
-# tmux -u start-server
-
-# Create a new tmux session, detached, named after your session variable
-tmux new-session -A -s $session -c $tmux_root
-
-# Rename the first window to 'main'
-tmux rename-window -t $session:0 'main'
-
-# In the first pane, open init.lua with nvim
-tmux send-keys -t $session:0 "nvim main.tex" C-m
+# Check if the tmux session exists
+if tmux has-session -t $session 2>/dev/null; then
+  echo "Session $session already exists. Attaching..."
+else
+  echo "Creating new session $session."
+  # Create a new tmux session, detached, with nvim opening main.tex
+  tmux new-session -d -s $session -c $tmux_root -n main "nvim $main_file"
+fi
 
 # Attach to the session
 tmux attach -t $session
+
