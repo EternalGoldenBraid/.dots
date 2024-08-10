@@ -61,19 +61,28 @@ return {
     opts = {},
     -- Optional dependencies
     dependencies = {
-       -- "nvim-treesitter/nvim-treesitter",
-       {"nvim-treesitter/nvim-treesitter", build = ":TSUpdate", config = function()
-          require("nvim-treesitter.configs").setup({
-            ensure_installed = "all", -- or specify languages like { "c", "lua", "vim" }
-            highlight = { enable = true },
-            indent = { enable = true }
-          })
-       end},
+       "nvim-treesitter/nvim-treesitter",
        "nvim-tree/nvim-web-devicons"
     },
     config = function() require('aerial').setup() end
   },
-
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",  -- This runs TSUpdate after installation
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        -- ensure_installed = "all",  -- Automatically install all maintained parsers
+        ensure_installed = {
+          "bash", "c", "cpp",
+          "css", "html", "javascript", "toml",
+          "yaml", "json", "lua", "regex",
+          "python", "rust",
+        },
+        highlight = { enable = true, disable = {"tex", "latex"}, },
+        indent = { enable = true, disable = {"tex", "latex"}, },
+      })
+    end
+  },
   {
     "ms-jpq/coq_nvim",
     branch = "coq",

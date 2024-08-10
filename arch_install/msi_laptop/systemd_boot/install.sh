@@ -66,7 +66,11 @@ install_system() {
         xorg xorg-xinit xorg-xrandr arandr \
         nvidia nvidia-utils nvidia-settings \
         gnome-keyring libsecret \
-        maim ripgrep cmake
+        maim ripgrep cmake \
+        pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
+        texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
+        texlive-mathscience texlive-plaingeneric texlive-langgreek \
+        zathura zathura-pdf-poppler
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }

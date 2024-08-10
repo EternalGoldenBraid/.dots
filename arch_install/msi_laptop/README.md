@@ -1,14 +1,13 @@
 # MSI laptop installation
 
-## Things to add
+### Things to add
 
 - tmux config
   - tmux source ~/.config/tmux.conf
 
+# AUR (Paru) packages
 paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop auto-cpufreq teams-for-linux \
-    pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol
-
-
+    
 - sudo auto-cpufreq --install
 
 
