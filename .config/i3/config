@@ -295,11 +295,7 @@ exec --no-startup-id firefox
 exec --no-startup-id kitty
 
 # Wallpaper
-#set $wall_paper ~/Media/Images/astronaut_jellyfish.jpg
-#set $wall_paper ~/Media/Images/frog.jpg
-#set $wall_paper ~/Media/Images/spinal_cord.jpg
-# set $wall_paper ~/Media/Images/photosynthesis.jpg
-# exec_always feh --bg-fill $wall_paper
+exec_always feh --bg-fill ~/Media/Images/wallpaper.jpg
 
 # Miscellanious setups:
 
