@@ -7,6 +7,7 @@
 
 # AUR (Paru) packages
 paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop auto-cpufreq teams-for-linux \
+        rofi-greenclip
     
 - sudo auto-cpufreq --install
 
