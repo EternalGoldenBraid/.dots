@@ -71,6 +71,7 @@ install_system() {
         texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
         texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
         zathura zathura-pdf-poppler xdotool \
+        lxappearance # For GTP themes
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }

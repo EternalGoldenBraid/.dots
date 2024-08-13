@@ -265,6 +265,7 @@ bar {
 		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
 	}
 	font pango:monospace 10, FontAwesome 10
+    # i3bar_command i3bar --transparency
 }
 
 
