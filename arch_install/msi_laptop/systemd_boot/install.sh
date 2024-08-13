@@ -62,7 +62,7 @@ install_system() {
         nm-connection-editor \
         neovim vim vifm obsidian firefox nemo \
         kitty git rsync \
-        i3 i3status i3lock i3-gaps rofi rofi-calc \
+        i3 i3status i3lock i3-gaps rofi rofi-calc picom \
         xorg xorg-xinit xorg-xrandr arandr \
         nvidia nvidia-utils nvidia-settings \
         gnome-keyring libsecret \
