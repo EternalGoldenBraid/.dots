@@ -1,11 +1,1 @@
-[Unit]
-Description=Backup to Remote Backups Folder
-
-[Service]
-Type=oneshot
-Environment=SOURCE_DIR=/home/nicklas/brain
-Environment=DEST_DIR=protondrive:Backups
-ExecStart=/usr/bin/rclone copy $SOURCE_DIR $DEST_DIR
-
-[Install]
-WantedBy=default.target
+/home/nicklas/.dotfiles/systemd_unit_files/services/obsidian_backup.service
