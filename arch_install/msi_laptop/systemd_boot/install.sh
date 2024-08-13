@@ -69,8 +69,8 @@ install_system() {
         maim ripgrep cmake \
         pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
         texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
-        texlive-mathscience texlive-plaingeneric texlive-langgreek \
-        zathura zathura-pdf-poppler
+        texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
+        zathura zathura-pdf-poppler xdotool \
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
