@@ -28,8 +28,8 @@ return {
       window = {
           layout = 'float',
           relative = 'cursor',
-          width = 1,
-          height = 0.4,
+          width = 0.8,
+          height = 0.8,
           row = 1
     },
     mappings = {
@@ -90,6 +90,23 @@ return {
     config = function()
       require("coq") -- initialize the coq plugin
     end
+  },
+  {
+      'windwp/nvim-autopairs',
+      event = "InsertEnter",
+      config = true
+      -- use opts = {} for passing setup options
+      -- this is equalent to setup({}) function
+  },
+  {
+      "kylechui/nvim-surround",
+      version = "*", -- Use for stability; omit to use `main` branch for the latest features
+      event = "VeryLazy",
+      config = function()
+          require("nvim-surround").setup({
+              -- Configuration here, or leave empty to use defaults
+          })
+      end
   },
   {
     "ms-jpq/coq.artifacts",

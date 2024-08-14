@@ -37,6 +37,7 @@ else
     require("plugins/coding"),
     require("plugins/telescope"),
     require("plugins/vimtex"),
+    require("plugins/firenvim"),
   })
   require('Comment').setup()
   
