@@ -2,8 +2,6 @@
 
 local home = os.getenv("HOME")
 
-print("Hep")
-
 -- Check if running inside VSCode
 if vim.g.vscode then
     vim.cmd("source " .. home .. "/.config/nvim/vscode.vim")
