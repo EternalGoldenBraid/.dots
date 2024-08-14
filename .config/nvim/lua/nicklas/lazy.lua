@@ -12,8 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
   
--- require("lazy").setup("plugins")
-require("lazy").setup({
+require("lazy").setup({ { import = "plugins"},
   require("plugins/ui"),
   require("plugins/ultisnips"),
   require("plugins/obsidian_nvim"),
@@ -22,4 +21,4 @@ require("lazy").setup({
   require("plugins/vimtex"),
   require("plugins/firenvim"),
 })
-require('Comment').setup()
+-- require('Comment').setup()
