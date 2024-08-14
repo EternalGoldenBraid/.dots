@@ -8,10 +8,10 @@ return {
     local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
     local colors = {
-      blue = "#65D1FF",
-      green = "#3EFFDC",
-      violet = "#FF61EF",
-      yellow = "#FFDA7B",
+      green = "#b3ee1d",
+      orange = "#e1a500",
+      brown = "#935f43",
+      violet = "#6c2b41",
       red = "#FF4A4A",
       fg = "#c3ccdc",
       bg = "#112638",
@@ -20,7 +20,7 @@ return {
 
     local my_lualine_theme = {
       normal = {
-        a = { bg = colors.blue, fg = colors.bg, gui = "bold" },
+        a = { bg = colors.orange, fg = colors.bg, gui = "bold" },
         b = { bg = colors.bg, fg = colors.fg },
         c = { bg = colors.bg, fg = colors.fg },
       },
@@ -30,12 +30,12 @@ return {
         c = { bg = colors.bg, fg = colors.fg },
       },
       visual = {
-        a = { bg = colors.violet, fg = colors.bg, gui = "bold" },
+        a = { bg = colors.brown, fg = colors.bg, gui = "bold" },
         b = { bg = colors.bg, fg = colors.fg },
         c = { bg = colors.bg, fg = colors.fg },
       },
       command = {
-        a = { bg = colors.yellow, fg = colors.bg, gui = "bold" },
+        a = { bg = colors.violet, fg = colors.bg, gui = "bold" },
         b = { bg = colors.bg, fg = colors.fg },
         c = { bg = colors.bg, fg = colors.fg },
       },
