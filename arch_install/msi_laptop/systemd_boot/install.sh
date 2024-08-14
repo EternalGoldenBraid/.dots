@@ -71,7 +71,7 @@ install_system() {
         texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
         texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
         zathura zathura-pdf-poppler xdotool \
-        lxappearance ttf-font-awesome \
+        lxappearance ttf-font-awesome zoxide \
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
