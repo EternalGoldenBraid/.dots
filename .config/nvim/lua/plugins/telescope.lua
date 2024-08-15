@@ -2,6 +2,15 @@ return {
   {
     'nvim-telescope/telescope.nvim', tag = '0.1.5',
      -- or                              , branch = '0.1.x',
+    config = function()
+      require('telescope').setup{
+        defaults = {
+          preview = {
+            treesitter = false
+          }
+        }
+      }
+    end,
       dependencies = {
         'nvim-lua/plenary.nvim',
         'nvim-treesitter/nvim-treesitter'

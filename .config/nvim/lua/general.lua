@@ -1,5 +1,8 @@
 -- general.lua
 
+-- fold method indent
+vim.o.foldmethod = "indent"
+
 -- Use system-wide Python binaries even in virtual environments
 vim.g.python3_host_prog = "~/venvs/neovim/bin/python"
 
