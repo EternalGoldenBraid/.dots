@@ -7,7 +7,10 @@ return {
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
       -- Set width
-      width = 200,
+      width = 1,
+      height = 1,
+      -- backdrop=0.95,
+      backdrop=1.00,
     }
   },
   {

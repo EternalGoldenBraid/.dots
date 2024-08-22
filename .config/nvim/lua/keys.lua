@@ -24,12 +24,17 @@ vim.api.nvim_set_keymap('n', 'tt', ':tab split<CR>', {noremap = true})
 -- Delete line in insert mode
 vim.api.nvim_set_keymap('i', '<c-d>', '<esc>ddi', {noremap = true})
 
--- Move top and bottom of view with shift-h and shift-l
+-- Move top and bottom of view with shift-h and shift-l in both normal and visual mode
 vim.api.nvim_set_keymap('n', '<S-l>', 'H', {noremap = true})
 vim.api.nvim_set_keymap('n', '<S-h>', 'L', {noremap = true})
+vim.api.nvim_set_keymap('v', '<S-l>', 'H', {noremap = true})
+vim.api.nvim_set_keymap('v', '<S-h>', 'L', {noremap = true})
 
 -- Increase and decrease window size
 vim.api.nvim_set_keymap('n', '<c-j>', '<c-w>-', {noremap = true})
+vim.api.nvim_set_keymap('n', '<c-k>', '<c-w>+', {noremap = true})
+vim.api.nvim_set_keymap('n', '<c-h>', '<c-w><', {noremap = true})
+vim.api.nvim_set_keymap('n', '<c-l>', '<c-w>>', {noremap = true})
 
 
 -- Insert newline and enter normal mode
