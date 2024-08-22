@@ -1,3 +1,6 @@
 .ssh/config
 .ssh/known*
 
+bin/logs/nvim.log
+.config/vifm/vifminfo.json
+.config/nvim/lazy-lock.json
