@@ -43,6 +43,10 @@ return {
     -- See Commands section for default commands if you want to lazy load on them
   },
   {
+      'sindrets/diffview.nvim',
+      cmd = 'DiffviewOpen',
+  },
+  {
       'numToStr/Comment.nvim',
       opts = {
           -- add any options here
