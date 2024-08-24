@@ -15,13 +15,19 @@ snippet beg "begin{} / end{}" iA
 \end{$1}
 endsnippet
 
-snippet mk "Math" wA
+snippet mk "Math inline" wA
 $${1}$`!p
 if t[2] and t[2][0] not in [',', '.', '?', '-', ' ', ':']:
     snip.rv = ' '
 else:
     snip.rv = ''
 `$2
+endsnippet
+
+snippet dm "Math block" wA
+\begin{equation}
+${1}
+\end{equation}
 endsnippet
 
 context "math()"
