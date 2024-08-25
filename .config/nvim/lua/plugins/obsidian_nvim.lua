@@ -20,19 +20,21 @@ return {
     workspaces = {
       {
         name = "brain",
-        path = "~/brain",
+        path = "/home/nicklas/brain",
+        -- path = "~/brain",
       },
     },
-
     -- see below for full list of options 👇
   },
 
-  config = function()
-    require("nvim-treesitter.configs").setup({
-      ensure_installed = { "markdown", "markdown_inline" },
-      highlight = {
-        enable = true,
-      },
-    })
-  end,
+  log_level = vim.log.levels.INFO,
+
+  -- config = function()
+  --   require("nvim-treesitter.configs").setup({
+  --     ensure_installed = { "markdown", "markdown_inline" },
+  --     highlight = {
+  --       enable = true,
+  --     },
+  --   })
+  -- end,
 }

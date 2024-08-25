@@ -77,7 +77,7 @@ return {
       require("nvim-treesitter.configs").setup({
         -- ensure_installed = "all",  -- Automatically install all maintained parsers
         ensure_installed = {
-          "bash", "c", "cpp",
+          "bash", "c", "cpp", "markdown",
           "css", "html", "javascript", "toml",
           "yaml", "json", "lua", "regex",
           "python", "rust",
