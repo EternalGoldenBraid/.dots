@@ -22,12 +22,17 @@ return {
         name = "brain",
         path = "~/brain",
       },
-      {
-        name = "work",
-        path = "~/vaults/work",
-      },
     },
 
     -- see below for full list of options 👇
   },
+
+  config = function()
+    require("nvim-treesitter.configs").setup({
+      ensure_installed = { "markdown", "markdown_inline" },
+      highlight = {
+        enable = true,
+      },
+    })
+  end,
 }
