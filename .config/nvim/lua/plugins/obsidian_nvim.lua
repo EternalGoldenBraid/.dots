@@ -20,14 +20,32 @@ return {
     workspaces = {
       {
         name = "brain",
-        path = "~/brain",
-      },
-      {
-        name = "work",
-        path = "~/vaults/work",
+        path = "/home/nicklas/brain",
+        -- path = "~/brain",
       },
     },
-
+    disable_frontmatter = true,
     -- see below for full list of options 👇
+
+    -- Mappings TODO
+
+    -- Templates
+    templates = {
+      folder = "Templates",
+      date_format = "%d-%m-%Y",
+      time_format = "%H:%M",
+    }
+    
   },
+
+  log_level = vim.log.levels.INFO,
+
+  -- config = function()
+  --   require("nvim-treesitter.configs").setup({
+  --     ensure_installed = { "markdown", "markdown_inline" },
+  --     highlight = {
+  --       enable = true,
+  --     },
+  --   })
+  -- end,
 }

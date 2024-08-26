@@ -70,6 +70,10 @@ return {
     -- See Commands section for default commands if you want to lazy load on them
   },
   {
+      'sindrets/diffview.nvim',
+      cmd = 'DiffviewOpen',
+  },
+  {
       'numToStr/Comment.nvim',
       opts = {
           -- add any options here
@@ -100,7 +104,7 @@ return {
       require("nvim-treesitter.configs").setup({
         -- ensure_installed = "all",  -- Automatically install all maintained parsers
         ensure_installed = {
-          "bash", "c", "cpp",
+          "bash", "c", "cpp", "markdown",
           "css", "html", "javascript", "toml",
           "yaml", "json", "lua", "regex",
           "python", "rust",

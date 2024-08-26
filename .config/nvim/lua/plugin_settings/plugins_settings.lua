@@ -33,6 +33,11 @@ require('telescope').setup{
 vim.api.nvim_set_keymap('n', '<leader>fd', '<cmd>Telescope file_browser<cr>', {noremap = true, silent = true})
 vim.keymap.set("n", "<space>fb", ":Telescope file_browser path=%:p:h select_buffer=true<CR>")
 
+-- Disable folding in Telescope's result window.
+vim.api.nvim_create_autocmd("FileType", 
+  { pattern = "TelescopeResults", command = [[setlocal nofoldenable]] }
+)
+
 -- Keymaps for vimtex
 vim.g.vimtex_view_method = 'zathura'
 vim.g.vimtex_compiler_method = 'latexmk'
