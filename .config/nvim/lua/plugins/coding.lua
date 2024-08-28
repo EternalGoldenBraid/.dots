@@ -107,10 +107,16 @@ return {
           "bash", "c", "cpp", "markdown",
           "css", "html", "javascript", "toml",
           "yaml", "json", "lua", "regex",
-          "python", "rust",
+          "python", "rust", "latex",
         },
-        highlight = { enable = true, disable = {"tex", "latex"}, },
-        indent = { enable = true, disable = {"tex", "latex"}, },
+        highlight = { 
+          enable = true,
+          -- disable = {"tex", "latex"}, 
+        },
+        indent = { 
+          enable = true,
+          -- disable = {"tex", "latex"}, 
+        },
       })
     end
   },
