@@ -30,11 +30,17 @@ vim.api.nvim_set_keymap('n', '<S-h>', 'L', {noremap = true})
 vim.api.nvim_set_keymap('v', '<S-l>', 'H', {noremap = true})
 vim.api.nvim_set_keymap('v', '<S-h>', 'L', {noremap = true})
 
--- Increase and decrease window size
-vim.api.nvim_set_keymap('n', '<c-j>', '<c-w>-', {noremap = true})
-vim.api.nvim_set_keymap('n', '<c-k>', '<c-w>+', {noremap = true})
-vim.api.nvim_set_keymap('n', '<c-h>', '<c-w><', {noremap = true})
-vim.api.nvim_set_keymap('n', '<c-l>', '<c-w>>', {noremap = true})
+-- Increase and decrease window size with ctrl+W+j/k/h/l
+vim.api.nvim_set_keymap('n', '<A-j>', '<c-w>-', {noremap = true})
+vim.api.nvim_set_keymap('n', '<A-k>', '<c-w>+', {noremap = true})
+vim.api.nvim_set_keymap('n', '<A-h>', '<c-w><', {noremap = true})
+vim.api.nvim_set_keymap('n', '<A-l>', '<c-w>>', {noremap = true})
+
+-- Move between splits with ctrl+h/j/k/l
+vim.api.nvim_set_keymap('n', '<c-j>', '<c-w>j', {noremap = true})
+vim.api.nvim_set_keymap('n', '<c-k>', '<c-w>k', {noremap = true})
+vim.api.nvim_set_keymap('n', '<c-h>', '<c-w>h', {noremap = true})
+vim.api.nvim_set_keymap('n', '<c-l>', '<c-w>l', {noremap = true})
 
 
 -- Insert newline and enter normal mode
