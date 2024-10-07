@@ -14,8 +14,8 @@ vim.opt.rtp:prepend(lazypath)
   
 require("lazy").setup({ { import = "plugins"},
   require("plugins/ui"),
-  require("plugins/ultisnips"),
-  -- require("plugins/luasnips"),
+  -- require("plugins/ultisnips"),
+  require("plugins/luasnips"),
   require("plugins/obsidian_nvim"),
   require("plugins/coding"),
   require("plugins/telescope"),
