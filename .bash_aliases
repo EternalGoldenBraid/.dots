@@ -10,13 +10,14 @@ alias home='cd $HOME'
 alias pacinstall='sudo pacman -Syu'
 alias dots='cd ~/.dotfiles'
 alias bins='cd ~/.dotfiles/bin'
+alias tree='exa --tree'
 
 alias sammu='shutdown -h now'
 alias sleep='sudo systemctl suspend'
 alias gitsave='git add --all && git commit -m "unimportant" && git push'
 
 # Temporary configurations
-alias activate='. venv/bin/activate'
+alias activate='pixi shell'
 
 # Tmux startups
 alias daymux='~/.dotfiles/tmux/tmux_daily.sh'
