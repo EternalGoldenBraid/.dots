@@ -38,7 +38,21 @@ return {
     }
   },
   {
-  "github/copilot.vim",
+  -- "github/copilot.vim",
+  "zbirenbaum/copilot.lua",
+  keys = {
+    {
+      "<leader>ct",
+        function()
+          if require("copilot.client").is_disabled() then
+            require("copilot.command").enable()
+          else
+            require("copilot.command").disable()
+          end
+        end,
+      desc = "Toggle (Copilot)",
+    },
+  },
   config = function()
   end
   },
@@ -47,7 +61,8 @@ return {
     branch = "canary",
     dependencies = {
       -- { "github/copilot.lua" }, -- or github/copilot.vim
-      { "github/copilot.vim" }, -- or github/copilot.vim
+      -- { "github/copilot.vim" }, -- or github/copilot.vim
+      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
       { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
     },
     opts = {
