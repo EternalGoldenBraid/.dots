@@ -1,0 +1,23 @@
+# Colors
+GREEN="\[$(tput setaf 2)\]"
+RESET="\[$(tput sgr0)\]"
+
+PS1="${GREEN} \h:\u \w ${RESET}> "
+
+source ~/.exports
+
+export PATH=$PATH:~/bin
+
+### Pip
+export PIP_REQUIRE_VIRTUALENV='true'
+
+# pudb breakpoint()
+export PYTHONBREAKPOINT="pudb.set_trace"
+
+export MANPAGER='nvim +Man!'
+
+# ssh
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+    eval `ssh-agent`
+    ssh-add
+fi

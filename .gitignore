@@ -4,3 +4,4 @@
 bin/logs/nvim.log
 .config/vifm/vifminfo.json
 .config/nvim/lazy-lock.json
+.local/share/rofi/rofi_calc_history
