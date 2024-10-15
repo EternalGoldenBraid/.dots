@@ -16,6 +16,7 @@ return {
       fg = "#c3ccdc",
       bg = "#112638",
       inactive_bg = "#2c3043",
+      semilightgray = "#DBDCDF",
     }
 
     local my_lualine_theme = {

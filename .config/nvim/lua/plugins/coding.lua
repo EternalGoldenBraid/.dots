@@ -38,21 +38,21 @@ return {
     }
   },
   {
-  -- "github/copilot.vim",
-  "zbirenbaum/copilot.lua",
-  keys = {
-    {
-      "<leader>ct",
-        function()
-          if require("copilot.client").is_disabled() then
-            require("copilot.command").enable()
-          else
-            require("copilot.command").disable()
-          end
-        end,
-      desc = "Toggle (Copilot)",
-    },
-  },
+  "github/copilot.vim",
+  -- "zbirenbaum/copilot.lua",
+  -- keys = {
+  --   {
+  --     "<leader>ct",
+  --       function()
+  --         if require("copilot.client").is_disabled() then
+  --           require("copilot.command").enable()
+  --         else
+  --           require("copilot.command").disable()
+  --         end
+  --       end,
+  --     desc = "Toggle (Copilot)",
+  --   },
+  -- },
   config = function()
   end
   },
@@ -203,14 +203,7 @@ return {
   {
     "mfussenegger/nvim-dap-python",
     config = function()
-      require("dap").adapters.python = {
-        type = "executable",
-        command = "python",
-        args = { "-m", "debugpy.adapter" },
-      }
-      require("dap-python").setup("~/venvs/debugpy/bin/python")
-      require("dap-python").test_runner = "pytest"
-      require("dap-python").setup()
+      require("dap-python").setup("~/venvs/neovim/bin/python")
     end
   },
   {
