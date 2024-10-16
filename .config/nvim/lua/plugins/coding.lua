@@ -15,10 +15,6 @@ return {
   --   dependencies = { "PaterJason/cmp-conjure" },
   -- },
   {
-    "aserowy/tmux.nvim",
-    config = function() return require("tmux").setup({}) end
-  },
-  {
     "PaterJason/cmp-conjure",
     lazy = true,
     config = function()
