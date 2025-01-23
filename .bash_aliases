@@ -2,7 +2,7 @@
 alias vi=nvim
 alias reload='source ~/.bashrc'
 alias ls='ls --color=auto'
-# alias ls='exa'
+alias ls='exa'
 alias ..='cd ..;pwd'
 alias ...='cd ../..;pwd'
 alias ....='cd ../../..;pwd'
