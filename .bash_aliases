@@ -13,6 +13,12 @@ alias dots='cd ~/.dotfiles'
 alias bins='cd ~/.dotfiles/bin'
 alias tree='exa --tree'
 
+get_num_physical_cores() {
+  grep '^core id' /proc/cpuinfo | sort -u | wc -l
+}
+alias ncdu='ncdu -t${(get_num_physical_cores)}'
+
+
 alias sammu='shutdown -h now'
 alias sleep='sudo systemctl suspend'
 alias gitsave='git add --all && git commit -m "unimportant" && git push'
