@@ -14,6 +14,7 @@ pacman_enable_parallel_downloads() {
 }
 
 setup_neovim() {
+    echo "Setting up Neovim..."
     mkdir -p ~/venvs
     pushd ~/venvs
     python3 -m venv neovim
@@ -21,13 +22,16 @@ setup_neovim() {
     pip install pynvim debugpy
     deactivate
     popd
+    echo "Neovim setup complete."
 }
 
 setup_tmux() {
+    echo "Setting up tmux..."
     DOT_DIR=${HOME}/.dotfiles
 
     # Install Temp Plugin Manager
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
     ln -sf ${DOT_DIR/tmux.conf} /home/${USER_NAME}/.tmux.conf
     tmux source ~/.tmux.conf
+    echo "Tmux setup complete."
 }
