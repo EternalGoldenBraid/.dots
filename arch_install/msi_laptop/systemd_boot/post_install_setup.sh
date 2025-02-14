@@ -27,20 +27,20 @@ nmtui
 
 # Optional: Clone dotfiles from GitHub
 # echo "Cloning dotfiles for ${USER_NAME}..."
-# sudo -u ${USER_NAME} git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${dot_dir}
+# sudo -u ${USER_NAME} git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${DOT_DIR}
 # git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
 # mv $HOME/.dots $HOME/.dotfiles
 
 # Symbolic link the dotfiles
-ln -sf $dot_dir/.bashrc /home/${USER_NAME}/.bashrc
-# ln -sf $dot_dir/.bash_profile /home/${USER_NAME}/.bash_profile # Don't have this
-ln -sf $dot_dir/.bash_aliases /home/${USER_NAME}/.bash_aliases
-ln -sf $dot_dir/xinitrc /home/${USER_NAME}/.xinitrc
+ln -sf ${DOT_DIR}/.bashrc /home/${USER_NAME}/.bashrc
+# ln -sf $DOT_DIR/.bash_profile /home/${USER_NAME}/.bash_profile # Don't have this
+ln -sf ${DOT_DIR}/.bash_aliases /home/${USER_NAME}/.bash_aliases
+ln -sf ${DOT_DIR}/xinitrc /home/${USER_NAME}/.xinitrc
 
 mkdir -p /home/${USER_NAME}/.config
 mkdir -p $HOME/bin
-ln -s ${DOT_DIR}/.config/* /$HOME/.config/
-ln -s ${DOT_DIR}/bin/* /$HOME/bin/
+ln -sf ${DOT_DIR}/.config/* /$HOME/.config/
+ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 
 # TODO Add Paru setup
 mkdir -p /home/${USER_NAME}/builds
