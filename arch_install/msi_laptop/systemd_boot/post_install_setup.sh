@@ -46,7 +46,9 @@ ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 # TODO Add Paru setup
 mkdir -p ${BUILD_DIR}
 git clone https://aur.archlinux.org/paru.git /home/${USER_NAME}/builds/paru
-pusdh makepkg -srci --noconfirm
+pushd
+makepkg -srci --noconfirm
+popd
 
 ### Pacman Configuration
 pacman_enable_parallel_downloads
