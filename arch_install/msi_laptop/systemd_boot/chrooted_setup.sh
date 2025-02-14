@@ -105,4 +105,3 @@ echo "Set password for $USER_NAME..."
 passwd $USER_NAME
 
 git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
-mv $HOME/.dots $HOME/.dotfiles

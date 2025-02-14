@@ -56,7 +56,7 @@ create_swap_file() {
 install_system() {
     echo "Pacstrap installation..."
     # might need to update the keyring on an old image?
-    pacman -Sy archlinux-keyring
+    pacman -Sy --yes archlinux-keyring
     
     # sway swaylock swayidle swaybg waybar wofi \
     # nvidia nvidia-utils nvidia-settings \ # Fuck this
