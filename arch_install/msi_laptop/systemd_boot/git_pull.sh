@@ -2,6 +2,7 @@
 
 pushd ~/.dots
 git stash; git pull; 
+chmod +x *.sh
 umount \
     /dev/nvme0n1p1 \
     /dev/nvme0n1p3 \
