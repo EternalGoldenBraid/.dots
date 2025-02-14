@@ -32,21 +32,21 @@ ln -sf ${DOT_DIR}/.config/* /$HOME/.config/
 ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 
 # TODO Add Paru setup
-mkdir -p ${BUILD_DIR}
-git clone https://aur.archlinux.org/paru.git ${BUILD_DIR}/paru
-pushd ${BUILD_DIR}/paru
-makepkg -srci --noconfirm
-popd
-
-### Pacman Configuration
-pacman_enable_parallel_downloads
-
-paru -S \
-    1password 1password-cli \
-    tree-sitter-cli ncdu btop \
-    gnome-keyring rofi-greenclip \
-    python-eduvpn-client python-eduvpn_common \
-    slack-desktop auto-cpufreq teams-for-linux redshift 
+# mkdir -p ${BUILD_DIR}
+# git clone https://aur.archlinux.org/paru.git ${BUILD_DIR}/paru
+# pushd ${BUILD_DIR}/paru
+# makepkg -srci --noconfirm
+# popd
+#
+# ### Pacman Configuration
+# pacman_enable_parallel_downloads
+#
+# paru -S \
+#     1password 1password-cli \
+#     tree-sitter-cli ncdu btop \
+#     gnome-keyring rofi-greenclip \
+#     python-eduvpn-client python-eduvpn_common \
+#     slack-desktop auto-cpufreq teams-for-linux redshift 
 
     
 sudo auto-cpufreq --install
