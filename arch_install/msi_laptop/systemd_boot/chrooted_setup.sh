@@ -88,25 +88,25 @@ passwd
 
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
-HOME=/home/$USER_NAME
+HOME=/home/${USER_NAME}
 DOT_DIR=${HOME}/.dotfiles
 
 # Create a new user
-echo "Creating user $USER_NAME..."
-# mkdir -p /home/$USER_NAME
-# chown $USER_NAME:$USER_NAME /home/$USER_NAME
-useradd -m -G wheel -s /bin/bash $USER_NAME
+echo "Creating user ${USER_NAME}..."
+# mkdir -p /home/${USER_NAME}
+# chown ${USER_NAME}:${USER_NAME} /home/${USER_NAME}
+useradd -m -G wheel -s /bin/bash ${USER_NAME}
 
 # Add the new user to the sudoers file via visudo
-echo "Adding $USER_NAME to the sudoers file..."
-echo "$USER_NAME ALL=(ALL) ALL" >> /etc/sudoers
+echo "Adding ${USER_NAME} to the sudoers file..."
+echo "${USER_NAME} ALL=(ALL) ALL" >> /etc/sudoers
 
 # Set password for the new user
-echo "Set password for $USER_NAME..."
-passwd $USER_NAME
+echo "Set password for ${USER_NAME}..."
+passwd ${USER_NAME}
 
 git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
-chown -R $USER_NAME:$USER_NAME $DOT_DIR
+chown -R ${USER_NAME}:${USER_NAME} ${DOT_DIR}
 
 # Internet
 echo "Setting up internet connection..."
