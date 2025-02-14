@@ -53,6 +53,8 @@ ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 sudo auto-cpufreq --install
 systemctl enable --now auto-cpufreq
 
+setup_tmux
+
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service
 #
