@@ -69,7 +69,7 @@ install_system() {
         i3 i3status i3lock i3-gaps rofi rofi-calc picom \
         xorg xorg-xinit xorg-xrandr arandr \
         gnome-keyring libsecret \
-        maim ripgrep cmake ssh \
+        maim ripgrep cmake openssh \
         pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
         texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
         texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
