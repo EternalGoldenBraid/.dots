@@ -12,3 +12,13 @@ pacman_enable_parallel_downloads() {
     
     echo "Parallel downloads enabled for Pacman."
 }
+
+setup_neovim() {
+    mkdir -p ~/venvs/neovim
+    pushd ~/venvs/neovim
+    python3 -m venv neovim
+    source neovim/bin/activate
+    pip install pynvim debugpy
+    deactivate
+    popd
+}

@@ -42,14 +42,18 @@ popd
 pacman_enable_parallel_downloads
 
 paru -S \
+    1password 1password-cli \
     tree-sitter-cli ncdu btop \
-    gnome-keyring python-eduvpn-client 1password \
-    slack-desktop auto-cpufreq teams-for-linux \
-    rofi-greenclip
+    gnome-keyring rofi-greenclip \
+    python-eduvpn-client python-eduvpn_common \
+    slack-desktop auto-cpufreq teams-for-linux redshift 
+
     
 sudo auto-cpufreq --install
+systemctl enable --now auto-cpufreq
 
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service
 #
 
+setup_neovim
