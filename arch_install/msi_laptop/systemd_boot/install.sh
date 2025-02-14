@@ -3,6 +3,8 @@
 
 set -e
 
+source utils.sh
+
 # Script to create and format partitions on a specified device using parted
 swap_size=12G
 create_swapfile=true
@@ -51,20 +53,6 @@ mount_partitions() {
 create_swap_file() {
     echo "Creating swap file..."
     mkswap -U clear --size $swap_size --file /mnt/swapfile
-}
-
-pacman_enable_parallel_downloads() {
-    # Check if ParallelDownloads is already set
-    if grep -q "^ParallelDownloads" /etc/pacman.conf; then
-        # Update the existing line
-        sudo sed -i 's/^ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-    else
-        # Add ParallelDownloads setting under Misc options
-        # echo "ParallelDownloads = 5" | sudo tee -a /etc/pacman.conf
-        sudo sed -i '/^# Misc options/a ParallelDownloads = 5' /etc/pacman.conf
-    fi
-    
-    echo "Parallel downloads enabled for Pacman."
 }
 
 install_system() {

@@ -1,19 +1,7 @@
 #!/bin/bash
 set -e
 
-pacman_enable_parallel_downloads() {
-    # Check if ParallelDownloads is already set
-    if grep -q "^ParallelDownloads" /etc/pacman.conf; then
-        # Update the existing line
-        sudo sed -i 's/^ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
-    else
-        # Add ParallelDownloads setting under Misc options
-        # echo "ParallelDownloads = 5" | sudo tee -a /etc/pacman.conf
-        sudo sed -i '/^# Misc options/a ParallelDownloads = 5' /etc/pacman.conf
-    fi
-    
-    echo "Parallel downloads enabled for Pacman."
-}
+source utils.sh
 
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
@@ -55,7 +43,7 @@ pacman_enable_parallel_downloads
 
 paru -S \
     tree-sitter-cli ncdu btop \
-    gnome-keyring eduvpn 1password setups \
+    gnome-keyring python-eduvpn-client 1password \
     slack-desktop auto-cpufreq teams-for-linux \
     rofi-greenclip
     
