@@ -53,30 +53,44 @@ create_swap_file() {
     mkswap -U clear --size $swap_size --file /mnt/swapfile
 }
 
+pacman_enable_parallel_downloads() {
+    # Check if ParallelDownloads is already set
+    if grep -q "^ParallelDownloads" /etc/pacman.conf; then
+        # Update the existing line
+        sudo sed -i 's/^ParallelDownloads.*/ParallelDownloads = 5/' /etc/pacman.conf
+    else
+        # Add ParallelDownloads setting under Misc options
+        # echo "ParallelDownloads = 5" | sudo tee -a /etc/pacman.conf
+        sudo sed -i '/^# Misc options/a ParallelDownloads = 5' /etc/pacman.conf
+    fi
+    
+    echo "Parallel downloads enabled for Pacman."
+}
+
 install_system() {
     echo "Pacstrap installation..."
+    pacman_enable_parallel_downloads
     # might need to update the keyring on an old image?
     pacman -Sy --noconfirm archlinux-keyring
     
     # sway swaylock swayidle swaybg waybar wofi \
     # nvidia nvidia-utils nvidia-settings \ # Fuck this
     pacstrap -K /mnt base base-devel \
-        linux linux-firmware ${cpu_manufacturer}-ucode openssh git
-        # linux linux-firmware ${cpu_manufacturer}-ucode \
-        # networkmanager network-manager-applet \
-        # nm-connection-editor \
-        # neovim vim vifm obsidian firefox nemo \
-        # kitty git rsync \
-        # i3 i3status i3lock i3-gaps rofi rofi-calc picom \
-        # xorg xorg-xinit xorg-xrandr arandr \
-        # gnome-keyring libsecret \
-        # maim ripgrep cmake openssh \
-        # pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
-        # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
-        # texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
-        # zathura zathura-pdf-poppler xdotool \
-        # lxappearance ttf-font-awesome zoxide \
-        # tree-sitter-cli ncdu btop
+        linux linux-firmware ${cpu_manufacturer}-ucode openssh git \
+        networkmanager network-manager-applet \
+        nm-connection-editor \
+        neovim vim vifm obsidian firefox nemo \
+        kitty git rsync \
+        i3 i3status i3lock i3-gaps rofi rofi-calc picom \
+        xorg xorg-xinit xorg-xrandr arandr \
+        gnome-keyring libsecret \
+        maim ripgrep cmake \
+        pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
+        texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
+        texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
+        zathura zathura-pdf-poppler xdotool \
+        lxappearance ttf-font-awesome zoxide \
+        tree-sitter-cli ncdu btop
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
