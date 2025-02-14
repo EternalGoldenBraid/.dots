@@ -9,7 +9,6 @@ DOT_DIR=${HOME}/.dotfiles
 BUILD_DIR=/home/${USER_NAME}/builds
 
 nmtui
-setup_neovim
 
 # Create ssh keys for the new user
 # echo "Creating ssh keys for ${USER_NAME}..."
@@ -49,11 +48,12 @@ ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 #     python-eduvpn-client python-eduvpn_common \
 #     slack-desktop auto-cpufreq teams-for-linux redshift 
 
+setup_neovim
+setup_tmux
     
 sudo auto-cpufreq --install
 systemctl enable --now auto-cpufreq
 
-setup_tmux
 
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service
