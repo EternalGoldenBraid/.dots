@@ -61,21 +61,22 @@ install_system() {
     # sway swaylock swayidle swaybg waybar wofi \
     # nvidia nvidia-utils nvidia-settings \ # Fuck this
     pacstrap -K /mnt base base-devel \
-        linux linux-firmware ${cpu_manufacturer}-ucode \
-        networkmanager network-manager-applet \
-        nm-connection-editor \
-        neovim vim vifm obsidian firefox nemo \
-        kitty git rsync \
-        i3 i3status i3lock i3-gaps rofi rofi-calc picom \
-        xorg xorg-xinit xorg-xrandr arandr \
-        gnome-keyring libsecret \
-        maim ripgrep cmake openssh \
-        pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
-        texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
-        texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
-        zathura zathura-pdf-poppler xdotool \
-        lxappearance ttf-font-awesome zoxide \
-        tree-sitter-cli ncdu btop
+        linux linux-firmware ${cpu_manufacturer}-ucode 
+        # linux linux-firmware ${cpu_manufacturer}-ucode \
+        # networkmanager network-manager-applet \
+        # nm-connection-editor \
+        # neovim vim vifm obsidian firefox nemo \
+        # kitty git rsync \
+        # i3 i3status i3lock i3-gaps rofi rofi-calc picom \
+        # xorg xorg-xinit xorg-xrandr arandr \
+        # gnome-keyring libsecret \
+        # maim ripgrep cmake openssh \
+        # pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
+        # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
+        # texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
+        # zathura zathura-pdf-poppler xdotool \
+        # lxappearance ttf-font-awesome zoxide \
+        # tree-sitter-cli ncdu btop
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
