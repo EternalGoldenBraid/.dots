@@ -3,7 +3,7 @@
 
 set -e
 
-source ~/.dotfiles/arch_install/msi_install/systemd_boot/utils.sh
+source ~/.dotfiles/arch_install/msi_laptop/systemd_boot/utils.sh
 
 # Script to create and format partitions on a specified device using parted
 swap_size=12G
