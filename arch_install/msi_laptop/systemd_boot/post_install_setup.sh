@@ -18,6 +18,7 @@ pacman_enable_parallel_downloads() {
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
 DOT_DIR=${HOME}/.dotfiles
+BUILD_DIR=/home/${USER_NAME}/builds
 
 nmtui
 
@@ -43,9 +44,9 @@ ln -sf ${DOT_DIR}/.config/* /$HOME/.config/
 ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 
 # TODO Add Paru setup
-mkdir -p /home/${USER_NAME}/builds
+mkdir -p ${BUILD_DIR}
 git clone https://aur.archlinux.org/paru.git /home/${USER_NAME}/builds/paru
-makepkg -srci --noconfirm
+pusdh makepkg -srci --noconfirm
 
 ### Pacman Configuration
 pacman_enable_parallel_downloads
