@@ -7,9 +7,9 @@ set -e
 # sudo -u $USER_NAME ssh-keygen -t rsa -b 4096 -f /home/$USER_NAME/.ssh/id_rsa -C "$USER_NAME@${HOSTNAME}"
 
 # Optional: Clone dotfiles from GitHub
-echo "Cloning dotfiles for $USER_NAME..."
-sudo -u $USER_NAME git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${dot_dir}
-mv $HOME/.dots $HOME/.dotfiles
+# echo "Cloning dotfiles for $USER_NAME..."
+# sudo -u $USER_NAME git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${dot_dir}
+# mv $HOME/.dots $HOME/.dotfiles
 
 # Symbolic link the dotfiles
 ln -sf $dot_dir/.bashrc /home/$USER_NAME/.bashrc
