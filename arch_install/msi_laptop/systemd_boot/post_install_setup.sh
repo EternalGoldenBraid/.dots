@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-source ~/.dotfiles/arch_linux/msi_install/systemd_boot/utils.sh
+source ~/.dotfiles/arch_install/msi_install/systemd_boot/utils.sh
 
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
