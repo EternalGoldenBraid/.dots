@@ -3,11 +3,12 @@ set -e
 
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
-HOME= /home/$USER_NAME
+HOME=/home/$USER_NAME
 DOT_DIR=${HOME}/.dotfiles
 
 # Create a new user
 echo "Creating user $USER_NAME..."
+mkdir -p /home/$USER_NAME
 useradd -m -G wheel -s /bin/bash $USER_NAME
 
 # Add the new user to the sudoers file via visudo
@@ -36,10 +37,17 @@ ln -sf $dot_dir/xinitrc /home/$USER_NAME/.xinitrc
 mkdir -p /home/$USER_NAME/.config
 mkdir $HOME/bin
 ln -s $DOT_DIR/.config/* /$HOME/.config/
-ln -s $DOT_DIR/bin/* /$HOME/bin
+ln -s $DOT_DIR/bin/* /$HOME/bin/
 
 # TODO Add Paru setup
-
+mkdir -p /home/$USER_NAME/builds
+git clone https://aur.archlinux.org/paru.git /home/$USER_NAME/builds/paru
+paru -S \
+    gnome-keyring eduvpn 1password setups \
+    slack-desktop auto-cpufreq teams-for-linux \
+    rofi-greenclip
+    
+sudo auto-cpufreq --install
 
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service

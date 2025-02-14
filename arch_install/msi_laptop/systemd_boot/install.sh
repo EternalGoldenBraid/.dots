@@ -55,7 +55,11 @@ create_swap_file() {
 
 install_system() {
     echo "Pacstrap installation..."
+    # might need to update the keyring on an old image?
+    pacman -Sy archlinux-keyring
+    
     # sway swaylock swayidle swaybg waybar wofi \
+    # nvidia nvidia-utils nvidia-settings \ # Fuck this
     pacstrap -K /mnt base base-devel \
         linux linux-firmware ${cpu_manufacturer}-ucode \
         networkmanager network-manager-applet \
@@ -64,15 +68,14 @@ install_system() {
         kitty git rsync \
         i3 i3status i3lock i3-gaps rofi rofi-calc picom \
         xorg xorg-xinit xorg-xrandr arandr \
-        nvidia nvidia-utils nvidia-settings \
         gnome-keyring libsecret \
-        maim ripgrep cmake \
+        maim ripgrep cmake ssh \
         pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
         texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
         texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
         zathura zathura-pdf-poppler xdotool \
         lxappearance ttf-font-awesome zoxide \
-        tree-sitter-cli
+        tree-sitter-cli ncdu btop
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
@@ -80,7 +83,7 @@ install_system() {
 ### Main Script Execution
 set -e
 if [ -z "$1" ]; then
-    echo "Usage: $0 /dev/sdX"
+    echo "Usage: $0 /dev/sdX or /dev/nvme0n1"
     exit 1
 elif [ ! -b "$1" ]; then
     echo "Error: $1 is not a valid block device."
