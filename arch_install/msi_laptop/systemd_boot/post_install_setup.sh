@@ -45,7 +45,7 @@ ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 # paru -S \
 #     1password 1password-cli \
 #     tree-sitter-cli ncdu btop \
-#     gnome-keyring rofi-greenclip \
+#     gnome-keyring rofi-greenclip exa \
 #     python-eduvpn-client python-eduvpn_common \
 #     slack-desktop auto-cpufreq teams-for-linux redshift 
 

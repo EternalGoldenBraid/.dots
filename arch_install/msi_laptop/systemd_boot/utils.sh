@@ -22,3 +22,12 @@ setup_neovim() {
     deactivate
     popd
 }
+
+setup_tmux() {
+    DOT_DIR=${HOME}/.dotfiles
+
+    # Install Temp Plugin Manager
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    ln -sf ${DOT_DIR/tmux.conf /home/${USER_NAME}/.tmux.conf
+    tmux source ~/.tmux.conf
+}
