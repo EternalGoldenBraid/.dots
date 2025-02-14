@@ -125,4 +125,4 @@ function run_chrooted( ) {
 }
 
 run_chrooted chrooted_setup.sh
-run_chrooted post_install_setup.sh
+# run_chrooted post_install_setup.sh # TODO Figure out how to run these things as user

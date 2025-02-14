@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
-
+P
+USER_NAME="nicklas"
+GITHUB_USERNAME="EternalGoldenBraid"
+DOT_DIR=${HOME}/.dotfiles
 
 # Create ssh keys for the new user
 # echo "Creating ssh keys for $USER_NAME..."
@@ -9,6 +12,7 @@ set -e
 # Optional: Clone dotfiles from GitHub
 # echo "Cloning dotfiles for $USER_NAME..."
 # sudo -u $USER_NAME git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${dot_dir}
+git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
 # mv $HOME/.dots $HOME/.dotfiles
 
 # Symbolic link the dotfiles
