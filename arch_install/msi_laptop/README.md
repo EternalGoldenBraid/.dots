@@ -1,17 +1,25 @@
 # MSI laptop installation
 
+## Status:
+- Base installation works.
+
+## Internet
+`systemctl enable NetworkManager`
+`systemctl start NetworkManager`
+`nmtui`
+
 ### Things to add
 
 - tmux config
   - tmux source ~/.config/tmux.conf
 
-# AUR (Paru) packages
+## AUR (Paru) packages
 paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop auto-cpufreq teams-for-linux \
         rofi-greenclip
     
 - sudo auto-cpufreq --install
 
-# On ssh configs and configs setup with 1password:
+## On ssh configs and configs setup with 1password:
 
 - export the github key from 1password and store in some `temp_gh_key`
 - `ssh-add temp_gh_key`

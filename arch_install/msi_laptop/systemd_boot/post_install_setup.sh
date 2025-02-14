@@ -45,8 +45,8 @@ ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 
 # TODO Add Paru setup
 mkdir -p ${BUILD_DIR}
-git clone https://aur.archlinux.org/paru.git /home/${USER_NAME}/builds/paru
-pushd
+git clone https://aur.archlinux.org/paru.git ${BUILD_DIR}/paru
+pushd ${BUILD_DIR}/paru
 makepkg -srci --noconfirm
 popd
 
