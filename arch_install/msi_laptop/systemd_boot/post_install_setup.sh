@@ -9,6 +9,7 @@ DOT_DIR=${HOME}/.dotfiles
 BUILD_DIR=/home/${USER_NAME}/builds
 
 nmtui
+setup_neovim
 
 # Create ssh keys for the new user
 # echo "Creating ssh keys for ${USER_NAME}..."
@@ -56,4 +57,3 @@ systemctl enable --now auto-cpufreq
 # systemctl enable --now systemd-timesyncd.service
 #
 
-setup_neovim

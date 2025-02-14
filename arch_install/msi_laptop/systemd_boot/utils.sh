@@ -14,8 +14,8 @@ pacman_enable_parallel_downloads() {
 }
 
 setup_neovim() {
-    mkdir -p ~/venvs/neovim
-    pushd ~/venvs/neovim
+    mkdir -p ~/venvs
+    pushd ~/venvs
     python3 -m venv neovim
     source neovim/bin/activate
     pip install pynvim debugpy
