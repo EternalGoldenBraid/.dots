@@ -1,5 +1,8 @@
 #!/bin/bash
 
+DOTS_REPO_HTTPS="https://github.com/EternalGoldenBraid/.dots"
+DOTS_REPO_SSH="git@github.com:EternalGoldenBraid/.dots"
+
 pacman_enable_parallel_downloads() {
     # Check if ParallelDownloads is already set
     if grep -q "^ParallelDownloads" /etc/pacman.conf; then

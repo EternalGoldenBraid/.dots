@@ -54,6 +54,10 @@ setup_tmux
 sudo auto-cpufreq --install
 systemctl enable --now auto-cpufreq
 
+timedatectl set-ntp true
+pushd ~/${DOT_DIR}
+git remote set-url origin ${DOTS_REPO_SSH}
+popd
 
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service
