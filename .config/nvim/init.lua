@@ -13,6 +13,9 @@ if vim.g.vscode then
     -- vim.cmd("source " .. home .. "/.config/nvim/vscode.vim")
     vim.cmd('echo "init.lua: VSCode Neovim Loaded"')
     require('keys')
+elseif vim.g.started_by_firenvim then
+    vim.cmd('echo "init.lua: Firenvim Loaded"')
+    require('plugin_settings.firenvim')
 else
   
   -- Using require for modules
