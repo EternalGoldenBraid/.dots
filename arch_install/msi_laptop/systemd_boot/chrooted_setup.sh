@@ -105,7 +105,8 @@ echo "${USER_NAME} ALL=(ALL) ALL" >> /etc/sudoers
 echo "Set password for ${USER_NAME}..."
 passwd ${USER_NAME}
 
-git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
+# git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
+git clone ${DOTS_REPO_HTTPS} ${DOT_DIR}
 chown -R ${USER_NAME}:${USER_NAME} ${DOT_DIR}
 
 # Internet

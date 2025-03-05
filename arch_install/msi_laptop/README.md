@@ -23,8 +23,7 @@ paru -S gnome-keyring eduvpn 1password ssh setups slack-desktop auto-cpufreq tea
 
 - export the github key from 1password and store in some `temp_gh_key`
 - `ssh-add temp_gh_key`
-- Pull .dots
-- pull privete ssh configs (requires the above key) `git submodule update --init --recursive`
+- pull private ssh configs (requires the above key) `git submodule update --init --recursive`
 - remove old .ssh dir: `rm -r ~/.ssh`
 - link the .ssh dir: `ln -sf ~/.dotfiles/.ssh ~/.ssh`
 - Create a main config at: `~/.ssh/config` containing:
