@@ -15,6 +15,7 @@ vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({ { import = "plugins"},
   require("plugins/firenvim"),
+  require('keys'),
 })
 
 -- -- Hide status line
