@@ -170,7 +170,6 @@ return {
     "ms-jpq/coq.thirdparty",
     branch = "3p",
   },
-
   {
     "dense-analysis/ale",
     event = "VimEnter",
@@ -190,6 +189,11 @@ return {
       vim.g.ale_fixers = {
         ['*'] = {'remove_trailing_lines', 'trim_whitespace'},  -- Universal fixers
         python = {'black', 'isort'},  -- Python specific fixers
+      }
+
+      -- Add Pyright specific settings
+      vim.g.ale_python_pyright = {
+        diagnosticMode = 'openFilesOnly',
       }
     end
   },
