@@ -23,6 +23,7 @@ function restart_service {
 files=(
   "rclone-mount_wallpapers.service"
   "rclone-mount_finance.service"
+  "rclone-mount_reaper_backups.service"
 )
 
 # Iterate over each service in the list and apply operations
