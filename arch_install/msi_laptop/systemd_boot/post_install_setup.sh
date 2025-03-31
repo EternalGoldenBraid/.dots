@@ -24,6 +24,7 @@ nmtui
 ln -sf ${DOT_DIR}/.bashrc /home/${USER_NAME}/.bashrc
 # ln -sf $DOT_DIR/.bash_profile /home/${USER_NAME}/.bash_profile # Don't have this
 ln -sf ${DOT_DIR}/.bash_aliases /home/${USER_NAME}/.bash_aliases
+ln -sf ${DOT_DIR}/.bash_generals /home/${USER_NAME}/.bash_generals
 ln -sf ${DOT_DIR}/xinitrc /home/${USER_NAME}/.xinitrc
 
 mkdir -p /home/${USER_NAME}/.config
