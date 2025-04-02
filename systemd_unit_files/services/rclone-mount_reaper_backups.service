@@ -5,7 +5,7 @@ After=network-online.target
 
 [Service]
 Type=simple
-Environment=MOUNT_PATH="/home/nicklas/Documents/REAPER Media"
+Environment=MOUNT_PATH="/home/nicklas/Documents/Reaper_remote"
 ExecStart=/usr/bin/rclone mount protondrive:Reaper ${MOUNT_PATH} --vfs-cache-mode writes
 ExecStop=/bin/fusermount -u ${MOUNT_PATH}
 Restart=on-abort
