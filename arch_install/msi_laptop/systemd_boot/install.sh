@@ -63,7 +63,7 @@ install_system() {
     
     # sway swaylock swayidle swaybg waybar wofi \
     # nvidia nvidia-utils nvidia-settings \ # Fuck this
-    pacstrap -K /mnt base base-devel \
+    pacstrap -K /mnt base base-devel acpi \
         linux linux-firmware ${cpu_manufacturer}-ucode openssh git \
         networkmanager network-manager-applet \
         nm-connection-editor \
