@@ -63,7 +63,7 @@ install_system() {
     
     # sway swaylock swayidle swaybg waybar wofi \
     # nvidia nvidia-utils nvidia-settings \ # Fuck this
-    pacstrap -K /mnt base base-devel \
+    pacstrap -K /mnt base base-devel acpi \
         linux linux-firmware ${cpu_manufacturer}-ucode openssh git \
         networkmanager network-manager-applet \
         nm-connection-editor \
@@ -75,10 +75,10 @@ install_system() {
         maim ripgrep cmake \
         pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
         texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
-        texlive-mathscience texlive-plaingeneric texlive-langgreek biber \
+        texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
         zathura zathura-pdf-poppler xdotool \
         lxappearance ttf-font-awesome zoxide \
-        tree-sitter-cli ncdu btop lazygit unzip pixi
+        tree-sitter-cli ncdu btop lazygit unzip pixi rclone
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }

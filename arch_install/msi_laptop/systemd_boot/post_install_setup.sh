@@ -57,6 +57,7 @@ systemctl enable --now auto-cpufreq
 
 timedatectl set-ntp true
 pushd ~/${DOT_DIR}
+git config --global core.editor "nvim -f"
 git remote set-url origin ${DOTS_REPO_SSH}
 popd
 
