@@ -3,6 +3,7 @@ alias vi=nvim
 alias reload='source ~/.bashrc'
 alias ls='ls --color=auto'
 alias ls='exa'
+# alias cd='z'
 alias ..='cd ..;pwd'
 alias ...='cd ../..;pwd'
 alias ....='cd ../../..;pwd'
@@ -16,7 +17,11 @@ alias tree='exa --tree'
 get_num_physical_cores() {
   grep '^core id' /proc/cpuinfo | sort -u | wc -l
 }
-alias ncdu='ncdu -t${(get_num_physical_cores)}'
+
+ncdu() {
+  command ncdu -t"$(get_num_physical_cores)" "$@"
+}
+alias diskspace='ncdu'
 
 
 alias sammu='shutdown -h now'
