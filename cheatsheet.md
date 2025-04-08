@@ -51,3 +51,33 @@ To unset the alias
 ```
 unalias <alias_name>
 ```
+
+## Background processes
+
+https://stackoverflow.com/questions/44222883/run-a-shell-script-and-immediately-background-it-however-keep-the-ability-to-in
+
+Add & to the end of the command to run it in the background. For example:
+```
+> zathura instructions/E4_instructions.pdf &
+```
+
+Inspect jobs with:
+```
+ > jobs
+[1]+  Running                 zathura instructions/E4_instructions.pdf &
+```
+
+Bring to foreground:
+```
+> fg 1
+```
+
+Put to sleep and resume to your shell:
+```
+ctrl + z
+```
+
+Resume:
+```
+> bg 1
+```
