@@ -78,7 +78,8 @@ install_system() {
         texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
         zathura zathura-pdf-poppler xdotool \
         lxappearance ttf-font-awesome zoxide \
-        tree-sitter-cli ncdu btop lazygit unzip pixi rclone
+        tree-sitter-cli ncdu btop lazygit unzip pixi rclone feh \
+        npm nodejs
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
