@@ -47,7 +47,7 @@ ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 #     tree-sitter-cli ncdu btop \
 #     gnome-keyring rofi-greenclip exa \
 #     python-eduvpn-client python-eduvpn_common \
-#     slack-desktop auto-cpufreq teams-for-linux redshift 
+#     slack-desktop auto-cpufreq teams-for-linux redshift \
 
 setup_neovim
 setup_tmux

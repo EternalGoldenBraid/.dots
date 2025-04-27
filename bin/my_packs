@@ -1,0 +1,4 @@
+#!/bin/bash
+
+source ~/.dotfiles/bin/utils
+init_tmux "cheatshet" "$HOME/.dotfiles/arch_install/msi_laptop/systemd_boot" "install.sh"

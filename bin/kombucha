@@ -1,0 +1,60 @@
+#!/bin/python
+
+def kombucha_recipe():
+    print("Kombucha-mittalaskuri!")
+
+    teas = [
+        "black", "green", "oolong",
+        "white", "herbal", "rooibos",
+        "pu-erh", "sencha", "chai"
+        ]
+    
+    try:
+        volume_liters = float(input("Kuinka iso on sun astia (litroina)? "))
+        tea_type = input(
+            "Minkälaista teetä käytät: \n"
+            f"{', '.join(teas)} \n"
+            "Syötä teelaadun nimi: ")
+
+        if tea_type not in teas:
+            print("Valitse jokin ylläolevista teelaaduista.")
+            return
+
+    except ValueError:
+        print("Syötä numero.")
+        return
+
+    assert tea_type == 'black', "Tällä hetkellä vain musta tee on tuettu."
+
+    # Perusproportiot 4 litran reseptistä
+    base_volume = 4.0
+    tea_grams = 15  # minimi
+    tea_grams_max = 20  # maksimi
+    sugar_grams = 225
+    starter_liters = 0.5
+    grams_per_tbsp = 6  # 1 rkl mustaa teetä painaa 6 grammaa
+
+    # Skaalauskerroin
+    scale = volume_liters / base_volume
+
+    # Lasketut määrät
+    tea_min = tea_grams * scale
+    tea_max = tea_grams_max * scale
+    sugar = sugar_grams * scale
+    starter = starter_liters * scale
+    water_to_boil = (volume_liters * 0.75)
+    water_cold = (volume_liters * 0.25)
+
+    tea_min_tbsp = tea_min / grams_per_tbsp
+    tea_max_tbsp = tea_max / grams_per_tbsp
+
+    print("\nTarvitset seuraavat määrät:")
+    print(f"- Vettä keitettäväksi: {water_to_boil:.1f} litraa")
+    print(f"- Vettä kylmänä lisättäväksi: {water_cold:.1f} litraa")
+    print(f"- Teetä: {tea_min:.0f}-{tea_max:.0f} grammaa ({tea_min_tbsp:.1f}-{tea_max_tbsp:.1f} rkl)")
+    print(f"- Sokeria: {sugar:.0f} grammaa")
+    print(f"- Starter-nestettä: {starter:.2f} litraa")
+    print(f"- SCOBY-pellicle: 1 kpl")
+
+if __name__ == "__main__":
+    kombucha_recipe()
