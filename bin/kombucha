@@ -34,6 +34,8 @@ def kombucha_recipe():
     starter_liters = 0.5
     grams_per_tbsp = 6  # 1 rkl mustaa teetä painaa 6 grammaa
 
+    sugar_grams_per_dl = 100
+
     # Skaalauskerroin
     scale = volume_liters / base_volume
 
@@ -41,6 +43,7 @@ def kombucha_recipe():
     tea_min = tea_grams * scale
     tea_max = tea_grams_max * scale
     sugar = sugar_grams * scale
+    sugar_dl = sugar / sugar_grams_per_dl
     starter = starter_liters * scale
     water_to_boil = (volume_liters * 0.75)
     water_cold = (volume_liters * 0.25)
@@ -52,7 +55,7 @@ def kombucha_recipe():
     print(f"- Vettä keitettäväksi: {water_to_boil:.1f} litraa")
     print(f"- Vettä kylmänä lisättäväksi: {water_cold:.1f} litraa")
     print(f"- Teetä: {tea_min:.0f}-{tea_max:.0f} grammaa ({tea_min_tbsp:.1f}-{tea_max_tbsp:.1f} rkl)")
-    print(f"- Sokeria: {sugar:.0f} grammaa")
+    print(f"- Sokeria: {sugar:.0f} grammaa ({sugar_dl:.1f} dl)")
     print(f"- Starter-nestettä: {starter:.2f} litraa")
     print(f"- SCOBY-pellicle: 1 kpl")
 
