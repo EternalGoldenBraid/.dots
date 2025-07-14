@@ -307,7 +307,7 @@ exec_always feh --bg-fill ~/Media/Images/Wallpapers/wallpaper.jpg
 
 # Miscellanious setups:
 
-bindsym ctrl+shift+Mod1+d exec firefox "https://dailyapp.eu.pythonanywhere.com/login"
+bindsym shift+$mod+i exec firefox "https://drive.proton.me/u/3/oOkPF6rGUgTMRWkRYMoGyuXy2qxtYsH7ZT__xxTnQwRZhFZ89Pa1tAEL77qDeNYDp2e_yaLZjmJfUbOBpn58hg==/folder/ELJOCWKHNiMepYPkoB4zqX_AO2Fhyc7znQaKhs8Joymg7WslqzVAkCDWBcTpfd-eisf8nIG_v5KMv9irl9LFgA=="
 
 # Bluetooth devices
 bindsym ctrl+$mod+k exec blueman-manager
