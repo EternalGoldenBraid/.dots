@@ -1,0 +1,11 @@
+" Open vifmrc quickly and reload config
+nnoremap ,c :write | edit $MYVIFMRC | restart full<cr>
+
+" Toggle wrap mode
+nnoremap ,w :set wrap!<cr>
+
+" Open shell in current directory
+nnoremap s :shell<cr>
+
+" Sort mode toggle
+nnoremap S :sort<cr>

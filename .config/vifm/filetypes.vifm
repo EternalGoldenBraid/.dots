@@ -1,0 +1,15 @@
+" Video
+filextype {*.mp4,*.mkv,*.webm},<video/*>
+        \ mpv %f
+
+
+" Image files
+filextype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.webp},<image/*>
+        \ imv %f
+
+" PDF files
+filextype {*.pdf},<application/pdf>
+        \ zathura %f
+
+" Fallback: view unknown files in nvim
+filetype * nvim %f
