@@ -15,7 +15,14 @@ local keys = {
   -- {key="l", mods="ALT", action=wezterm.action.AdjustPaneSize{"Right", 3}},
 
   -- Tab management similar to Vim tabs
-  {key="t", mods="CTRL", action=wezterm.action.SpawnTab("CurrentPaneDomain")},
+  -- local utils = require 'utils'
+  -- wezterm.on('spawn-tab-with-name', utils.spawn_tab_with_name())
+  {key="t", mods="CTRL|SHIFT", 
+      action = wezterm.action.Multiple {
+        wezterm.action.SpawnTab("CurrentPaneDomain"),
+        -- wezterm.action.EmitEvent "spawn-tab-with-name",
+      },
+  },
   {key="w", mods="CTRL|SHIFT", action=wezterm.action.CloseCurrentTab{confirm=true}},
   {key="n", mods="CTRL", action=wezterm.action.ActivateTabRelative(1)},
   {key="p", mods="CTRL", action=wezterm.action.ActivateTabRelative(-1)},
