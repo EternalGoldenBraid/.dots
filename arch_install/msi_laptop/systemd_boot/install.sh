@@ -68,7 +68,7 @@ install_system() {
         networkmanager network-manager-applet \
         nm-connection-editor \
         neovim vim vifm obsidian firefox nemo \
-        kitty git rsync tmux \
+        wezterm git rsync tmux \
         i3 i3status i3lock i3-gaps rofi rofi-calc picom \
         xorg xorg-xinit xorg-xrandr arandr \
         gnome-keyring libsecret \
