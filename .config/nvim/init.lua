@@ -21,9 +21,12 @@ else
   -- Using require for modules
   require('keys')
 
-  vim.g.ale_python_pyright_executable = "pyright"
+  -- -- vim.g.ale_python_pyright_executable = "pyright"
+  -- vim.g.ale_python_pyright_executable = '/home/fianda/bin/bin/pyright'
+  -- vim.g.ale_history_log_output = 1
   vim.env.PATH = os.getenv("HOME") .. "/bin/bin:" .. vim.env.PATH
   require("nicklas.lazy")
+  require('lspconfig').pyright.setup{}
   require('general')
   require('gui')
 

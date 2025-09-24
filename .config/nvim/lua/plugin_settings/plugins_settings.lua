@@ -8,6 +8,9 @@ vim.g.UltiSnipsEditSplit = "vertical"
 
 -- Keymaps for Telescope and its plugins
 -- Load the telescope file browser extension
+local telescope = require('telescope')
+local fb_actions = require('telescope').extensions.file_browser.actions
+
 require('telescope').load_extension('file_browser')
 require('telescope').setup{
     -- other setup configuration
@@ -23,7 +26,7 @@ require('telescope').setup{
                     ["j"] = require('telescope.actions').move_selection_next,
                     ["k"] = require('telescope.actions').move_selection_previous,
                     ["<CR>"] = require('telescope.actions').select_default + require('telescope.actions').center,
-                    -- Add more bindings as needed
+                    ["zn"] = fb_actions.toggle_hidden,
                 },
             },
         },
