@@ -41,6 +41,17 @@ vim.api.nvim_create_autocmd("FileType",
 -- Keymaps for vimtex
 vim.g.vimtex_view_method = 'zathura'
 vim.g.vimtex_compiler_method = 'latexmk'
+
+-- Thesis required lualatex (Comment below out for whatever is the default)
+vim.g.vimtex_compiler_latexmk = {
+  build_dir = 'build',  -- optional, keeps aux files out of main dir
+  options = {
+    '-pdf',            -- generate pdf
+    '-lualatex',       -- use LuaLaTeX engine
+    '-interaction=nonstopmode',
+    '-synctex=1',
+  },
+}
 vim.keymap.set('n', '<leader>l', function()
   vim.cmd('VimtexCompile')
   vim.cmd('VimtexView')
