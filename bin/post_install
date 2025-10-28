@@ -1,0 +1,3 @@
+#!/bin/bash
+kitty nvim /home/nicklas/.dotfiles/arch_install/msi_laptop/systemd_boot/post_install_setup.sh
+
