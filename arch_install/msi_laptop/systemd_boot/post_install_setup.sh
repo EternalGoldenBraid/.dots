@@ -48,6 +48,7 @@ ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 #     gnome-keyring rofi-greenclip exa \
 #     python-eduvpn-client python-eduvpn_common \
 #     slack-desktop auto-cpufreq teams-for-linux redshift \
+#     zotero
 
 setup_neovim
 setup_tmux
