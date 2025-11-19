@@ -12,6 +12,7 @@ Scripts Overview
   - A single disk layout with a GPT partition table.
 
 ### chrooted_setup.sh
+Note this is ran directly by `install.sh`
 **Purpose:** Configured to run inside a chroot environment. It sets up system configurations like timezone, locale, hostname, mkinitcpio with resume hook for suspend-to-disk functionality, and installs systemd-boot.
 **Assumptions:** Assumes it's being executed inside a chroot environment on the target filesystem.
 
@@ -32,3 +33,23 @@ This script partitions the drive, installs the base system, and then automatical
 
 ### Note
 Ensure you have a live internet connection and the latest Arch Linux live media to avoid issues during installation. Customize the scripts as needed before running, especially to match hardware specifications like disk layout and desired software.
+
+
+### Internet
+
+Ping:
+```
+ping archlinux.org
+```
+
+If no connection go with iwctl:
+```
+iwctl device list
+
+>> wlan0
+```
+
+e.g.
+```
+iwctl --passphrase <PWD> stationn <device_name> connect <SSID>
+```

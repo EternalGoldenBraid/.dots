@@ -26,7 +26,10 @@ add_resume_hook() {
         exit 1
     fi
     
-    # Regenerate initramfs
+    ### Regenerate initramfs
+    ## Create minimal vconsole to avoid mkinicpio erroring out on
+    ## `/etc/vconsole.conf` not found
+    echo "KEYMAP=us" > /etc/vconsole.conf
     mkinitcpio -P
     echo "Initramfs regenerated."
 }
