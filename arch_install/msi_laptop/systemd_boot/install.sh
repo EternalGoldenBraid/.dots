@@ -74,12 +74,12 @@ install_system() {
         gnome-keyring libsecret \
         maim ripgrep cmake \
         pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
-        texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
-        texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
         zathura zathura-pdf-poppler xdotool \
         lxappearance ttf-font-awesome zoxide \
         tree-sitter-cli ncdu btop lazygit unzip pixi rclone feh \
-        npm nodejs
+        npm nodejs 
+        # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
+        # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
