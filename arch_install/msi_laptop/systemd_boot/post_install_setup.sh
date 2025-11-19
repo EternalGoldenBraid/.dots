@@ -6,7 +6,7 @@ source ~/.dotfiles/arch_install/msi_laptop/systemd_boot/utils.sh
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
 DOT_DIR=${HOME}/.dotfiles
-BUILD_DIR=/home/${USER_NAME}/builds
+AUR_DIR=/home/${USER_NAME}/aur
 
 nmtui
 
@@ -15,6 +15,7 @@ nmtui
 # sudo -u ${USER_NAME} ssh-keygen -t rsa -b 4096 -f /home/${USER_NAME}/.ssh/id_rsa -C "${USER_NAME}@${HOSTNAME}"
 
 # Optional: Clone dotfiles from GitHub
+# TODO ADD IF EXIST CHECK
 # echo "Cloning dotfiles for ${USER_NAME}..."
 # sudo -u ${USER_NAME} git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${DOT_DIR}
 # git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
@@ -32,23 +33,24 @@ mkdir -p $HOME/bin
 ln -sf ${DOT_DIR}/.config/* /$HOME/.config/
 ln -sf ${DOT_DIR}/bin/* /$HOME/bin/
 
-# TODO Add Paru setup
-# mkdir -p ${BUILD_DIR}
-# git clone https://aur.archlinux.org/paru.git ${BUILD_DIR}/paru
-# pushd ${BUILD_DIR}/paru
-# makepkg -srci --noconfirm
-# popd
-#
-# ### Pacman Configuration
-# pacman_enable_parallel_downloads
-#
-# paru -S \
-#     1password 1password-cli \
-#     tree-sitter-cli ncdu btop \
-#     gnome-keyring rofi-greenclip exa \
-#     python-eduvpn-client python-eduvpn_common \
-#     slack-desktop auto-cpufreq teams-for-linux redshift \
-#     zotero
+echo "#### Setting up paru and AUR dir..."
+mkdir -p ${AUR_DIR}
+git clone https://aur.archlinux.org/paru.git ${AUR_DIR}/paru
+pushd ${AUR_DIR}/paru
+makepkg -srci --noconfirm
+popd
+
+### Pacman Configuration
+echo "#### Enabling pacman parallel downloads"
+pacman_enable_parallel_downloads
+
+paru -S \
+    1password 1password-cli \
+    tree-sitter-cli ncdu btop \
+    gnome-keyring rofi-greenclip exa \
+    slack-desktop auto-cpufreq teams-for-linux redshift \
+    zotero 
+    # python-eduvpn-client python-eduvpn_common \
 
 setup_neovim
 setup_tmux
@@ -64,5 +66,3 @@ popd
 
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service
-#
-
