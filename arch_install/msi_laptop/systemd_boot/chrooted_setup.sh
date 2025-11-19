@@ -83,10 +83,10 @@ initrd  /initramfs-linux.img
 options root=UUID=$(blkid -s UUID -o value /dev/nvme0n1p2) resume=UUID=$(blkid -s UUID -o value /dev/nvme0n1p2) resume_offset=$(filefrag -v /swapfile | awk '$1=="0:" {print substr($4, 1, length($4)-2)}') rw
 EOF
 
-echo "Systemd-boot installation complete."
+echo "#### Systemd-boot installation complete. #### "
 
 # Set root password
-echo "Set root password..."
+echo "#### Set root password... ####"
 passwd
 
 USER_NAME="nicklas"
@@ -95,23 +95,23 @@ HOME=/home/${USER_NAME}
 DOT_DIR=${HOME}/.dotfiles
 
 # Create a new user
-echo "Creating user ${USER_NAME}..."
+echo "#### Creating user ${USER_NAME}... ####"
 # mkdir -p /home/${USER_NAME}
 # chown ${USER_NAME}:${USER_NAME} /home/${USER_NAME}
 useradd -m -G wheel -s /bin/bash ${USER_NAME}
 
 # Add the new user to the sudoers file via visudo
-echo "Adding ${USER_NAME} to the sudoers file..."
+echo "#### Adding ${USER_NAME} to the sudoers file... ####"
 echo "${USER_NAME} ALL=(ALL) ALL" >> /etc/sudoers
 
 # Set password for the new user
-echo "Set password for ${USER_NAME}..."
+echo "#### Set password for ${USER_NAME}... ####"
 passwd ${USER_NAME}
 
-# git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
-git clone ${DOTS_REPO_HTTPS} ${DOT_DIR}
+git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
+# git clone ${DOTS_REPO_HTTPS} ${DOT_DIR}
 chown -R ${USER_NAME}:${USER_NAME} ${DOT_DIR}
 
 # Internet
-echo "Setting up internet connection..."
+echo "#### Setting up internet connection... ####"
 systemctl enable NetworkManager
