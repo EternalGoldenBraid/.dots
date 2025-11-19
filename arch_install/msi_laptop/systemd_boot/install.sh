@@ -16,15 +16,27 @@ cpu_manufacturer=intel
 
 ### Functions
 mount_partition() {
-    local partition=$1
-    local mount_point=$2
+    local partition="$1"
+    local mount_point="$2"
+    local opts="$3"
 
     echo "Mounting $partition on $mount_point..."
-    if ! mount --mkdir $partition $mount_point; then
-        echo "Failed to mount $partition on $mount_point. Exiting."
-        exit 1
+
+    if [ -n "$opts" ]; then
+        # With custom mount options
+        if ! mount -o "$opts" --mkdir "$partition" "$mount_point"; then
+            echo "Failed to mount $partition on $mount_point with options: $opts"
+            exit 1
+        fi
+    else
+        # Default mount
+        if ! mount --mkdir "$partition" "$mount_point"; then
+            echo "Failed to mount $partition on $mount_point"
+            exit 1
+        fi
     fi
 }
+
 
 partition_drive() {
     echo "Partitioning new GPT partition table on $DEVICE..."
@@ -46,7 +58,7 @@ format_partitions() {
 
 mount_partitions() {
     mount_partition ${DEVICE}p2 /mnt
-    mount_partition ${DEVICE}p1 /mnt/boot
+    mount_partition ${DEVICE}p1 /mnt/boot "umask=0077" # Not non-wordreadable security risk
     mount_partition ${DEVICE}p3 /mnt/home
 }
 
