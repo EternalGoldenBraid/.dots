@@ -59,6 +59,7 @@ CORE_PKGS=(
     "1password" "1password-cli"
     "slack-desktop" "teams-for-linux" "zotero"
     "auto-cpufreq"
+    "kitty" "exa"
     # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
     # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
 )
