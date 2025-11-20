@@ -18,16 +18,8 @@ echo "#### Starting Post-Install Setup for $TARGET_ENV..."
 
 nmtui
 
-# Create ssh keys for the new user
-# echo "Creating ssh keys for ${USER_NAME}..."
-# sudo -u ${USER_NAME} ssh-keygen -t rsa -b 4096 -f /home/${USER_NAME}/.ssh/id_rsa -C "${USER_NAME}@${HOSTNAME}"
-
-# Optional: Clone dotfiles from GitHub
-# TODO ADD IF EXIST CHECK
-# echo "Cloning dotfiles for ${USER_NAME}..."
-# sudo -u ${USER_NAME} git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${DOT_DIR}
-# git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
-# mv $HOME/.dots $HOME/.dotfiles
+echo "Cloning dotfiles for ${USER_NAME}..."
+git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${DOT_DIR}
 
 # Symbolic link the dotfiles
 ln -sf ${DOT_DIR}/.bashrc /home/${USER_NAME}/.bashrc
@@ -138,3 +130,7 @@ popd
 # systemctl enable --now systemd-timesyncd.service
 
 echo "#### Setup Complete! ####"
+
+echo "
+    Go ahead and setup 1password by enabling cli and ssh-agent integration in the developer settings.
+"
