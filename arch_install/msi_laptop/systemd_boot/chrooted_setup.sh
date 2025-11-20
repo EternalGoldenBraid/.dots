@@ -111,6 +111,7 @@ passwd ${USER_NAME}
 git clone https://github.com/EternalGoldenBraid/.dots ${DOT_DIR}
 # git clone ${DOTS_REPO_HTTPS} ${DOT_DIR}
 chown -R ${USER_NAME}:${USER_NAME} ${DOT_DIR}
+git remote set-url origin git@github.com:EternalGoldenBraid/.dots.git
 
 # Internet
 echo "#### Setting up internet connection... ####"
