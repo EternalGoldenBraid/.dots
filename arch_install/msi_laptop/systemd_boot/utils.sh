@@ -34,7 +34,7 @@ setup_tmux() {
 
     # Install Temp Plugin Manager
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-    ln -sf ${DOT_DIR/tmux.conf} /home/${USER_NAME}/.tmux.conf
+    ln -sf ${DOT_DIR/.config/tmux.conf} /home/${USER_NAME}/.tmux.conf
     tmux source ~/.tmux.conf
     echo "Tmux setup complete."
 }

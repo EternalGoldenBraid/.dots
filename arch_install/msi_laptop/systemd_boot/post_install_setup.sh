@@ -49,7 +49,7 @@ paru -S \
     tree-sitter-cli ncdu btop \
     gnome-keyring rofi-greenclip exa \
     slack-desktop auto-cpufreq teams-for-linux redshift \
-    zotero 
+    zotero ttf-font-awesome-5
     # python-eduvpn-client python-eduvpn_common \
 
 setup_neovim
