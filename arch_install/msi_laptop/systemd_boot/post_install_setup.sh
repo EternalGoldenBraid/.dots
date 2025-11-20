@@ -81,7 +81,9 @@ if [ "$TARGET_ENV" == "wayland" ]; then
         "wl-clipboard"      # Clipboard utils (replaces xclip)
         "cliphist"          # Clipboard manager (replaces greenclip)
         "gammastep"         # Blue light filter (replaces redshift)
+        "geoclue"
         "wlr-randr"         # CLI Monitor config (replaces xrandr)
+        "wdisplays"
         "nwg-look"          # GTK Theme switcher (replaces lxappearance)
         "qt5-wayland"       # Qt support
         "qt6-wayland"       # Qt support
