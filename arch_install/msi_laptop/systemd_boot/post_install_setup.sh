@@ -1,12 +1,20 @@
-#!/bin/bash
+l!/bin/bash
 set -e
 
 source ~/.dotfiles/arch_install/msi_laptop/systemd_boot/utils.sh
 
+# --- CONFIGURATION ---
+# Set to "wayland" (Hyprland) or "x11" (i3)
+TARGET_ENV="wayland" 
 USER_NAME="nicklas"
 GITHUB_USERNAME="EternalGoldenBraid"
 DOT_DIR=${HOME}/.dotfiles
 AUR_DIR=/home/${USER_NAME}/aur
+# ---------------------
+
+
+echo "#### Starting Post-Install Setup for $TARGET_ENV..."
+
 
 nmtui
 
@@ -44,19 +52,81 @@ popd
 echo "#### Enabling pacman parallel downloads"
 pacman_enable_parallel_downloads
 
-paru -S \
-    1password 1password-cli \
-    tree-sitter-cli ncdu btop \
-    gnome-keyring rofi-greenclip exa \
-    slack-desktop auto-cpufreq teams-for-linux redshift \
-    zotero ttf-font-awesome-5
-    # python-eduvpn-client python-eduvpn_common \
+# 2. Define Package Lists
+
+# --- CORE UTILITIES (Desktop Agnostic) ---
+CORE_PKGS=(
+    "neovim" "vim" "vifm" "obsidian" "firefox" "nemo"
+    "wezterm" "git" "rsync" "tmux" "wget" "curl"
+    "tree-sitter-cli" "ncdu" "btop" "lazygit" "unzip" "pixi" "rclone"
+    "npm" "nodejs" "fzf"
+    "pipewire" "pipewire-alsa" "pipewire-pulse" "pipewire-jack" "pavucontrol" "pamixer"
+    "zathura" "zathura-pdf-poppler"
+    "ttf-font-awesome" "ttf-jetbrains-mono-nerd" "noto-fonts-emoji" # Fonts are critical
+    "gnome-keyring" "libsecret"
+    "1password" "1password-cli"
+    "slack-desktop" "teams-for-linux" "zotero"
+    "auto-cpufreq"
+    # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
+    # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
+)
+
+
+# --- ENVIRONMENT SPECIFIC ---
+
+if [ "$TARGET_ENV" == "wayland" ]; then
+    echo "-> Selecting Wayland (Hyprland) packages..."
+    ENV_PKGS=(
+        "hyprland"          # The Compositor
+        "waybar"            # Status Bar
+        "wofi"              # App Launcher (Simple)
+        "rofi-wayland"      # App Launcher (Complex/Themable)
+        "hyprpaper"         # Wallpaper manager
+        "hyprlock"          # Lock screen
+        "hypridle"          # Idle daemon
+        "grim" "slurp"      # Screenshot tools (replaces maim)
+        "wl-clipboard"      # Clipboard utils (replaces xclip)
+        "cliphist"          # Clipboard manager (replaces greenclip)
+        "gammastep"         # Blue light filter (replaces redshift)
+        "wlr-randr"         # CLI Monitor config (replaces xrandr)
+        "nwg-look"          # GTK Theme switcher (replaces lxappearance)
+        "qt5-wayland"       # Qt support
+        "qt6-wayland"       # Qt support
+    )
+else
+    echo "-> Selecting X11 (i3) packages..."
+    ENV_PKGS=(
+        "i3-wm" "i3status" "i3lock" "i3-gaps"
+        "rofi" "rofi-calc" "rofi-greenclip"
+        "picom"             # Compositor
+        "xorg-server" "xorg-xinit" "xorg-xrandr" "arandr"
+        "maim"              # Screenshot
+        "xclip"             # Clipboard
+        "redshift"          # Blue light
+        "lxappearance"      # Theming
+        "feh"               # Wallpaper
+    )
+fi
+
+# 3. Install Packages
+echo "#### Installing packages..."
+
+# Combine lists
+ALL_PKGS=("${CORE_PKGS[@]}" "${ENV_PKGS[@]}")
+
+# Run installation
+paru -S --needed --noconfirm "${ALL_PKGS[@]}"
+
+
+# 4. Post-Install Configuration
 
 setup_neovim
 setup_tmux
     
-sudo auto-cpufreq --install
-systemctl enable --now auto-cpufreq
+echo "WARNING: auto-cpufreq not setup"
+# Note: On EndeavourOS, verify 'power-profiles-daemon' isn't conflicting before enabling auto-cpufreq
+# sudo auto-cpufreq --install
+# systemctl enable --now auto-cpufreq
 
 timedatectl set-ntp true
 pushd ~/${DOT_DIR}
@@ -66,3 +136,5 @@ popd
 
 # # Time synchronization
 # systemctl enable --now systemd-timesyncd.service
+
+echo "#### Setup Complete! ####"

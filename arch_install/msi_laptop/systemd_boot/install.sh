@@ -73,25 +73,12 @@ install_system() {
     # might need to update the keyring on an old image?
     pacman -Sy --noconfirm archlinux-keyring
     
-    # sway swaylock swayidle swaybg waybar wofi \
     # nvidia nvidia-utils nvidia-settings \ # Fuck this
     pacstrap -K /mnt base base-devel acpi \
         linux linux-firmware ${cpu_manufacturer}-ucode openssh git \
         networkmanager network-manager-applet \
         nm-connection-editor \
-        neovim vim vifm obsidian firefox nemo \
-        wezterm git rsync tmux \
-        i3 i3status i3lock i3-gaps rofi rofi-calc picom \
-        xorg xorg-xinit xorg-xrandr arandr \
-        gnome-keyring libsecret \
-        maim ripgrep cmake \
-        pipewire pipewire-alsa pipewire-pulse pipewire-jack pavucontrol pamixer \
-        zathura zathura-pdf-poppler xdotool \
-        lxappearance ttf-font-awesome zoxide \
-        tree-sitter-cli ncdu btop lazygit unzip pixi rclone feh \
-        npm nodejs 
-        # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
-        # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
+        ripgrep cmake \
 
     genfstab -U /mnt >> /mnt/etc/fstab
 }
