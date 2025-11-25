@@ -18,8 +18,8 @@ echo "#### Starting Post-Install Setup for $TARGET_ENV..."
 
 nmtui
 
-echo "Cloning dotfiles for ${USER_NAME}..."
-git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${DOT_DIR}
+# echo "Cloning dotfiles for ${USER_NAME}..."
+# git clone https://github.com/${GITHUB_USERNAME}/.dots.git ${DOT_DIR}
 
 # Symbolic link the dotfiles
 ln -sf ${DOT_DIR}/.bashrc /home/${USER_NAME}/.bashrc
@@ -77,13 +77,12 @@ if [ "$TARGET_ENV" == "wayland" ]; then
         "hyprpaper"         # Wallpaper manager
         "hyprlock"          # Lock screen
         "hypridle"          # Idle daemon
+        "nwg-displays"      # Arandr alternative
         "grim" "slurp"      # Screenshot tools (replaces maim)
         "wl-clipboard"      # Clipboard utils (replaces xclip)
         "cliphist"          # Clipboard manager (replaces greenclip)
         "gammastep"         # Blue light filter (replaces redshift)
-        "geoclue"
         "wlr-randr"         # CLI Monitor config (replaces xrandr)
-        "wdisplays"
         "nwg-look"          # GTK Theme switcher (replaces lxappearance)
         "qt5-wayland"       # Qt support
         "qt6-wayland"       # Qt support

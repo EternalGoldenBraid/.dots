@@ -40,6 +40,12 @@ To add a new plugin as a submodule:
 # Neovim helpz
 https://blog.claude.nl/tech/howto/Setup-Neovim-as-Python-IDE-with-virtualenvs/
 
+```
+python -m venv ~/venvs/neovim
+pip install pynvim
+source ~/venvs/nvin/bin/activate
+```
+
 ## coc.nvim
 ### extensions
 https://github.com/neoclide/coc-snippets
