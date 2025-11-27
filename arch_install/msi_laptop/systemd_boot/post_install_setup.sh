@@ -59,7 +59,9 @@ CORE_PKGS=(
     "1password" "1password-cli"
     "slack-desktop" "teams-for-linux" "zotero"
     "auto-cpufreq"
-    "kitty" "exa"
+    "kitty" "exa" 
+    "cups" "cups-pdf" "avahi" "nss-mdns"
+    "firewalld" "nftables" "polkit-gnome"
     # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
     # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
 )
@@ -116,6 +118,12 @@ paru -S --needed --noconfirm "${ALL_PKGS[@]}"
 
 setup_neovim
 setup_tmux
+
+sudo systemctl enable avahi
+sudo systemctl enable avahi-daemon.service
+sudo systemctl enable cups.socket
+
+sudo systemctl enable --now firewalld.service
     
 echo "WARNING: auto-cpufreq not setup"
 # Note: On EndeavourOS, verify 'power-profiles-daemon' isn't conflicting before enabling auto-cpufreq

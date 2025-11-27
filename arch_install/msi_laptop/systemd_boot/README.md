@@ -19,9 +19,10 @@ Note this is ran directly by `install.sh`
 ### post_install_setup.sh
 **Purpose:** Adds user accounts, configures SSH keys, clones dotfiles from a GitHub repository, and sets up necessary system services.
 
-**Assumptions:** Assumes it has network access and that it's running post-installation in the chroot environment.
+**Assumptions:** Assumes it has network access and that it's running post-installation in the chroot or installed environment.
 
-Usage
+
+### Usage
 
 Run install.sh with the target device as a parameter:
 
