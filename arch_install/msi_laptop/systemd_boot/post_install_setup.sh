@@ -48,7 +48,7 @@ pacman_enable_parallel_downloads
 
 # --- CORE UTILITIES (Desktop Agnostic) ---
 CORE_PKGS=(
-    "neovim" "vim" "vifm" "obsidian" "firefox" "nemo"
+    "neovim" "vim" "vifm" "obsidian" "firefox" "nemo" "pyright"
     "wezterm" "git" "rsync" "tmux" "wget" "curl"
     "tree-sitter-cli" "ncdu" "btop" "lazygit" "unzip" "pixi" "rclone"
     "npm" "nodejs" "fzf"

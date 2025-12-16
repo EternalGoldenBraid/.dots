@@ -30,6 +30,7 @@ alias gitsave='git add --all && git commit -m "unimportant" && git push'
 
 # Temporary configurations
 alias activate='pixi shell'
+alias uva='source ./.venv/bin/activate'
 
 # Tmux startups
 alias daymux='~/.dotfiles/tmux/tmux_daily.sh'
