@@ -1,0 +1,20 @@
+#!/bin/bash
+
+DEFAULT_TERMINAL="kitty"
+
+# Source logging functions
+source ~/bin/logging.sh
+log_file=~/bin/logs/nvim.log
+
+# Log the start of the script
+log_message "INFO" "Starting nvim script" $log_file
+
+# Command
+$DEFAULT_TERMINAL nvim ~/.config/hypr/hyprland.conf 2>&1 | tee -a $log_file
+
+if [ $? -ne 0 ]; then
+    log_message "ERROR" "Failed to start nvim in kitty" $log_file
+fi
+
+# Log completion of the script
+log_message "INFO" "Completed nvim script" $log_file
