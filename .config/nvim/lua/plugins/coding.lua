@@ -171,32 +171,63 @@ return {
     branch = "3p",
   },
   {
-    "dense-analysis/ale",
-    event = "VimEnter",
+    "neovim/nvim-lspconfig",
+    event = { "BufReadPre", "BufNewFile" },
     config = function()
-      vim.g.ale_fix_on_save = 0  -- Automatically fix issues when saving files
-      vim.g.ale_linters_explicit = 1  -- Only use linters that are explicitly enabled
-      vim.g.ale_lint_on_enter = 1  -- Lint files when first opened
-
-      -- Enable specific linters and fixers
-      vim.g.ale_linters = {
-        python = {
-          -- 'flake8', 
-          'pyright',
+      -- optional: your diagnostic UI prefs
+      vim.diagnostic.config({
+        virtual_text = true,
+        signs = true,
+        underline = true,
+        update_in_insert = false,
+        severity_sort = true,
+      })
+  
+      -- Customize pyright (this merges with nvim-lspconfig's built-in server config)
+      vim.lsp.config("pyright", {
+        settings = {
+          python = {
+            analysis = {
+              diagnosticMode = "openFilesOnly",
+              typeCheckingMode = "basic",
+            },
+          },
         },
-      }
-
-      vim.g.ale_fixers = {
-        ['*'] = {'remove_trailing_lines', 'trim_whitespace'},  -- Universal fixers
-        python = {'black', 'isort'},  -- Python specific fixers
-      }
-
-      -- Add Pyright specific settings
-      vim.g.ale_python_pyright = {
-        diagnosticMode = 'openFilesOnly',
-      }
-    end
+      })
+  
+      -- Enable the server (activates based on filetypes)
+      vim.lsp.enable("pyright")
+    end,
   },
+  -- {
+  --   "dense-analysis/ale",
+  --   event = "VimEnter",
+  --   config = function()
+  --     vim.g.ale_fix_on_save = 0  -- Automatically fix issues when saving files
+  --     vim.g.ale_linters_explicit = 1  -- Only use linters that are explicitly enabled
+  --     vim.g.ale_lint_on_enter = 1  -- Lint files when first opened
+  --
+  --
+  --     -- Enable specific linters and fixers
+  --     vim.g.ale_python_pyright_executable = "pyright-langserver"
+  --     vim.g.ale_linters = {
+  --       python = {
+  --         -- 'flake8', 
+  --         'pyright',
+  --       },
+  --     }
+  --
+  --     vim.g.ale_fixers = {
+  --       ['*'] = {'remove_trailing_lines', 'trim_whitespace'},  -- Universal fixers
+  --       python = {'black', 'isort'},  -- Python specific fixers
+  --     }
+  --
+  --     -- Add Pyright specific settings
+  --     vim.g.ale_python_pyright = {
+  --       diagnosticMode = 'openFilesOnly',
+  --     }
+  --   end
+  -- },
 
   -- Debugging
   {

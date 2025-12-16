@@ -93,16 +93,31 @@ end)
 
 
 -- Keybindigns
-vim.api.nvim_set_keymap('n', 'gd', ':ALEGoToDefinition<CR>', {noremap = true, silent = true})
--- shift + gd to open in a new tab
-vim.keymap.set('n', 'GD', function()
-  vim.cmd('tabnew')
-  vim.cmd('ALEGoToDefinition')
-end)
-function _G.goto_definition_in_new_tab()
-  vim.cmd('ALEGoToDefinition')
-  vim.cmd('tabnew')
-end
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("UserLspKeymaps", { clear = true }),
+  callback = function(args)
+    local opts = { buffer = args.buf, silent = true }
+
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+
+    -- Definition in new tab
+    vim.keymap.set("n", "GD", function()
+      vim.cmd("tabnew")
+      vim.lsp.buf.definition()
+    end, opts)
+
+    -- vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+    -- vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+    -- vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+    -- vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+
+    -- Handy diagnostic navigations (optional)
+    -- vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
+    -- vim.keymap.set("n", "]d", vim.diagnostic.goto_next, opts)
+    -- vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, opts)
+  end,
+})
+
 
 vim.api.nvim_set_keymap('n', 'GD', ':lua goto_definition_in_new_tab()<CR>', {noremap = true, silent = true})
 

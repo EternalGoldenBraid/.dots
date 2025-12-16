@@ -21,8 +21,8 @@ else
   -- Using require for modules
   require('keys')
 
+  -- vim.env.PATH = os.getenv("HOME") .. "/bin/bin:" .. vim.env.PATH
   vim.g.ale_python_pyright_executable = "pyright"
-  vim.env.PATH = os.getenv("HOME") .. "/bin/bin:" .. vim.env.PATH
   require("nicklas.lazy")
   require('general')
   require('gui')
