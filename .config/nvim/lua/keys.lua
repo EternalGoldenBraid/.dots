@@ -18,6 +18,25 @@ vim.g.clipboard = {
 vim.g.mapleader = "-"
 vim.g.maplocalleader = "]"
 
+local map = vim.keymap.set
+
+-- Clipboard yank / paste
+map("n", "<leader>y", '"+y')
+map("n", "<leader>p", '"+p')
+
+-- Copy paths / names to system clipboard
+map("n", "<localleader>yp", function()
+  vim.fn.setreg("+", vim.fn.expand("%:p:."))
+end)
+
+map("n", "<localleader>yd", function()
+  vim.fn.setreg("+", vim.fn.expand("%:h"))
+end)
+
+map("n", "<localleader>yf", function()
+  vim.fn.setreg("+", vim.fn.expand("%:t:r"))
+end)
+
 -- Open buffer in new tab
 vim.api.nvim_set_keymap('n', 'tt', ':tab split<CR>', {noremap = true})
 
@@ -54,10 +73,6 @@ vim.api.nvim_set_keymap('n', '<c-u>', 'VU', {noremap = true})
 -- Open .vimrc in vsplit and source .vimrc
 vim.api.nvim_set_keymap('n', '<leader>ev', ':vsplit $MYVIMRC<cr>', {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>sv', ':source $MYVIMRC<cr>', {noremap = true})
-
--- Clipboard copy and paste
-vim.api.nvim_set_keymap('n', '<leader>y', '"+y', {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader>p', '"+p', {noremap = true})
 
 -- Add quotes to word
 vim.api.nvim_set_keymap('n', '<leader>"', 'viw<esc>a"<esc>bi"<esc>lel', {noremap = true})

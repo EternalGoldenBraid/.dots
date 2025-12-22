@@ -54,8 +54,9 @@ vim.keymap.set('n', '<Leader>dd', function()
   dap.continue()
 end)
 
-vim.keymap.set('n', '<F5>', function() require('dap').continue() end)
-vim.keymap.set('n', '<F10>', function() require('dap').step_over() end)
+local keymap = vim.keymap.set
+keymap("n", "<leader>dt", function() require('dap-python').test_method() end, { desc = "Debug Method" })
+
 vim.keymap.set('n', '<A-b>', function() require('dap').toggle_breakpoint() end)
 vim.keymap.set('n', '<Leader>dr', function() require('dap').repl.open() end)
 vim.keymap.set('n', '<Leader>dl', function() require('dap').run_last() end)

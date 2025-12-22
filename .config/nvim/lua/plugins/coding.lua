@@ -238,7 +238,22 @@ return {
   {
     "mfussenegger/nvim-dap-python",
     config = function()
-      require("dap-python").setup("~/venvs/neovim/bin/python")
+      -- require("dap-python").setup("~/venvs/neovim/bin/python")
+      local dap_python = require("dap-python")
+      dap_python.setup("~/venvs/neovim/bin/python")
+      dap_python.test_runner = 'pytest'
+
+      -- local test_runners = dap_python.test_runners
+      -- test_runners.pytest = function(classname, methodname, opts)
+      --   local args = {classname, methodname, opts}
+      --   return {
+      --     "pytest",
+      --     "-s",           -- Let warnings print to console (Crucial for debugging!)
+      --     "--tb=long",    -- Show full traceback on crash
+      --     unpack(args)    -- FIX: Use global 'unpack' for Neovim/LuaJIT
+      --   }
+      -- end
+
     end
   },
   {
