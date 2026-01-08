@@ -3,18 +3,6 @@ local zen_mode = require('zen-mode')
 vim.keymap.set('n', '<leader>z', zen_mode.toggle, {desc = 'Zen mode toggle'})
 
 
--- Copilot settings
-vim.g.copilot_filetypes = {markdown = true}
-vim.g.copilot_no_tab_map = true
-
-
--- Key mappings for Copilot
--- These mappings use Vimscript syntax for specific plugin functions
--- They are set using vim.api.nvim_set_keymap with the 'expr' option
-vim.api.nvim_set_keymap('i', '<C-J>', 'copilot#Accept("\\<CR>")', {silent = true, script = true, expr = true})
-vim.api.nvim_set_keymap('i', '<C-L>', '<Plug>(copilot-accept-word)', {silent = true})
-
-
 -- Copilog chat settings
 vim.api.nvim_set_keymap('n', '<M-i>', ':CopilotChatToggle<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<M-C-i>', ':CopilotChatReset<CR>', {noremap = true, silent = true})

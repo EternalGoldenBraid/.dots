@@ -38,52 +38,101 @@ return {
     }
   },
   {
-  "github/copilot.vim",
-  -- "zbirenbaum/copilot.lua",
-  -- keys = {
-  --   {
-  --     "<leader>ct",
-  --       function()
-  --         if require("copilot.client").is_disabled() then
-  --           require("copilot.command").enable()
-  --         else
-  --           require("copilot.command").disable()
-  --         end
-  --       end,
-  --     desc = "Toggle (Copilot)",
-  --   },
-  -- },
-  config = function()
-  end
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        auth_provider_url = "https://nestai.ghe.com/",
+        
+        -- 1. Filetypes (Replacement for vim.g.copilot_filetypes)
+        -- By default it runs on all files. If you want to FORCE it for markdown:
+        filetypes = {
+          markdown = true, 
+          help = false,
+          gitcommit = false,
+          gitrebase = false,
+          hgcommit = false,
+          svn = false,
+          cvs = false,
+          ["."] = false,
+        },
+  
+        -- 2. Ghost Text & Keymaps (Replacement for vim.api mappings)
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          debounce = 75,
+          keymap = {
+            -- Your old <C-J> mapping to accept
+            accept = "<C-J>", 
+            
+            -- Your old <C-L> mapping to accept just one word
+            accept_word = "<C-L>", 
+            
+            -- Standard defaults you might want
+            accept_line = false,
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-]>",
+          },
+        },
+        panel = { enabled = false },
+      })
+    end,
   },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "canary",
     dependencies = {
-      -- { "github/copilot.lua" }, -- or github/copilot.vim
-      -- { "github/copilot.vim" }, -- or github/copilot.vim
-      { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-      { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+      { "zbirenbaum/copilot.lua" }, -- Ensure load order
+      { "nvim-lua/plenary.nvim", branch = "master" },
     },
+    build = "make tiktoken",
     opts = {
-      debug = false, 
+      debug = false,
       window = {
-          layout = 'float',
-          relative = 'cursor',
-          width = 0.8,
-          height = 0.8,
-          row = 1
+        layout = "float",
+        relative = "cursor",
+        width = 0.8,
+        height = 0.8,
+        row = 1,
+      },
+      mappings = {
+        reset = {
+          normal = "",
+          insert = "",
+        },
+      },
     },
-    mappings = {
-      reset = {
-        normal = '',
-        insert = ''
-      }
-    }
-      -- See Configuration section for rest
-    },
-    -- See Commands section for default commands if you want to lazy load on them
   },
+  -- {
+  --   "CopilotC-Nvim/CopilotChat.nvim",
+  --   branch = "canary",
+  --   dependencies = {
+  --     -- { "github/copilot.lua" }, -- or github/copilot.vim
+  --     -- { "github/copilot.vim" }, -- or github/copilot.vim
+  --     { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
+  --     { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
+  --   },
+  --   opts = {
+  --     debug = false, 
+  --     window = {
+  --         layout = 'float',
+  --         relative = 'cursor',
+  --         width = 0.8,
+  --         height = 0.8,
+  --         row = 1
+  --   },
+  --     mappings = {
+  --       reset = {
+  --         normal = '',
+  --         insert = ''
+  --       }
+  --     }
+  --     -- See Configuration section for rest
+  --   },
+  --   -- See Commands section for default commands if you want to lazy load on them
+  -- },
   {
       'sindrets/diffview.nvim',
       cmd = 'DiffviewOpen',
@@ -170,64 +219,96 @@ return {
     "ms-jpq/coq.thirdparty",
     branch = "3p",
   },
+  -- {
+  --   "neovim/nvim-lspconfig",
+  --   event = { "BufReadPre", "BufNewFile" },
+  --   config = function()
+  --     -- optional: your diagnostic UI prefs
+  --     vim.diagnostic.config({
+  --       virtual_text = true,
+  --       signs = true,
+  --       underline = true,
+  --       update_in_insert = false,
+  --       severity_sort = true,
+  --     })
+  -- 
+  --     -- Customize pyright (this merges with nvim-lspconfig's built-in server config)
+  --     vim.lsp.config("pyright", {
+  --       settings = {
+  --         python = {
+  --           analysis = {
+  --             diagnosticMode = "openFilesOnly",
+  --             typeCheckingMode = "basic",
+  --           },
+  --         },
+  --       },
+  --     })
+  -- 
+  --     -- Enable the server (activates based on filetypes)
+  --     vim.lsp.enable("pyright")
+  --   end,
+  -- },
   {
-    "neovim/nvim-lspconfig",
-    event = { "BufReadPre", "BufNewFile" },
-    config = function()
-      -- optional: your diagnostic UI prefs
-      vim.diagnostic.config({
-        virtual_text = true,
-        signs = true,
-        underline = true,
-        update_in_insert = false,
-        severity_sort = true,
-      })
-  
-      -- Customize pyright (this merges with nvim-lspconfig's built-in server config)
-      vim.lsp.config("pyright", {
-        settings = {
-          python = {
-            analysis = {
-              diagnosticMode = "openFilesOnly",
-              typeCheckingMode = "basic",
+      "neovim/nvim-lspconfig",
+      event = { "BufReadPre", "BufNewFile" },
+      config = function()
+        vim.diagnostic.config({
+          virtual_text = true,
+          signs = true,
+          underline = true,
+          update_in_insert = false,
+          severity_sort = true,
+        })
+
+        vim.diagnostic.config({
+          virtual_text = { source = "if_many" },
+          float = { source = true },
+        })
+    
+        -- PYRIGHT
+        vim.lsp.config("pyright", {
+          settings = {
+            python = {
+              analysis = {
+                diagnosticMode = "openFilesOnly",
+                typeCheckingMode = "basic", -- "standard"/"strict" are basedpyright terms
+                reportUnusedImport = "none",
+                reportUnusedVariable = "none",
+              },
             },
           },
-        },
-      })
-  
-      -- Enable the server (activates based on filetypes)
-      vim.lsp.enable("pyright")
-    end,
-  },
-  -- {
-  --   "dense-analysis/ale",
-  --   event = "VimEnter",
-  --   config = function()
-  --     vim.g.ale_fix_on_save = 0  -- Automatically fix issues when saving files
-  --     vim.g.ale_linters_explicit = 1  -- Only use linters that are explicitly enabled
-  --     vim.g.ale_lint_on_enter = 1  -- Lint files when first opened
-  --
-  --
-  --     -- Enable specific linters and fixers
-  --     vim.g.ale_python_pyright_executable = "pyright-langserver"
-  --     vim.g.ale_linters = {
-  --       python = {
-  --         -- 'flake8', 
-  --         'pyright',
-  --       },
-  --     }
-  --
-  --     vim.g.ale_fixers = {
-  --       ['*'] = {'remove_trailing_lines', 'trim_whitespace'},  -- Universal fixers
-  --       python = {'black', 'isort'},  -- Python specific fixers
-  --     }
-  --
-  --     -- Add Pyright specific settings
-  --     vim.g.ale_python_pyright = {
-  --       diagnosticMode = 'openFilesOnly',
-  --     }
-  --   end
-  -- },
+        })
+
+        -- BASEDPYRIGHT
+        vim.lsp.config("basedpyright", {
+          settings = {
+            basedpyright = {
+              analysis = {
+                diagnosticMode = "openFilesOnly",
+                typeCheckingMode = "standard", -- or "strict"
+                reportUnusedImport = "none",
+                reportUnusedVariable = "none",
+              },
+            },
+            -- Some setups also honor this block:
+            python = {
+              analysis = {
+                autoSearchPaths = true,
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        })
+    
+        -- Enable exactly ONE of these:
+        vim.lsp.enable("pyright")
+        -- vim.lsp.enable("basedpyright")
+
+        vim.lsp.config("ruff", {})
+        vim.lsp.enable("ruff")
+      end,
+    },
+
 
   -- Debugging
   {
