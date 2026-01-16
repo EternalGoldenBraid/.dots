@@ -61,7 +61,7 @@ CORE_PKGS=(
     "auto-cpufreq"
     "kitty" "exa" 
     "cups" "cups-pdf" "avahi" "nss-mdns"
-    "firewalld" "nftables" "polkit-gnome"
+    "firewalld" "nftables" "polkit-gnome" "network-manager-applet"
     # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
     # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
 )
@@ -88,6 +88,9 @@ if [ "$TARGET_ENV" == "wayland" ]; then
         "nwg-look"          # GTK Theme switcher (replaces lxappearance)
         "qt5-wayland"       # Qt support
         "qt6-wayland"       # Qt support
+        "xdg-desktop-portal" # Portal backend 
+        "xdg-desktop-portal-hyprland" # Portal backend for Hyprland, Hyprland: screen sharing requires xdg-desktop-portal-hyprland (not wlr)
+
     )
 else
     echo "-> Selecting X11 (i3) packages..."
