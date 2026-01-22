@@ -1,5 +1,5 @@
 " Video
-filextype {*.mp4,*.mkv,*.webm},<video/*>
+filextype {*.mp4,*.mkv,*.webm,*.avi},<video/*>
         \ mpv %f
 
 

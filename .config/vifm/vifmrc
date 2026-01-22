@@ -24,3 +24,11 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,phistory,fhistory,dir
 source ~/.config/vifm/filetypes.vifm
 source ~/.config/vifm/keys.vifm
 source ~/.config/vifm/themes.vifm
+
+" Add fd for find alternative
+" %a is the argument: In which directory to search
+" fd's -E is short for for --exclude
+command! FZFfind :set noquickview | :execute 'goto' fnameescape(term('fd . %a --hidden -E .git -E .stversions | fzf 2> /dev/tty'))
+
+" Ctrl+/ → fuzzy find in current dir (recursive), `/` is sent as `_` by many terminals.
+nnoremap <C-_> :FZFfind .<cr>

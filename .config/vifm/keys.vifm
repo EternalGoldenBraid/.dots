@@ -9,3 +9,23 @@ nnoremap s :shell<cr>
 
 " Sort mode toggle
 nnoremap S :sort<cr>
+
+" Yank current directory path into primary and selection clipboards
+nnoremap yd :!echo -n %d | wl-copy --primary &&
+  \ echo -n %d | wl-copy<cr>
+
+" Yank current file path into into primary and selection clipboards
+nnoremap yp :!echo -n %c:p | wl-copy --primary &&
+  \ echo -n %c:p | wl-copy<cr>
+
+" Yank current file name into into primary and selection clipboards
+nnoremap yf :!echo -n %c:r | wl-copy --primary &&
+  \ echo -n %c:r | wl-copy<cr>
+
+" Yank current file name into into primary and selection clipboards
+nnoremap ye :!echo -n %c | wl-copy --primary &&
+  \ echo -n %c | wl-copy<cr>
+
+" Yank current file into primary and selection clipboards
+nnoremap yc :!wl-copy -t "text/uri-list" --primary "file://%c:p" &&
+  \ wl-copy -t "text/uri-list" "file://%c:p"<cr>
