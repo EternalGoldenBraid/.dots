@@ -306,6 +306,30 @@ return {
 
         vim.lsp.config("ruff", {})
         vim.lsp.enable("ruff")
+
+        -- C / C++
+        -- sudo pacman -S clang llvm
+
+        vim.lsp.config("clangd", {
+          cmd = {
+              "clangd",
+              "--background-index",
+              "--clang-tidy",
+              "--completion-style=detailed",
+              "--header-insertion=iwyu",
+              "--header-insertion-decorators",
+          },
+          filetypes = { "c", "cpp", "objc", "objcpp" },
+          root_markers = {
+            "compile_commands.json",
+            "compile_flags.txt",
+            ".git",
+          },
+        })
+
+      vim.lsp.enable("clangd")
+
+
       end,
     },
 
