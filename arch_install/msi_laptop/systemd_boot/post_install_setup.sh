@@ -50,7 +50,7 @@ pacman_enable_parallel_downloads
 CORE_PKGS=(
     "neovim" "vim" "vifm" "obsidian" "firefox" "nemo" "pyright"
     "wezterm" "git" "rsync" "tmux" "wget" "curl"
-    "tree-sitter-cli" "ncdu" "btop" "lazygit" "unzip" "pixi" "rclone"
+    "tree-sitter-cli" "ncdu" "btop" "lazygit" "unzip" "pixi" "rclone" "yazi" "pulsemixer" "lazydocker"
     "npm" "nodejs" "fzf"
     "pipewire" "pipewire-alsa" "pipewire-pulse" "pipewire-jack" "pavucontrol" "pamixer"
     "zathura" "zathura-pdf-poppler" "feh"
@@ -61,7 +61,7 @@ CORE_PKGS=(
     "auto-cpufreq" "systemd-manager-tui"
     "kitty" "exa" 
     "cups" "cups-pdf" "avahi" "nss-mdns"
-    "firewalld" "nftables" "polkit-gnome" "network-manager-applet"
+    "firewalld" "nftables" "polkit-gnome" "network-manager-applet" "lsof"
     # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
     # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
 )
