@@ -13,6 +13,8 @@ alias pacinstall='sudo pacman -Syu'
 alias dots='cd ~/.dotfiles'
 alias bins='cd ~/.dotfiles/bin'
 alias tree='exa --tree'
+alias lg='lazygit'
+alias ld='lazydocker'
 
 get_num_physical_cores() {
   grep '^core id' /proc/cpuinfo | sort -u | wc -l
