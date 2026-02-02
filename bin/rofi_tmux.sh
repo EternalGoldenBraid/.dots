@@ -17,11 +17,22 @@ if [ -z "$selected" ]; then
     exit 0
 fi
 
-# Check if we're already in a tmux session
-if [ -n "$TMUX" ]; then
-    # Switch to the selected session
-    tmux switch-client -t "$selected"
+# Check if session is already attached somewhere
+if tmux list-clients -t "$selected" &>/dev/null; then
+    # Session is attached - try to find and focus the window
+    # Get the client PID
+    client_pid=$(tmux list-clients -t "$selected" -F "#{client_pid}" | head -1)
+    
+    # Find kitty window containing this tmux session
+    window=$(hyprctl clients -j | jq -r ".[] | select(.pid == $client_pid or .title | contains(\"$selected\")) | .address" | head -1)
+    
+    if [ -n "$window" ]; then
+        hyprctl dispatch focuswindow address:$window
+    else
+        # Fallback: open new terminal
+        kitty tmux attach-session -t "$selected" &
+    fi
 else
-    # Attach to the selected session
-    tmux attach-session -t "$selected"
+    # Session exists but not attached - open in new kitty terminal
+    kitty tmux attach-session -t "$selected" &
 fi

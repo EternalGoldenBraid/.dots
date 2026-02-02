@@ -105,34 +105,39 @@ return {
       },
     },
   },
-  -- {
-  --   "CopilotC-Nvim/CopilotChat.nvim",
-  --   branch = "canary",
-  --   dependencies = {
-  --     -- { "github/copilot.lua" }, -- or github/copilot.vim
-  --     -- { "github/copilot.vim" }, -- or github/copilot.vim
-  --     { "zbirenbaum/copilot.lua" }, -- or github/copilot.vim
-  --     { "nvim-lua/plenary.nvim" }, -- for curl, log wrapper
-  --   },
-  --   opts = {
-  --     debug = false, 
-  --     window = {
-  --         layout = 'float',
-  --         relative = 'cursor',
-  --         width = 0.8,
-  --         height = 0.8,
-  --         row = 1
-  --   },
-  --     mappings = {
-  --       reset = {
-  --         normal = '',
-  --         insert = ''
-  --       }
-  --     }
-  --     -- See Configuration section for rest
-  --   },
-  --   -- See Commands section for default commands if you want to lazy load on them
-  -- },
+  {
+  "NickvanDyke/opencode.nvim",
+  dependencies = {
+    -- Recommended for `ask()` and `select()`.
+    -- Required for `snacks` provider.
+    ---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
+    { "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
+  },
+  config = function()
+    ---@type opencode.Opts
+    vim.g.opencode_opts = {
+      -- Your configuration, — see `lua/opencode/config.lua`, or "goto definition" on the type or field.
+    }
+
+    -- Required for `opts.events.reload`.
+    vim.o.autoread = true
+
+    -- Opencode Keybindings
+    vim.keymap.set({ "n", "x" }, "<leader>o", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask Opencode" })
+    vim.keymap.set({ "n", "x" }, "<leader>s", function() require("opencode").select() end,                          { desc = "Opencode Actions/Select" })
+    vim.keymap.set({ "n", "t" }, "<leader>r", function() require("opencode").toggle() end,                          { desc = "Toggle Opencode Window" })
+
+    -- vim.keymap.set({ "n", "x" }, "go",  function() return require("opencode").operator("@this ") end,        { desc = "Add range to opencode", expr = true })
+    -- vim.keymap.set("n",          "goo", function() return require("opencode").operator("@this ") .. "_" end, { desc = "Add line to opencode", expr = true })
+
+    -- vim.keymap.set("n", "<S-C-u>", function() require("opencode").command("session.half.page.up") end,   { desc = "Scroll opencode up" })
+    -- vim.keymap.set("n", "<S-C-d>", function() require("opencode").command("session.half.page.down") end, { desc = "Scroll opencode down" })
+
+    -- Note: Removed conflicting "+"/"-" mappings. 
+    -- Since your mapleader is "-", mapping "-" to Decrement was breaking all leader keys.
+
+  end,
+  },
   {
       'sindrets/diffview.nvim',
       cmd = 'DiffviewOpen',
