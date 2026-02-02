@@ -37,3 +37,18 @@ unset __conda_setup
 
 eval "$(zoxide init bash)"
 export PATH="/home/nicklas/.pixi/bin:$PATH"
+
+# uv
+export PATH="/home/nicklas/.local/bin:$PATH"
+
+# gcloud numpy warning fix
+export CLOUDSDK_PYTHON_SITEPACKAGES=1
+
+# Yazi cd wrapper
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	command yazi "$@" --cwd-file="$tmp"
+	IFS= read -r -d '' cwd < "$tmp"
+	[ "$cwd" != "$PWD" ] && [ -d "$cwd" ] && builtin cd -- "$cwd"
+	rm -f -- "$tmp"
+}
