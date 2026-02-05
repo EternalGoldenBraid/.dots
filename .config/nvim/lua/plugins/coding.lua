@@ -111,7 +111,7 @@ return {
     -- Recommended for `ask()` and `select()`.
     -- Required for `snacks` provider.
     ---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
-    { "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
+    "folke/snacks.nvim",
   },
   config = function()
     ---@type opencode.Opts
@@ -137,6 +137,23 @@ return {
     -- Since your mapleader is "-", mapping "-" to Decrement was breaking all leader keys.
 
   end,
+  },
+  {
+    "folke/snacks.nvim",
+    opts = {
+      input = {},
+      picker = {},
+      terminal = {},
+      gitbrowse = {
+        open = function(url)
+          vim.fn.setreg("+", url)
+          vim.notify("Git URL copied to clipboard: " .. url, vim.log.levels.INFO)
+        end,
+      },
+    },
+    keys = {
+      { "<leader>gb", function() require("snacks").gitbrowse() end, mode = { "n", "v" }, desc = "Copy GitHub/GitLab link" },
+    },
   },
   {
       'sindrets/diffview.nvim',
