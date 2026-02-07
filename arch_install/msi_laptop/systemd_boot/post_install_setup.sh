@@ -62,6 +62,7 @@ CORE_PKGS=(
     "kitty" "exa" 
     "cups" "cups-pdf" "avahi" "nss-mdns"
     "firewalld" "nftables" "polkit-gnome" "network-manager-applet" "lsof"
+    "brightnessctl"
     # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
     # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
 )
