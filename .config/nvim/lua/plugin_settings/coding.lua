@@ -7,6 +7,7 @@ vim.keymap.set('n', '<leader>z', zen_mode.toggle, {desc = 'Zen mode toggle'})
 vim.api.nvim_set_keymap('n', '<M-i>', ':CopilotChatToggle<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<M-C-i>', ':CopilotChatReset<CR>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<M-I>', ':CopilotChatFix<CR>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>ct', ':Copilot toggle<CR>', {noremap = true, silent = true})
 
 -- Slime
 vim.g.slime_target = 'tmux'

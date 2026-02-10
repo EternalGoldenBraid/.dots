@@ -1,0 +1,4 @@
+# Match by connector names for your current home setup
+name:DP-1
+name:HDMI-A-1
+name:eDP-1
