@@ -89,6 +89,7 @@ if [ "$TARGET_ENV" == "wayland" ]; then
         "wlr-randr"         # CLI Monitor config (replaces xrandr)
         "qt5-wayland"       # Qt support
         "qt6-wayland"       # Qt support
+        "xdg-utils"         # XDG utilities (like xdg-open)
         "xdg-desktop-portal" # Portal backend 
         "xdg-desktop-portal-hyprland" # Portal backend for Hyprland, Hyprland: screen sharing requires xdg-desktop-portal-hyprland (not wlr)
         "xdg-desktop-portal-gtk" # Portal backend for GTK apps (like gnome-keyring)
