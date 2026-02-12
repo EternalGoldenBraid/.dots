@@ -81,16 +81,18 @@ if [ "$TARGET_ENV" == "wayland" ]; then
         "hyprlock"          # Lock screen
         "hypridle"          # Idle daemon
         "nwg-displays"      # Arandr alternative
+        "nwg-look"          # GTK Theme switcher (replaces lxappearance)
         "grim" "slurp"      # Screenshot tools (replaces maim)
         "wl-clipboard"      # Clipboard utils (replaces xclip)
         "cliphist"          # Clipboard manager (replaces greenclip)
         "gammastep"         # Blue light filter (replaces redshift)
         "wlr-randr"         # CLI Monitor config (replaces xrandr)
-        "nwg-look"          # GTK Theme switcher (replaces lxappearance)
         "qt5-wayland"       # Qt support
         "qt6-wayland"       # Qt support
         "xdg-desktop-portal" # Portal backend 
         "xdg-desktop-portal-hyprland" # Portal backend for Hyprland, Hyprland: screen sharing requires xdg-desktop-portal-hyprland (not wlr)
+        "xdg-desktop-portal-gtk" # Portal backend for GTK apps (like gnome-keyring)
+        "qt5ct" "qt6ct" "kvantum" # Qt theming (qt5ct and qt6ct are config tools, kvantum is the actual theme engine
 
     )
 else
