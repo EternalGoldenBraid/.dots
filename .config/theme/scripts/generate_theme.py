@@ -61,6 +61,9 @@ set -g mode-style 'bg={c['accent_end']},fg={c['accent_text_right']},bold'
 
 set -g pane-border-style 'fg={c['surface1']}'
 set -g pane-active-border-style 'fg={c['accent_end']}'
+set -g pane-border-lines heavy
+set -g pane-border-status top
+set -g pane-border-format '#{{?pane_active,#[bg={c['accent_end']},fg={c['accent_text_right']},bold] ACTIVE #[default],#[fg={c['overlay1']}] pane }} #P '
 
 set -g window-status-style 'bg={c['base']},fg={c['overlay1']}'
 set -g window-status-current-style 'bg={c['accent_start']},fg={c['accent_text_left']},bold'
