@@ -29,3 +29,15 @@ if command -v waybar >/dev/null 2>&1; then
     echo "waybar not running; generated colors only"
   fi
 fi
+
+if command -v hyprctl >/dev/null 2>&1; then
+  if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+    if hyprctl reload config-only >/dev/null 2>&1; then
+      echo "hyprland config reloaded"
+    else
+      echo "hyprland reload failed; generated colors only"
+    fi
+  else
+    echo "hyprland not running in this shell; generated colors only"
+  fi
+fi

@@ -1,0 +1,14 @@
+{
+  "base": "#241b18",
+  "terminal_bg": "#2a201c",
+  "mantle": "#1f1714",
+  "crust": "#17110f",
+  "text": "#f0ddd4",
+  "surface0": "#3a2e29",
+  "surface1": "#4d3d35",
+  "overlay1": "#a88c7f",
+  "accent_start": "#b5654d",
+  "accent_end": "#d98b4f",
+  "accent_text_left": "#fff2e8",
+  "accent_text_right": "#fff8f2"
+}

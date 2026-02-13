@@ -3,7 +3,7 @@ import json
 import pathlib
 import sys
 
-from generators import bash, kitty, nvim, tmux, vifm, waybar
+from generators import bash, hypr, kitty, nvim, tmux, vifm, waybar
 from generators.common import prepare_palette
 
 
@@ -50,6 +50,10 @@ def main() -> int:
         "bash": {
             "out": home / ".dotfiles/.config/.colors",
             "render": bash.render,
+        },
+        "hypr": {
+            "out": home / ".dotfiles/.config/hypr/colors.generated.conf",
+            "render": hypr.render,
         },
     }
 
