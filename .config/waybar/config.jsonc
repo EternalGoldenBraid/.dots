@@ -59,8 +59,7 @@
     },
     "hyprland/workspaces": {
         "format": "{id}",
-        "sort-by": "number",
-        "swap-icon-label": false
+        "sort-by": "number"
     },
     "hyprland/language": {
         "format": "{short}",
@@ -188,7 +187,6 @@
     },
     "custom/power": {
         "format" : "⏻ ",
-		"tooltip": false,
-		"swap-icon-label": false
+		"tooltip": false
     }
 }

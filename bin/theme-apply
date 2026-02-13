@@ -19,3 +19,13 @@ if command -v tmux >/dev/null 2>&1; then
     echo "tmux server not running; generated theme file only"
   fi
 fi
+
+if command -v waybar >/dev/null 2>&1; then
+  if pgrep -x waybar >/dev/null 2>&1; then
+    pkill waybar
+    waybar >/dev/null 2>&1 &
+    echo "waybar restarted"
+  else
+    echo "waybar not running; generated colors only"
+  fi
+fi

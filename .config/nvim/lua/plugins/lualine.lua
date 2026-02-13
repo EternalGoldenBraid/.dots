@@ -7,7 +7,8 @@ return {
     local lualine = require("lualine")
     local lazy_status = require("lazy.status") -- to configure lazy pending updates count
 
-    local colors = {
+    local ok, generated = pcall(require, "theme.generated_palette")
+    local colors = ok and generated or {
       green = "#b3ee1d",
       orange = "#e1a500",
       brown = "#935f43",
