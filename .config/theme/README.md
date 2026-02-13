@@ -12,6 +12,8 @@ This directory is the source of truth for generated theme colors.
 - `~/.dotfiles/.config/waybar/colors.generated.css`: Generated Waybar colors (do not edit by hand)
 - `~/.dotfiles/.config/nvim/lua/theme/generated_palette.lua`: Generated Neovim palette module (do not edit by hand)
 - `~/.dotfiles/.config/vifm/colors/generated.vifm`: Generated Vifm colorscheme (do not edit by hand)
+- `~/.dotfiles/.config/kitty/theme.generated.conf`: Generated Kitty colors (do not edit by hand)
+- `~/.dotfiles/.config/.colors`: Generated Bash-compatible color vars (do not edit by hand)
 
 ## Usage
 
@@ -23,7 +25,7 @@ After changing colors in `palette.json`, run:
 
 This will:
 1. Regenerate tmux theme output from the palette
-2. Regenerate Waybar, Neovim, and Vifm theme outputs
+2. Regenerate Waybar, Neovim, Vifm, Kitty, and Bash theme outputs
 3. Reload tmux config if tmux is currently running
 4. Restart Waybar if it is currently running
 

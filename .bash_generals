@@ -1,8 +1,16 @@
-# Colors
-GREEN="\[$(tput setaf 2)\]"
-RESET="\[$(tput sgr0)\]"
+# Colors (generated theme preferred, fallback to tput)
+if [ -f ~/.config/.colors ]; then
+    # shellcheck disable=SC1091
+    source ~/.config/.colors
+fi
 
-PS1="${GREEN} \h:\u \w ${RESET}> "
+if [ -n "${THEME_ACCENT_START:-}" ] && [ -n "${THEME_RESET:-}" ]; then
+    PS1="${THEME_ACCENT_START} \h:\u \w ${THEME_RESET}> "
+else
+    GREEN="\[$(tput setaf 2)\]"
+    RESET="\[$(tput sgr0)\]"
+    PS1="${GREEN} \h:\u \w ${RESET}> "
+fi
 
 source ~/.exports
 
