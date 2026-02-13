@@ -6,9 +6,12 @@ This directory is the source of truth for generated theme colors.
 
 - `palette.json`: Canonical color palette
 - `scripts/generate_theme.py`: Generates app-specific theme files from the palette
+- `scripts/generators/README.md`: Contract for per-app generator signatures and responsibilities
+- `scripts/generators/*.py`: App-specific renderers (`tmux`, `waybar`, `nvim`, `vifm`)
 - `~/.dotfiles/.config/tmux/theme.generated.conf`: Generated tmux theme output (do not edit by hand)
 - `~/.dotfiles/.config/waybar/colors.generated.css`: Generated Waybar colors (do not edit by hand)
 - `~/.dotfiles/.config/nvim/lua/theme/generated_palette.lua`: Generated Neovim palette module (do not edit by hand)
+- `~/.dotfiles/.config/vifm/colors/generated.vifm`: Generated Vifm colorscheme (do not edit by hand)
 
 ## Usage
 
@@ -20,7 +23,7 @@ After changing colors in `palette.json`, run:
 
 This will:
 1. Regenerate tmux theme output from the palette
-2. Regenerate Waybar and Neovim theme outputs
+2. Regenerate Waybar, Neovim, and Vifm theme outputs
 3. Reload tmux config if tmux is currently running
 4. Restart Waybar if it is currently running
 
