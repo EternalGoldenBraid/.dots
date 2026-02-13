@@ -29,6 +29,11 @@
 @define-color pink      #f5c2e7;
 @define-color flamingo  #f2cdcd;
 @define-color rosewater #f5e0dc;
+@define-color bar_grad_start #2f7f5f;
+@define-color bar_grad_end   #3fa7c9;
+@define-color bar_text_left  #edf9f3;
+@define-color bar_text_mid   #eef7fb;
+@define-color bar_text_right #f3f9ff;
 
 * {
     font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font Mono", "Noto Color Emoji", monospace;
@@ -38,7 +43,11 @@
 
 window#waybar {
     background-color: @base;
-    color: @text;
+    background-image:
+        linear-gradient(90deg, alpha(@bar_grad_start, 0.94), alpha(@bar_grad_end, 0.94)),
+        linear-gradient(0deg, alpha(@crust, 0.20), alpha(@crust, 0.20));
+    color: @bar_text_mid;
+    border-bottom: 2px solid alpha(@bar_grad_end, 0.80);
 }
 
 .modules-left > widget > *,
@@ -52,20 +61,40 @@ window#waybar {
     padding: 0 6px;
 }
 
+.modules-left > widget > * {
+    color: @bar_text_left;
+}
+
+.modules-center > widget > * {
+    color: @bar_text_mid;
+}
+
+.modules-right > widget > * {
+    color: @bar_text_right;
+}
+
 #workspaces button {
     padding: 0 10px;
     background-color: transparent;
-    color: @subtext0;
+    color: alpha(@bar_text_left, 0.82);
     border-bottom: 2px solid transparent;
 }
 
 #workspaces button:hover {
-    background-color: @surface0;
-    color: @text;
+    background-color: alpha(@crust, 0.25);
+    color: @bar_text_left;
 }
 
 #workspaces button.active {
-    background-color: @surface0;
-    color: @lavender;
-    border-bottom: 2px solid @lavender;
+    background-color: alpha(@crust, 0.35);
+    color: @bar_text_left;
+    border-bottom: 2px solid alpha(@bar_text_left, 0.95);
+}
+
+#custom-hyprshade.on {
+    color: @peach;
+}
+
+#custom-hyprshade.off {
+    color: @overlay1;
 }

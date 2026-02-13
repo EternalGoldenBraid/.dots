@@ -1,0 +1,13 @@
+{
+  "base": "#1e1e2e",
+  "mantle": "#181825",
+  "crust": "#11111b",
+  "text": "#cdd6f4",
+  "surface0": "#313244",
+  "surface1": "#45475a",
+  "overlay1": "#7f849c",
+  "accent_start": "#2f7f5f",
+  "accent_end": "#3fa7c9",
+  "accent_text_left": "#edf9f3",
+  "accent_text_right": "#f3f9ff"
+}

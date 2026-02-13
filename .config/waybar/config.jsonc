@@ -23,7 +23,7 @@
         "memory",
         "temperature",
         "backlight",
-        "keyboard-state",
+        "custom/hyprshade",
         "hyprland/language",
         "battery",
         "clock",
@@ -47,14 +47,12 @@
     //         "default": ""
     //     }
     // },
-    "keyboard-state": {
-        "numlock": true,
-        "capslock": true,
-        "format": "{name} {icon}",
-        "format-icons": {
-            "locked": "",
-            "unlocked": ""
-        }
+    "custom/hyprshade": {
+        "return-type": "json",
+        "interval": 10,
+        "signal": 8,
+        "exec": "bash -lc 's=\"$(hyprshade current 2>/dev/null || true)\"; if [ -n \"$s\" ] && [ \"$s\" != \"off\" ]; then printf \"{\\\"text\\\":\\\"\\\",\\\"tooltip\\\":\\\"Hyprshade: %s\\\",\\\"class\\\":\\\"on\\\"}\" \"$s\"; else printf \"{\\\"text\\\":\\\"\\\",\\\"tooltip\\\":\\\"Hyprshade: off\\\",\\\"class\\\":\\\"off\\\"}\"; fi'",
+        "on-click": "hyprshade toggle >/dev/null 2>&1 && pkill -RTMIN+8 waybar"
     },
     "hyprland/submap": {
         "format": "<span style=\"italic\">{}</span>"
