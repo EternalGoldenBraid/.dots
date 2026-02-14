@@ -57,6 +57,13 @@ window#waybar {
     border-bottom: 2px solid alpha(@bar_text_left, 0.95);
 }
 
+#submap {
+    color: @peach;
+    background-color: alpha(@crust, 0.28);
+    border-radius: 6px;
+    padding: 0 10px;
+}
+
 #custom-hyprshade.on {
     color: @peach;
 }

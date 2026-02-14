@@ -26,6 +26,21 @@ Rules:
 - No file I/O inside `render()`.
 - No process execution inside `render()`.
 
+## Binary target signature (images, non-text outputs)
+
+For generated binaries, expose:
+
+```python
+def generate(palette: dict[str, str], source_path: str, **paths) -> None:
+    ...
+```
+
+Rules:
+- Input palette is already validated.
+- `source_path` is used for traceability/comments when applicable.
+- Accept explicit `Path` arguments (for example `input_path`, `output_path`).
+- Perform deterministic generation only (no user prompts or interactive behavior).
+
 ## Registration shape (in `generate_theme.py`)
 
 Keep one mapping in the orchestrator:
@@ -45,6 +60,7 @@ Orchestrator responsibilities only:
 - call renderer
 - write output
 - print generated paths
+- call binary generators with explicit paths
 
 ## Style requirements
 

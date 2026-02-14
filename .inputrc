@@ -1,0 +1,14 @@
+set editing-mode vi
+set keymap vi
+set show-mode-in-prompt on
+set enable-active-region on
+"\C-l": clear-screen
+
+$if mode=vi
+  set keymap vi-insert
+  "\C-l": clear-screen
+  "jk": vi-movement-mode
+
+  set keymap vi-command
+  "\C-l": clear-screen
+$endif

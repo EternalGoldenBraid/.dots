@@ -55,7 +55,10 @@
         "on-click": "hyprshade toggle >/dev/null 2>&1 && pkill -RTMIN+8 waybar"
     },
     "hyprland/submap": {
-        "format": "<span style=\"italic\">{}</span>"
+        "format": "<span size='11000' foreground='#F8B471'> </span>{}",
+        "max-length": 20,
+        "tooltip": false,
+        "on-click": "hyprctl dispatch submap reset"
     },
     "hyprland/workspaces": {
         "format": "{id}",

@@ -15,6 +15,7 @@ This directory is the source of truth for generated theme colors.
 - `~/.dotfiles/.config/kitty/theme.generated.conf`: Generated Kitty colors (do not edit by hand)
 - `~/.dotfiles/.config/.colors`: Generated Bash-compatible color vars (do not edit by hand)
 - `~/.dotfiles/.config/hypr/colors.generated.conf`: Generated Hyprland colors (do not edit by hand)
+- `~/.dotfiles/media/zen-wallpaper.generated.png`: Palette-tinted generated wallpaper
 
 ## Usage
 
@@ -34,10 +35,11 @@ To switch between preset palettes:
 
 This will:
 1. Regenerate tmux theme output from the palette
-2. Regenerate Waybar, Neovim, Vifm, Kitty, Bash, and Hyprland theme outputs
+2. Regenerate Waybar, Neovim, Vifm, Kitty, Bash, Hyprland, and wallpaper outputs
 3. Reload tmux config if tmux is currently running
 4. Restart Waybar if it is currently running
 5. Reload Hyprland config if running in current shell
+6. Restart Hyprpaper if it is currently running
 
 ## Notes
 

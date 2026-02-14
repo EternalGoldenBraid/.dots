@@ -41,3 +41,13 @@ if command -v hyprctl >/dev/null 2>&1; then
     echo "hyprland not running in this shell; generated colors only"
   fi
 fi
+
+if command -v hyprpaper >/dev/null 2>&1; then
+  if pgrep -x hyprpaper >/dev/null 2>&1; then
+    pkill hyprpaper
+    hyprpaper >/dev/null 2>&1 &
+    echo "hyprpaper restarted"
+  else
+    echo "hyprpaper not running; generated wallpaper only"
+  fi
+fi

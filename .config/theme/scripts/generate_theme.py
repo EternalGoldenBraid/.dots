@@ -3,7 +3,7 @@ import json
 import pathlib
 import sys
 
-from generators import bash, hypr, kitty, nvim, tmux, vifm, waybar
+from generators import bash, hypr, kitty, nvim, tmux, vifm, wallpaper, waybar
 from generators.common import prepare_palette
 
 
@@ -63,6 +63,16 @@ def main() -> int:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(target["render"](palette, source_path), encoding="utf-8")
         print(f"Generated {out_path}")
+
+    wallpaper_in = home / ".dotfiles/media/zen-wallpaper.png"
+    wallpaper_out = home / ".dotfiles/media/zen-wallpaper.generated.png"
+    wallpaper.generate(
+        palette,
+        source_path,
+        input_path=wallpaper_in,
+        output_path=wallpaper_out,
+    )
+    print(f"Generated {wallpaper_out}")
 
     return 0
 

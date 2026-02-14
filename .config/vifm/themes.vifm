@@ -1,2 +1,2 @@
 " Use a simple color scheme (choose from :colorscheme in vifm to explore more)
-colorscheme palenight Default-256 Default
+colorscheme generated onedark Default-256 Default

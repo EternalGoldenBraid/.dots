@@ -15,6 +15,10 @@ if [ -f ~/.bash_generals ]; then
     . ~/.bash_generals
 fi
 
+if [ -f ~/.dotfiles/.inputrc ]; then
+    bind -f ~/.dotfiles/.inputrc
+fi
+
 export EDITOR=nvim
 
 # BEGIN_KITTY_SHELL_INTEGRATION
