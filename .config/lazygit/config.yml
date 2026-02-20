@@ -1,3 +1,4 @@
 # Use OSC 52 escape sequences to send clipboard data through SSH connection to local terminal.
 os:
   copyToClipboardCmd: 'printf "\033]52;c;$(printf {{text}} | base64)\a" > /dev/tty'
+  editPreset: 'nvim'
