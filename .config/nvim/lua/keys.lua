@@ -37,6 +37,14 @@ map("n", "<localleader>yf", function()
   vim.fn.setreg("+", vim.fn.expand("%:t:r"))
 end)
 
+-- Native diff helpers (works in Diffview and plain vimdiff)
+map("n", "<localleader>dg", "<cmd>diffget<CR>", { desc = "Diff Get (Take Other)" })
+map("n", "<localleader>dp", "<cmd>diffput<CR>", { desc = "Diff Put (Take Current)" })
+map("n", "<localleader>dn", "]c", { remap = true, desc = "Next Diff Change" })
+map("n", "<localleader>dN", "[c", { remap = true, desc = "Previous Diff Change" })
+map("n", "<localleader>du", "<cmd>diffupdate<CR>", { desc = "Diff Update" })
+map("n", "<localleader>do", "<cmd>diffoff!<CR>", { desc = "Diff Off (All Windows)" })
+
 -- Open buffer in new tab
 vim.api.nvim_set_keymap('n', 'tt', ':tab split<CR>', {noremap = true})
 

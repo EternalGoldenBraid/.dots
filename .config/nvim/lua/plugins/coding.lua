@@ -156,8 +156,25 @@ return {
     },
   },
   {
-      'sindrets/diffview.nvim',
-      cmd = 'DiffviewOpen',
+      "sindrets/diffview.nvim",
+      cmd = {
+        "DiffviewOpen",
+        "DiffviewClose",
+        "DiffviewToggleFiles",
+        "DiffviewFocusFiles",
+        "DiffviewRefresh",
+        "DiffviewFileHistory",
+      },
+      keys = {
+        { "<leader>gd", "<cmd>DiffviewOpen<CR>", desc = "Diffview Open" },
+        { "<leader>gD", "<cmd>DiffviewOpen HEAD~1<CR>", desc = "Diffview vs HEAD~1" },
+        { "<leader>gh", "<cmd>DiffviewFileHistory %<CR>", desc = "File History (Current File)" },
+        { "<leader>gH", "<cmd>DiffviewFileHistory<CR>", desc = "Repo File History" },
+        { "<leader>gf", "<cmd>DiffviewToggleFiles<CR>", desc = "Diffview Toggle File Panel" },
+        { "<leader>gF", "<cmd>DiffviewFocusFiles<CR>", desc = "Diffview Focus File Panel" },
+        { "<leader>gr", "<cmd>DiffviewRefresh<CR>", desc = "Diffview Refresh" },
+        { "<leader>gq", "<cmd>DiffviewClose<CR>", desc = "Diffview Close" },
+      },
   },
   {
       'numToStr/Comment.nvim',
