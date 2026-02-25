@@ -26,6 +26,7 @@
         "custom/hyprshade",
         "hyprland/language",
         "battery",
+        "custom/daily-note",
         "clock",
         "tray",
         "custom/power"
@@ -112,7 +113,16 @@
     "clock": {
         // "timezone": "America/New_York",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": "{:%Y-%m-%d}"
+        "format-alt": "{:%Y-%m-%d}",
+        "on-click": "$HOME/.config/waybar/scripts/calendar-popup.sh"
+    },
+    "custom/daily-note": {
+        "return-type": "json",
+        "interval": 15,
+        "signal": 9,
+        "exec": "$HOME/.config/waybar/scripts/daily-note.sh status",
+        "on-click": "$HOME/.config/waybar/scripts/daily-note.sh open",
+        "on-click-right": "$HOME/.config/waybar/scripts/daily-note.sh mark-unread"
     },
     "cpu": {
         "format": "{usage}% ",

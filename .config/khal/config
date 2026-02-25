@@ -1,0 +1,17 @@
+[calendars]
+[[all]]
+path = ~/.local/share/calendars/*
+type = discover
+readonly = False
+
+[locale]
+timeformat = %H:%M
+dateformat = %Y-%m-%d
+longdateformat = %Y-%m-%d
+datetimeformat = %Y-%m-%d %H:%M
+longdatetimeformat = %Y-%m-%d %H:%M
+firstweekday = 0
+unicode_symbols = True
+
+[sqlite]
+path = ~/.local/share/khal/khal.db
