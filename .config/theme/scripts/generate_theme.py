@@ -3,7 +3,7 @@ import json
 import pathlib
 import sys
 
-from generators import bash, hypr, kitty, nvim, tmux, vifm, wallpaper, waybar
+from generators import bash, foot, hypr, kitty, nvim, tmux, vifm, wallpaper, waybar
 from generators.common import prepare_palette
 
 
@@ -46,6 +46,10 @@ def main() -> int:
         "kitty": {
             "out": home / ".dotfiles/.config/kitty/theme.generated.conf",
             "render": kitty.render,
+        },
+        "foot": {
+            "out": home / ".dotfiles/.config/foot/theme.generated.ini",
+            "render": foot.render,
         },
         "bash": {
             "out": home / ".dotfiles/.config/.colors",

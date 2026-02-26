@@ -22,12 +22,12 @@ active_border_color {c['accent_end']}
 inactive_border_color {c['surface1']}
 
 # normal
-color0 {c['crust']}
+color0 {c['surface0']}
 color1 {c['red']}
 color2 {c['accent_start']}
 color3 {c['peach']}
 color4 {c['accent_end']}
-color5 {c['mantle']}
+color5 {c['overlay1']}
 color6 {c['accent_end']}
 color7 {c['text']}
 
@@ -37,7 +37,7 @@ color9 {c['red']}
 color10 {c['accent_start']}
 color11 {c['peach']}
 color12 {c['accent_end']}
-color13 {c['mantle']}
+color13 {c['overlay1']}
 color14 {c['accent_end']}
 color15 {c['accent_text_right']}
 

@@ -13,6 +13,7 @@ This directory is the source of truth for generated theme colors.
 - `~/.dotfiles/.config/nvim/lua/theme/generated_palette.lua`: Generated Neovim palette module (do not edit by hand)
 - `~/.dotfiles/.config/vifm/colors/generated.vifm`: Generated Vifm colorscheme (do not edit by hand)
 - `~/.dotfiles/.config/kitty/theme.generated.conf`: Generated Kitty colors (do not edit by hand)
+- `~/.dotfiles/.config/foot/theme.generated.ini`: Generated Foot colors (do not edit by hand)
 - `~/.dotfiles/.config/.colors`: Generated Bash-compatible color vars (do not edit by hand)
 - `~/.dotfiles/.config/hypr/colors.generated.conf`: Generated Hyprland colors (do not edit by hand)
 - `~/.dotfiles/media/zen-wallpaper.generated.png`: Palette-tinted generated wallpaper
