@@ -14,7 +14,7 @@ return {
         style = "moon",
         on_colors = function(c)
           c.bg = p.bg
-          c.bg_dark = p.violet
+          c.bg_dark = p.mantle or p.violet
           c.bg_float = p.inactive_bg
           c.bg_highlight = p.inactive_bg
           c.fg = p.fg

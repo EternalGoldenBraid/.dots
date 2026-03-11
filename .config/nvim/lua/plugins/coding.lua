@@ -1,29 +1,5 @@
 -- ultisnips.lua
 return {
-  -- {
-  --   "Olical/conjure",
-  --   ft = { "clojure", "fennel", "python" }, -- etc
-  --   lazy = true,
-  --   init = function()
-  --     -- Set configuration options here
-  --     -- Uncomment this to get verbose logging to help diagnose internal Conjure issues
-  --     -- This is VERY helpful when reporting an issue with the project
-  --     -- vim.g["conjure#debug"] = true
-  --   end,
-  --
-  --   -- Optional cmp-conjure integration
-  --   dependencies = { "PaterJason/cmp-conjure" },
-  -- },
-  {
-    "PaterJason/cmp-conjure",
-    lazy = true,
-    config = function()
-      local cmp = require("cmp")
-      local config = cmp.get_config()
-      table.insert(config.sources, { name = "conjure" })
-      return cmp.setup(config)
-    end,
-  },
   {
     "folke/zen-mode.nvim",
     opts = {
@@ -106,39 +82,6 @@ return {
     },
   },
   {
-  "NickvanDyke/opencode.nvim",
-  dependencies = {
-    -- Recommended for `ask()` and `select()`.
-    -- Required for `snacks` provider.
-    ---@module 'snacks' <- Loads `snacks.nvim` types for configuration intellisense.
-    "folke/snacks.nvim",
-  },
-  config = function()
-    ---@type opencode.Opts
-    vim.g.opencode_opts = {
-      -- Your configuration, — see `lua/opencode/config.lua`, or "goto definition" on the type or field.
-    }
-
-    -- Required for `opts.events.reload`.
-    vim.o.autoread = true
-
-    -- Opencode Keybindings
-    vim.keymap.set({ "n", "x" }, "<leader>o", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask Opencode" })
-    vim.keymap.set({ "n", "x" }, "<leader>s", function() require("opencode").select() end,                          { desc = "Opencode Actions/Select" })
-    vim.keymap.set({ "n", "t" }, "<leader>r", function() require("opencode").toggle() end,                          { desc = "Toggle Opencode Window" })
-
-    -- vim.keymap.set({ "n", "x" }, "go",  function() return require("opencode").operator("@this ") end,        { desc = "Add range to opencode", expr = true })
-    -- vim.keymap.set("n",          "goo", function() return require("opencode").operator("@this ") .. "_" end, { desc = "Add line to opencode", expr = true })
-
-    -- vim.keymap.set("n", "<S-C-u>", function() require("opencode").command("session.half.page.up") end,   { desc = "Scroll opencode up" })
-    -- vim.keymap.set("n", "<S-C-d>", function() require("opencode").command("session.half.page.down") end, { desc = "Scroll opencode down" })
-
-    -- Note: Removed conflicting "+"/"-" mappings. 
-    -- Since your mapleader is "-", mapping "-" to Decrement was breaking all leader keys.
-
-  end,
-  },
-  {
     "folke/snacks.nvim",
     opts = {
       input = {},
@@ -182,13 +125,6 @@ return {
           -- add any options here
       },
       lazy = false,
-  },
-
-  -- From https://forem.julialang.org/navi/set-up-neovim-tmux-for-a-data-science-workflow-with-julia-3ijk
-  {
-      "jpalardy/vim-slime",
-      config = function()
-      end
   },
   {
     'stevearc/aerial.nvim',
@@ -258,35 +194,6 @@ return {
     "ms-jpq/coq.thirdparty",
     branch = "3p",
   },
-  -- {
-  --   "neovim/nvim-lspconfig",
-  --   event = { "BufReadPre", "BufNewFile" },
-  --   config = function()
-  --     -- optional: your diagnostic UI prefs
-  --     vim.diagnostic.config({
-  --       virtual_text = true,
-  --       signs = true,
-  --       underline = true,
-  --       update_in_insert = false,
-  --       severity_sort = true,
-  --     })
-  -- 
-  --     -- Customize pyright (this merges with nvim-lspconfig's built-in server config)
-  --     vim.lsp.config("pyright", {
-  --       settings = {
-  --         python = {
-  --           analysis = {
-  --             diagnosticMode = "openFilesOnly",
-  --             typeCheckingMode = "basic",
-  --           },
-  --         },
-  --       },
-  --     })
-  -- 
-  --     -- Enable the server (activates based on filetypes)
-  --     vim.lsp.enable("pyright")
-  --   end,
-  -- },
   {
       "neovim/nvim-lspconfig",
       event = { "BufReadPre", "BufNewFile" },
@@ -377,41 +284,17 @@ return {
   {
     "mfussenegger/nvim-dap",
     config = function()
+      require("plugin_settings.coding.cpp").setup_dap(require("dap"))
     end
   },
   {
     "mfussenegger/nvim-dap-python",
     config = function()
-      -- require("dap-python").setup("~/venvs/neovim/bin/python")
-      local dap_python = require("dap-python")
-      dap_python.setup("~/venvs/neovim/bin/python")
-      dap_python.test_runner = 'pytest'
-
-      -- local test_runners = dap_python.test_runners
-      -- test_runners.pytest = function(classname, methodname, opts)
-      --   local args = {classname, methodname, opts}
-      --   return {
-      --     "pytest",
-      --     "-s",           -- Let warnings print to console (Crucial for debugging!)
-      --     "--tb=long",    -- Show full traceback on crash
-      --     unpack(args)    -- FIX: Use global 'unpack' for Neovim/LuaJIT
-      --   }
-      -- end
-
+      require("plugin_settings.coding.python").setup_dap_python()
     end
   },
   {
     "rcarriga/nvim-dap-ui",
     dependencies = {"mfussenegger/nvim-dap", "nvim-neotest/nvim-nio"}
   },
-  -- { 
-  --   "folke/neodev.nvim",
-  --   opts = {},
-  --   config = function()
-  --     require("neodev").setup({
-  --       library = { plugins = { "nvim-dap-ui" }, types = true },
-  --     })
-  --   end
-  -- },
-
 }

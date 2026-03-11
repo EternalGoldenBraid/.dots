@@ -26,7 +26,7 @@ else
   require('general')
   require('gui')
 
-  require('plugin_settings/coding')
+  require('plugin_settings.coding.init')
   require('plugin_settings/plugins_settings')
   require('filetypes')
 
