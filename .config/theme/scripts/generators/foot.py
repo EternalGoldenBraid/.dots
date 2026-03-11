@@ -8,7 +8,7 @@ def render(c: dict[str, str], source_path: str) -> str:
 # Source: {source_path}
 # Do not edit by hand; edit ~/.dotfiles/.config/theme/palette.json instead.
 
-[colors]
+[colors-dark]
 background={_hex6(c['terminal_bg'])}
 foreground={_hex6(c['terminal_fg'])}
 
