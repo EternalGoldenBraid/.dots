@@ -115,6 +115,14 @@ function M.setup_dap(dap)
 
   dap.configurations.c = dap.configurations.cpp
   dap.configurations.rust = dap.configurations.cpp
+
+  local root = project_root(vim.fn.getcwd())
+  local launchjs = root .. "/.vscode/launch.json"
+  if vim.fn.filereadable(launchjs) == 1 then
+    require("dap.ext.vscode").load_launchjs(launchjs, {
+      codelldb = { "c", "cpp", "rust" },
+    })
+  end
 end
 
 function M.continue_or_launch(dap)
@@ -130,7 +138,14 @@ function M.continue_or_launch(dap)
   end
 
   local configs = dap.configurations[ft] or dap.configurations.cpp
-  if configs and configs[1] then
+  if configs and #configs > 0 then
+    for _, cfg in ipairs(configs) do
+      if cfg.request == "launch" and type(cfg.program) == "string" then
+        dap.run(cfg)
+        return
+      end
+    end
+
     dap.run(configs[1])
     return
   end
