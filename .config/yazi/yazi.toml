@@ -1,0 +1,24 @@
+# Yazi Configuration
+
+[opener]
+edit = [
+	{ run = 'nvim "$@"', block = true, for = "linux" },
+]
+pdf = [
+	{ run = 'xdg-open "$@"', orphan = true, for = "linux" },
+]
+
+[open]
+prepend_rules = [
+	{ name = "*.pdf", use = "pdf" },
+	{ name = "*.PDF", use = "pdf" },
+]
+
+[plugin]
+prepend_fetchers = [
+	{ id = "git", name = "*", run = "git" },
+	{ id = "git_status", name = "*", run = "git_status" },
+]
+
+[mgr]
+show_hidden = true

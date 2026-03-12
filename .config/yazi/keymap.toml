@@ -1,0 +1,50 @@
+[manager]
+
+# Custom Yanking Keybindings (matching Vifm config)
+# Usage:
+# yd -> Copy current directory path
+# yp -> Copy file path
+# yf -> Copy filename (no ext)
+# ye -> Copy filename (with ext)
+# yc -> Copy file URI
+# yy -> Yank (Internal Yazi Clipboard)
+
+# Yank directory path (System Clipboard)
+# Uses 'copy dirname' which copies the parent folder of the hovered item (i.e., the current dir)
+[[manager.prepend_keymap]]
+on   = [ "y", "d" ]
+run  = "copy dirname"
+desc = "Yank directory path"
+
+# Yank file path (System Clipboard)
+# Uses 'copy path' (absolute path of hovered/selected)
+[[manager.prepend_keymap]]
+on   = [ "y", "p" ]
+run  = "copy path"
+desc = "Yank file path"
+
+# Yank filename without extension (System Clipboard)
+[[manager.prepend_keymap]]
+on   = [ "y", "f" ]
+run  = "copy name_without_ext"
+desc = "Yank filename (no ext)"
+
+# Yank filename with extension (System Clipboard)
+[[manager.prepend_keymap]]
+on   = [ "y", "e" ]
+run  = "copy filename"
+desc = "Yank filename (with ext)"
+
+# Yank file URI (System Clipboard)
+# Uses shell command since 'copy' doesn't support URI schemes directly yet
+[[manager.prepend_keymap]]
+on   = [ "y", "c" ]
+run  = "shell 'echo -n \"file://%h\" | wl-copy --primary && echo -n \"file://%h\" | wl-copy'"
+desc = "Yank file URI"
+
+# Default Yazi Yank (Internal Clipboard)
+# Remapped to 'yy' because 'y' is now a prefix
+[[manager.prepend_keymap]]
+on   = [ "y", "y" ]
+run  = "yank"
+desc = "Yank selected files (internal)"
