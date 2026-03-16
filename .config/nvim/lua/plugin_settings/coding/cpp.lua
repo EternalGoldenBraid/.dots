@@ -79,9 +79,12 @@ function M.resolve_program()
 end
 
 function M.setup_dap(dap)
-  local codelldb_path = vim.fn.exepath("codelldb")
+  local codelldb_path = vim.fn.stdpath("data") .. "/mason/bin/codelldb"
+  if vim.fn.executable(codelldb_path) ~= 1 then
+    codelldb_path = vim.fn.exepath("codelldb")
+  end
   if codelldb_path == "" then
-    vim.notify("codelldb not found in PATH. Install it to debug C/C++ (e.g., via Mason or system package).", vim.log.levels.WARN)
+    vim.notify("codelldb not found. Install it via :MasonInstall codelldb (or system package) to debug C/C++.", vim.log.levels.WARN)
     return
   end
 

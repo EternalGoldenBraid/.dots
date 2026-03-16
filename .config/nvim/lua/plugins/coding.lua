@@ -282,6 +282,19 @@ return {
 
   -- Debugging
   {
+    "williamboman/mason.nvim",
+    build = ":MasonUpdate",
+    opts = {},
+  },
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
+    opts = {
+      ensure_installed = { "codelldb" },
+      automatic_installation = true,
+    },
+  },
+  {
     "mfussenegger/nvim-dap",
     config = function()
       require("plugin_settings.coding.cpp").setup_dap(require("dap"))
