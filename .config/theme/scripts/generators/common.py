@@ -1,4 +1,5 @@
 import re
+import colorsys
 
 HEX_COLOR_RE = re.compile(r"^#[0-9a-fA-F]{6}$")
 
@@ -65,3 +66,30 @@ def rgb_to_xterm_index(rgb: tuple[int, int, int]) -> int:
     gray_index = 232 + gray_i
 
     return cube_index if rgb_distance_sq(rgb, cube_rgb) <= rgb_distance_sq(rgb, gray_rgb) else gray_index
+
+
+def rgb_to_hex(rgb: tuple[int, int, int]) -> str:
+    return "#{:02x}{:02x}{:02x}".format(*rgb)
+
+
+def rotate_hue(hex_color: str, degrees: float, saturation_scale: float = 1.0, lightness_scale: float = 1.0) -> str:
+    r, g, b = hex_to_rgb(hex_color)
+    h, l, s = colorsys.rgb_to_hls(r / 255.0, g / 255.0, b / 255.0)
+    h = (h + (degrees / 360.0)) % 1.0
+    s = min(1.0, max(0.0, s * saturation_scale))
+    l = min(1.0, max(0.0, l * lightness_scale))
+    rr, gg, bb = colorsys.hls_to_rgb(h, l, s)
+    return rgb_to_hex((int(round(rr * 255)), int(round(gg * 255)), int(round(bb * 255))))
+
+
+def relative_luminance(hex_color: str) -> float:
+    def channel(value: int) -> float:
+        c = value / 255.0
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+    r, g, b = hex_to_rgb(hex_color)
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+
+
+def contrast_text(hex_color: str, dark: str = "#11141d", light: str = "#f5fbff") -> str:
+    return dark if relative_luminance(hex_color) > 0.42 else light

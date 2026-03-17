@@ -15,3 +15,7 @@
 @define-color bar_text_left #ecf3f7;
 @define-color bar_text_mid #d8dee9;
 @define-color bar_text_right #f5fbff;
+@define-color dictation_recording #b25dae;
+@define-color dictation_recording_text #d8dee9;
+@define-color dictation_transcribing #d1c095;
+@define-color dictation_transcribing_text #11141d;

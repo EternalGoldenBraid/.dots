@@ -11,6 +11,7 @@
         "hyprland/submap"
     ],
     "modules-center": [
+        "custom/handy-status",
         "hyprland/window"
     ],
     "modules-right": [
@@ -123,6 +124,13 @@
         "exec": "$HOME/.config/waybar/scripts/daily-note.sh status",
         "on-click": "$HOME/.config/waybar/scripts/daily-note.sh open",
         "on-click-right": "$HOME/.config/waybar/scripts/daily-note.sh mark-unread"
+    },
+    "custom/handy-status": {
+        "return-type": "json",
+        "interval": 1,
+        "signal": 11,
+        "exec": "$HOME/.config/waybar/scripts/handy-status.sh",
+        "tooltip": false
     },
     "cpu": {
         "format": "{usage}% ",
