@@ -1,0 +1,216 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+find_workspace_root() {
+    if [ -n "${TMUX_PROJECT_ROOT:-}" ]; then
+        printf '%s\n' "$TMUX_PROJECT_ROOT"
+        return
+    fi
+
+    if git rev-parse --show-toplevel >/dev/null 2>&1; then
+        git rev-parse --show-toplevel
+        return
+    fi
+
+    printf '%s\n' "$PWD"
+}
+
+find_storage_dir() {
+    if [ -n "${TMUX_PROJECT_STORAGE_DIR:-}" ]; then
+        printf '%s\n' "$TMUX_PROJECT_STORAGE_DIR"
+        return
+    fi
+
+    if [ -d "$WORKSPACE_ROOT/coordination" ] && [ -w "$WORKSPACE_ROOT/coordination" ]; then
+        printf '%s/tmux\n' "$WORKSPACE_ROOT/coordination"
+        return
+    fi
+
+    printf '%s/.tmux-workspace\n' "$WORKSPACE_ROOT"
+}
+
+sanitize_name() {
+    printf '%s' "$1" | tr -cs '[:alnum:]' '-'
+}
+
+plugin_base_dir() {
+    if [ -n "${TMUX_PLUGIN_MANAGER_PATH:-}" ] && [ -d "$TMUX_PLUGIN_MANAGER_PATH" ]; then
+        printf '%s\n' "$TMUX_PLUGIN_MANAGER_PATH"
+        return
+    fi
+
+    if [ -d "$HOME/.config/tmux/plugins" ]; then
+        printf '%s\n' "$HOME/.config/tmux/plugins"
+        return
+    fi
+
+    printf '%s\n' "$HOME/.tmux/plugins"
+}
+
+plugin_script() {
+    local plugin_name="$1"
+    local script_relpath="$2"
+    local base_dir
+    base_dir="$(plugin_base_dir)"
+    printf '%s/%s/%s\n' "$base_dir" "$plugin_name" "$script_relpath"
+}
+
+configure_server() {
+    tmux -L "$SOCKET_NAME" set-option -gq @resurrect-dir "$RESURRECT_DIR"
+    tmux -L "$SOCKET_NAME" set-option -gq @continuum-save-interval 15
+    tmux -L "$SOCKET_NAME" set-option -gq @continuum-restore off
+}
+
+session_exists() {
+    tmux -L "$SOCKET_NAME" has-session -t "$1" 2>/dev/null
+}
+
+has_any_sessions() {
+    tmux -L "$SOCKET_NAME" list-sessions >/dev/null 2>&1
+}
+
+restore_if_possible() {
+    local restore_script
+    restore_script="$(plugin_script tmux-resurrect scripts/restore.sh)"
+
+    if [ ! -x "$restore_script" ]; then
+        return 1
+    fi
+
+    if ! ls "$RESURRECT_DIR"/tmux_resurrect_*.txt >/dev/null 2>&1; then
+        return 1
+    fi
+
+    tmux -L "$SOCKET_NAME" run-shell "$restore_script"
+
+    local _
+    for _ in 1 2 3 4 5 6 7 8 9 10; do
+        if has_any_sessions; then
+            return 0
+        fi
+        sleep 0.2
+    done
+
+    return 1
+}
+
+save_now() {
+    local save_script
+    save_script="$(plugin_script tmux-resurrect scripts/save.sh)"
+
+    if [ ! -x "$save_script" ]; then
+        echo "tmux-resurrect is not installed. Run prefix + I in tmux first." >&2
+        exit 1
+    fi
+
+    tmux -L "$SOCKET_NAME" start-server
+    configure_server
+
+    if ! has_any_sessions; then
+        echo "No tmux sessions exist for this project yet. Run 'tmux-project' first." >&2
+        exit 1
+    fi
+
+    tmux -L "$SOCKET_NAME" run-shell "$save_script"
+}
+
+remember_session() {
+    printf '%s\n' "$1" > "$LAST_SESSION_FILE"
+}
+
+preferred_session() {
+    if [ -n "${1:-}" ]; then
+        printf '%s\n' "$1"
+        return
+    fi
+
+    if [ -s "$LAST_SESSION_FILE" ]; then
+        head -n 1 "$LAST_SESSION_FILE"
+        return
+    fi
+
+    printf '%s\n' "$DEFAULT_SESSION"
+}
+
+attach_session() {
+    local session_name="$1"
+    remember_session "$session_name"
+
+    if [ -n "${TMUX:-}" ]; then
+        if tmux -L "$SOCKET_NAME" switch-client -t "$session_name" 2>/dev/null; then
+            exit 0
+        fi
+        exec env TMUX= tmux -L "$SOCKET_NAME" attach-session -t "$session_name"
+    fi
+
+    exec tmux -L "$SOCKET_NAME" attach-session -t "$session_name"
+}
+
+new_session() {
+    local session_name="$1"
+
+    if ! session_exists "$session_name"; then
+        tmux -L "$SOCKET_NAME" new-session -d -s "$session_name" -c "$WORKSPACE_ROOT"
+        configure_server
+    fi
+
+    attach_session "$session_name"
+}
+
+COMMAND="${1:-attach}"
+shift || true
+
+WORKSPACE_ROOT="$(find_workspace_root)"
+STORAGE_DIR="$(find_storage_dir)"
+RESURRECT_DIR="$STORAGE_DIR/resurrect"
+mkdir -p "$RESURRECT_DIR"
+
+ROOT_BASENAME="$(basename "$WORKSPACE_ROOT")"
+ROOT_HASH="$(printf '%s' "$WORKSPACE_ROOT" | sha1sum | cut -c1-8)"
+SOCKET_NAME="$(sanitize_name "$ROOT_BASENAME")-$ROOT_HASH"
+DEFAULT_SESSION="$(sanitize_name "$ROOT_BASENAME")"
+LAST_SESSION_FILE="$STORAGE_DIR/last-session"
+
+case "$COMMAND" in
+    attach|resume)
+        SESSION_NAME="$(preferred_session "${1:-}")"
+        tmux -L "$SOCKET_NAME" start-server
+        configure_server
+
+        if session_exists "$SESSION_NAME"; then
+            attach_session "$SESSION_NAME"
+        fi
+
+        if has_any_sessions || restore_if_possible; then
+            if ! session_exists "$SESSION_NAME"; then
+                SESSION_NAME="$(tmux -L "$SOCKET_NAME" list-sessions -F '#{session_name}' | head -n 1)"
+            fi
+            attach_session "$SESSION_NAME"
+        fi
+
+        new_session "$SESSION_NAME"
+        ;;
+    new)
+        SESSION_NAME="$(preferred_session "${1:-}")"
+        new_session "$SESSION_NAME"
+        ;;
+    save)
+        save_now
+        ;;
+    ls|list)
+        tmux -L "$SOCKET_NAME" list-sessions
+        ;;
+    root)
+        printf '%s\n' "$WORKSPACE_ROOT"
+        ;;
+    storage)
+        printf '%s\n' "$STORAGE_DIR"
+        ;;
+    socket)
+        printf '%s\n' "$SOCKET_NAME"
+        ;;
+    *)
+        echo "Usage: tmux-project [attach|resume|new|save|list|root|storage|socket] [session-name]" >&2
+        exit 1
+        ;;
+esac

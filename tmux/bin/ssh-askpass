@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -eu
+
+prompt="${1:-Enter SSH password}"
+prompt="${prompt#Password: }"
+prompt="${prompt#password: }"
+[ -n "$prompt" ] || prompt="Enter SSH password"
+
+if command -v rofi >/dev/null 2>&1; then
+    exec rofi -dmenu -password -p "$prompt"
+fi
+
+if command -v wofi >/dev/null 2>&1; then
+    exec wofi --dmenu --password --prompt "$prompt"
+fi
+
+if command -v ssh-askpass >/dev/null 2>&1; then
+    exec ssh-askpass "$prompt"
+fi
+
+exit 1

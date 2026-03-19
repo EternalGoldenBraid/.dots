@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+set -u
+
+ASKPASS_HELPER="$HOME/.dotfiles/tmux/bin/ssh-askpass"
+DISPLAY_VALUE="${DISPLAY:-:0}"
+
+pick_menu() {
+    local prompt="$1"
+
+    if [ -n "${WAYLAND_DISPLAY:-}" ] && command -v wofi >/dev/null 2>&1; then
+        wofi --dmenu --prompt "$prompt"
+        return
+    fi
+
+    if [ -n "${DISPLAY:-}" ] && command -v rofi >/dev/null 2>&1; then
+        rofi -dmenu -p "$prompt"
+        return
+    fi
+
+    if command -v wofi >/dev/null 2>&1; then
+        wofi --dmenu --prompt "$prompt"
+        return
+    fi
+
+    if command -v rofi >/dev/null 2>&1; then
+        rofi -dmenu -p "$prompt"
+        return
+    fi
+
+    if command -v dmenu >/dev/null 2>&1; then
+        dmenu -p "$prompt"
+        return
+    fi
+
+    return 1
+}
+
+notify_error() {
+    local msg="$1"
+    if command -v rofi >/dev/null 2>&1; then
+        rofi -e "$msg"
+        return
+    fi
+    if command -v notify-send >/dev/null 2>&1; then
+        notify-send "tmux launcher" "$msg"
+        return
+    fi
+    echo "$msg" >&2
+}
+
+shell_escape() {
+    printf '%q' "$1"
+}
+
+list_ssh_host_aliases() {
+    [ -r "$HOME/.ssh/config" ] || return 0
+
+    awk '
+        BEGIN { IGNORECASE = 1 }
+        $1 == "Host" {
+            for (i = 2; i <= NF; i++) {
+                if ($i ~ /^!/) continue
+                if ($i ~ /[*?]/) continue
+                print $i
+            }
+        }
+    ' "$HOME/.ssh/config" | sort -u
+}
+
+list_local_tmux_sockets() {
+    find /tmp -maxdepth 2 -path '/tmp/tmux-*/*' -type s 2>/dev/null | sort -u
+}
+
+ssh_with_askpass() {
+    env DISPLAY="$DISPLAY_VALUE" \
+        SSH_ASKPASS="$ASKPASS_HELPER" \
+        SSH_ASKPASS_REQUIRE=force \
+        setsid -w ssh -o ConnectTimeout=5 "$@" </dev/null
+}
+
+focus_or_attach_local() {
+    local socket_path="$1"
+    local session="$2"
+    local client_pid window
+
+    if tmux -S "$socket_path" list-clients -t "$session" >/dev/null 2>&1; then
+        client_pid="$(tmux -S "$socket_path" list-clients -t "$session" -F '#{client_pid}' | head -1)"
+        window="$(hyprctl clients -j | jq -r ".[] | select(.pid == $client_pid or .title | contains(\"$session\")) | .address" | head -1)"
+
+        if [ -n "$window" ]; then
+            hyprctl dispatch focuswindow "address:$window"
+            return
+        fi
+    fi
+
+    kitty tmux -S "$socket_path" attach-session -t "$session" &
+}
+
+remote_list_command() {
+    cat <<'EOF'
+find /tmp -maxdepth 2 -path '/tmp/tmux-*/*' -type s 2>/dev/null | sort -u |
+while IFS= read -r socket; do
+    [ -S "$socket" ] || continue
+    tmux -S "$socket" list-sessions -F '#{session_name}' 2>/dev/null |
+    while IFS= read -r session; do
+        [ -n "$session" ] || continue
+        printf '%s\t%s\n' "$socket" "$session"
+    done
+done
+EOF
+}
+
+declare -a local_targets
+declare -a local_labels
+declare -a host_aliases
+declare -a sources
+declare -a source_labels
+
+while IFS= read -r socket_path; do
+    [ -S "$socket_path" ] || continue
+    socket_name="$(basename "$socket_path")"
+    while IFS= read -r session; do
+        [ -n "$session" ] || continue
+        local_targets+=("$socket_path"$'\t'"$session")
+        local_labels+=("[local:$socket_name] $session")
+    done < <(tmux -S "$socket_path" list-sessions -F '#{session_name}' 2>/dev/null)
+done < <(list_local_tmux_sockets)
+
+while IFS= read -r host; do
+    [ -n "$host" ] || continue
+    host_aliases+=("$host")
+done < <(list_ssh_host_aliases)
+
+[ "${#local_targets[@]}" -gt 0 ] && {
+    sources+=("local")
+    source_labels+=("[local] Browse local tmux sessions")
+}
+
+for host in "${host_aliases[@]}"; do
+    sources+=("remote"$'\t'"$host")
+    source_labels+=("[$host] Browse remote tmux sessions")
+done
+
+if [ "${#sources[@]}" -eq 0 ]; then
+    notify_error "No local tmux sessions or SSH host aliases found"
+    exit 1
+fi
+
+selected_source="$(
+    printf '%s\n' "${source_labels[@]}" | pick_menu "Tmux source:"
+)"
+
+[ -n "${selected_source:-}" ] || exit 0
+
+selected_source_idx=-1
+for i in "${!source_labels[@]}"; do
+    if [ "${source_labels[$i]}" = "$selected_source" ]; then
+        selected_source_idx="$i"
+        break
+    fi
+done
+
+[ "$selected_source_idx" -ge 0 ] || exit 1
+
+IFS=$'\t' read -r source_kind source_host <<<"${sources[$selected_source_idx]}"
+
+if [ "$source_kind" = "local" ]; then
+    selected_local="$(
+        printf '%s\n' "${local_labels[@]}" | pick_menu "Local tmux session:"
+    )"
+    [ -n "${selected_local:-}" ] || exit 0
+
+    selected_local_idx=-1
+    for i in "${!local_labels[@]}"; do
+        if [ "${local_labels[$i]}" = "$selected_local" ]; then
+            selected_local_idx="$i"
+            break
+        fi
+    done
+
+    [ "$selected_local_idx" -ge 0 ] || exit 1
+    IFS=$'\t' read -r socket_path session_name <<<"${local_targets[$selected_local_idx]}"
+    focus_or_attach_local "$socket_path" "$session_name"
+    exit 0
+fi
+
+declare -a remote_targets
+declare -a remote_labels
+remote_output="$(ssh_with_askpass "$source_host" "$(remote_list_command)" 2>/dev/null)"
+
+while IFS=$'\t' read -r socket_path session_name; do
+    [ -n "${socket_path:-}" ] || continue
+    [ -n "${session_name:-}" ] || continue
+    socket_name="$(basename "$socket_path")"
+    remote_targets+=("$socket_path"$'\t'"$session_name")
+    remote_labels+=("[$source_host:$socket_name] $session_name")
+done <<<"$remote_output"
+
+if [ "${#remote_targets[@]}" -eq 0 ]; then
+    notify_error "No tmux sessions found on $source_host, or authentication was cancelled"
+    exit 1
+fi
+
+selected_remote="$(
+    printf '%s\n' "${remote_labels[@]}" | pick_menu "Remote tmux session:"
+)"
+
+[ -n "${selected_remote:-}" ] || exit 0
+
+selected_remote_idx=-1
+for i in "${!remote_labels[@]}"; do
+    if [ "${remote_labels[$i]}" = "$selected_remote" ]; then
+        selected_remote_idx="$i"
+        break
+    fi
+done
+
+[ "$selected_remote_idx" -ge 0 ] || exit 1
+
+IFS=$'\t' read -r remote_socket remote_session <<<"${remote_targets[$selected_remote_idx]}"
+kitty sh -lc "export DISPLAY=$(shell_escape "$DISPLAY_VALUE"); export SSH_ASKPASS=$(shell_escape "$ASKPASS_HELPER"); export SSH_ASKPASS_REQUIRE=force; exec setsid -w ssh -t $(shell_escape "$source_host") tmux -S $(shell_escape "$remote_socket") attach-session -t $(shell_escape "$remote_session") </dev/null" &
