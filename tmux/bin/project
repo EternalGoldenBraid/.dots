@@ -21,16 +21,41 @@ find_storage_dir() {
         return
     fi
 
-    if [ -d "$WORKSPACE_ROOT/coordination" ] && [ -w "$WORKSPACE_ROOT/coordination" ]; then
-        printf '%s/tmux\n' "$WORKSPACE_ROOT/coordination"
+    local preferred_storage_dir="$WORKSPACE_ROOT/coordination/tmux"
+    local legacy_storage_dir="$WORKSPACE_ROOT/.tmux-workspace"
+
+    if storage_dir_has_resurrect_state "$preferred_storage_dir"; then
+        printf '%s\n' "$preferred_storage_dir"
         return
     fi
 
-    printf '%s/.tmux-workspace\n' "$WORKSPACE_ROOT"
+    if storage_dir_has_resurrect_state "$legacy_storage_dir"; then
+        printf '%s\n' "$legacy_storage_dir"
+        return
+    fi
+
+    if [ -d "$WORKSPACE_ROOT/coordination" ] && [ -w "$WORKSPACE_ROOT/coordination" ]; then
+        if storage_dir_has_metadata "$preferred_storage_dir" || ! storage_dir_has_metadata "$legacy_storage_dir"; then
+            printf '%s\n' "$preferred_storage_dir"
+            return
+        fi
+    fi
+
+    printf '%s\n' "$legacy_storage_dir"
 }
 
 sanitize_name() {
     printf '%s' "$1" | tr -cs '[:alnum:]' '-'
+}
+
+storage_dir_has_resurrect_state() {
+    local storage_dir="$1"
+    compgen -G "$storage_dir/resurrect/tmux_resurrect_*.txt" >/dev/null 2>&1
+}
+
+storage_dir_has_metadata() {
+    local storage_dir="$1"
+    [ -s "$storage_dir/last-session" ] || storage_dir_has_resurrect_state "$storage_dir"
 }
 
 plugin_base_dir() {
@@ -55,6 +80,14 @@ plugin_script() {
     printf '%s/%s/%s\n' "$base_dir" "$plugin_name" "$script_relpath"
 }
 
+cleanup_stale_socket() {
+    local runtime_dir="${TMUX_TMPDIR:-/tmp}/tmux-$(id -u)"
+    local socket_path="$runtime_dir/$SOCKET_NAME"
+    if [ -S "$socket_path" ] && ! tmux -L "$SOCKET_NAME" list-sessions >/dev/null 2>&1; then
+        rm -f "$socket_path"
+    fi
+}
+
 configure_server() {
     tmux -L "$SOCKET_NAME" set-option -gq @resurrect-dir "$RESURRECT_DIR"
     tmux -L "$SOCKET_NAME" set-option -gq @continuum-save-interval 15
@@ -67,6 +100,34 @@ session_exists() {
 
 has_any_sessions() {
     tmux -L "$SOCKET_NAME" list-sessions >/dev/null 2>&1
+}
+
+has_real_sessions() {
+    tmux -L "$SOCKET_NAME" list-sessions -F '#{session_name}' 2>/dev/null |
+        awk -v bootstrap="$BOOTSTRAP_SESSION" '$0 != bootstrap { found=1; exit } END { exit found ? 0 : 1 }'
+}
+
+first_real_session() {
+    tmux -L "$SOCKET_NAME" list-sessions -F '#{session_name}' 2>/dev/null |
+        awk -v bootstrap="$BOOTSTRAP_SESSION" '$0 != bootstrap { print; exit }'
+}
+
+ensure_restore_server() {
+    cleanup_stale_socket
+
+    if has_any_sessions; then
+        return
+    fi
+
+    tmux -L "$SOCKET_NAME" new-session -d -s "$BOOTSTRAP_SESSION" -c "$WORKSPACE_ROOT" >/dev/null
+}
+
+cleanup_bootstrap_session() {
+    if ! session_exists "$BOOTSTRAP_SESSION"; then
+        return
+    fi
+
+    tmux -L "$SOCKET_NAME" kill-session -t "$BOOTSTRAP_SESSION" >/dev/null 2>&1 || true
 }
 
 restore_if_possible() {
@@ -85,7 +146,7 @@ restore_if_possible() {
 
     local _
     for _ in 1 2 3 4 5 6 7 8 9 10; do
-        if has_any_sessions; then
+        if has_real_sessions; then
             return 0
         fi
         sleep 0.2
@@ -103,14 +164,13 @@ save_now() {
         exit 1
     fi
 
-    tmux -L "$SOCKET_NAME" start-server
-    configure_server
-
-    if ! has_any_sessions; then
+    cleanup_stale_socket
+    if ! has_real_sessions; then
         echo "No tmux sessions exist for this project yet. Run 'tmux-project' first." >&2
         exit 1
     fi
 
+    configure_server
     tmux -L "$SOCKET_NAME" run-shell "$save_script"
 }
 
@@ -149,6 +209,8 @@ attach_session() {
 new_session() {
     local session_name="$1"
 
+    cleanup_bootstrap_session
+
     if ! session_exists "$session_name"; then
         tmux -L "$SOCKET_NAME" new-session -d -s "$session_name" -c "$WORKSPACE_ROOT"
         configure_server
@@ -160,6 +222,12 @@ new_session() {
 COMMAND="${1:-attach}"
 shift || true
 
+SESSION_ARG="${1:-}"
+if [ "${SESSION_ARG:-}" = "-s" ]; then
+    shift || true
+    SESSION_ARG="${1:-}"
+fi
+
 WORKSPACE_ROOT="$(find_workspace_root)"
 STORAGE_DIR="$(find_storage_dir)"
 RESURRECT_DIR="$STORAGE_DIR/resurrect"
@@ -170,28 +238,31 @@ ROOT_HASH="$(printf '%s' "$WORKSPACE_ROOT" | sha1sum | cut -c1-8)"
 SOCKET_NAME="$(sanitize_name "$ROOT_BASENAME")-$ROOT_HASH"
 DEFAULT_SESSION="$(sanitize_name "$ROOT_BASENAME")"
 LAST_SESSION_FILE="$STORAGE_DIR/last-session"
+BOOTSTRAP_SESSION="__tmux_project_bootstrap__"
 
 case "$COMMAND" in
     attach|resume)
-        SESSION_NAME="$(preferred_session "${1:-}")"
-        tmux -L "$SOCKET_NAME" start-server
+        SESSION_NAME="$(preferred_session "$SESSION_ARG")"
+        ensure_restore_server
         configure_server
 
-        if session_exists "$SESSION_NAME"; then
+        if [ "$SESSION_NAME" != "$BOOTSTRAP_SESSION" ] && session_exists "$SESSION_NAME"; then
+            cleanup_bootstrap_session
             attach_session "$SESSION_NAME"
         fi
 
-        if has_any_sessions || restore_if_possible; then
-            if ! session_exists "$SESSION_NAME"; then
-                SESSION_NAME="$(tmux -L "$SOCKET_NAME" list-sessions -F '#{session_name}' | head -n 1)"
+        if restore_if_possible || has_real_sessions; then
+            if [ "$SESSION_NAME" = "$BOOTSTRAP_SESSION" ] || ! session_exists "$SESSION_NAME"; then
+                SESSION_NAME="$(first_real_session)"
             fi
+            cleanup_bootstrap_session
             attach_session "$SESSION_NAME"
         fi
 
         new_session "$SESSION_NAME"
         ;;
     new)
-        SESSION_NAME="$(preferred_session "${1:-}")"
+        SESSION_NAME="$(preferred_session "$SESSION_ARG")"
         new_session "$SESSION_NAME"
         ;;
     save)

@@ -218,4 +218,4 @@ done
 [ "$selected_remote_idx" -ge 0 ] || exit 1
 
 IFS=$'\t' read -r remote_socket remote_session <<<"${remote_targets[$selected_remote_idx]}"
-kitty sh -lc "export DISPLAY=$(shell_escape "$DISPLAY_VALUE"); export SSH_ASKPASS=$(shell_escape "$ASKPASS_HELPER"); export SSH_ASKPASS_REQUIRE=force; exec setsid -w ssh -t $(shell_escape "$source_host") tmux -S $(shell_escape "$remote_socket") attach-session -t $(shell_escape "$remote_session") </dev/null" &
+kitty sh -lc "export DISPLAY=$(shell_escape "$DISPLAY_VALUE"); export SSH_ASKPASS=$(shell_escape "$ASKPASS_HELPER"); export SSH_ASKPASS_REQUIRE=force; exec setsid -w ssh -tt $(shell_escape "$source_host") tmux -S $(shell_escape "$remote_socket") attach-session -t $(shell_escape "$remote_session") </dev/null" &
