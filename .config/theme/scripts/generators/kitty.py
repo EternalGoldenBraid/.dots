@@ -5,7 +5,7 @@ def render(c: dict[str, str], source_path: str) -> str:
 
 background {c['terminal_bg']}
 foreground {c['terminal_fg']}
-selection_background {c['surface0']}
+selection_background {c['selection_bg']}
 selection_foreground {c['text']}
 url_color {c['accent_end']}
 cursor {c['text']}
@@ -24,21 +24,21 @@ inactive_border_color {c['surface1']}
 # normal
 color0 {c['surface0']}
 color1 {c['red']}
-color2 {c['accent_start']}
+color2 {c['terminal_green']}
 color3 {c['peach']}
 color4 {c['accent_end']}
 color5 {c['overlay1']}
-color6 {c['accent_end']}
+color6 {c['terminal_cyan']}
 color7 {c['text']}
 
 # bright
 color8 {c['surface1']}
 color9 {c['red']}
-color10 {c['accent_start']}
+color10 {c['terminal_green']}
 color11 {c['peach']}
 color12 {c['accent_end']}
 color13 {c['overlay1']}
-color14 {c['accent_end']}
+color14 {c['terminal_cyan']}
 color15 {c['accent_text_right']}
 
 # extended

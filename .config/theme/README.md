@@ -5,6 +5,8 @@ This directory is the source of truth for generated theme colors.
 ## Files
 
 - `palette.json`: Canonical color palette
+- Optional terminal ANSI role keys: `terminal_green`, `terminal_cyan`
+- Optional shared selection/highlight key: `selection_bg`
 - `scripts/generate_theme.py`: Generates app-specific theme files from the palette
 - `scripts/generators/README.md`: Contract for per-app generator signatures and responsibilities
 - `scripts/generators/*.py`: App-specific renderers (`tmux`, `waybar`, `nvim`, `vifm`)
@@ -14,6 +16,7 @@ This directory is the source of truth for generated theme colors.
 - `~/.dotfiles/.config/vifm/colors/generated.vifm`: Generated Vifm colorscheme (do not edit by hand)
 - `~/.dotfiles/.config/kitty/theme.generated.conf`: Generated Kitty colors (do not edit by hand)
 - `~/.dotfiles/.config/foot/theme.generated.ini`: Generated Foot colors (do not edit by hand)
+- `~/.dotfiles/.config/lazygit/theme.generated.yml`: Generated LazyGit theme overrides (do not edit by hand)
 - `~/.dotfiles/.config/.colors`: Generated Bash-compatible color vars (do not edit by hand)
 - `~/.dotfiles/.config/hypr/colors.generated.conf`: Generated Hyprland colors (do not edit by hand)
 - `~/.dotfiles/media/zen-wallpaper.generated.png`: Palette-tinted generated wallpaper
@@ -59,6 +62,7 @@ Current generators already cluster into shared roles:
 - Background layers: `base`, `mantle`, `crust`, `surface0`, `surface1`
 - Foreground tiers: `text`, `overlay1`, `accent_text_left`, `accent_text_right`
 - Emphasis/status: `accent_start`, `accent_end`, `red`, `peach`
+- Selection/highlight: `selection_bg`
 
 That means we can introduce semantic names without changing visual intent first.
 

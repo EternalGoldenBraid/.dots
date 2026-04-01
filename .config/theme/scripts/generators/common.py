@@ -29,8 +29,20 @@ def prepare_palette(palette: dict[str, str]) -> dict[str, str]:
     merged.setdefault("red", "#f38ba8")
     merged.setdefault("terminal_bg", merged["base"])
     merged.setdefault("terminal_fg", merged["text"])
+    merged.setdefault("terminal_green", "#a3be8c")
+    merged.setdefault("terminal_cyan", "#88c0d0")
+    merged.setdefault("selection_bg", merged["surface0"])
 
-    validate_keys = REQUIRED_KEYS + ["peach", "bar_text_mid", "red", "terminal_bg", "terminal_fg"]
+    validate_keys = REQUIRED_KEYS + [
+        "peach",
+        "bar_text_mid",
+        "red",
+        "terminal_bg",
+        "terminal_fg",
+        "terminal_green",
+        "terminal_cyan",
+        "selection_bg",
+    ]
     for key in validate_keys:
         value = merged.get(key)
         if not isinstance(value, str) or not HEX_COLOR_RE.match(value):

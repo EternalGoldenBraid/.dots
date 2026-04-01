@@ -1,4 +1,4 @@
-# Use OSC 52 escape sequences to send clipboard data through SSH connection to local terminal.
+# Base LazyGit config. Theme overrides are generated into ~/.config/lazygit/theme.generated.yml.
 os:
   copyToClipboardCmd: 'printf "\033]52;c;$(printf {{text}} | base64)\a" > /dev/tty'
   editPreset: 'nvim'

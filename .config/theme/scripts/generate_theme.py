@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import json
 import pathlib
+import subprocess
 import sys
 
-from generators import bash, foot, hypr, kitty, nvim, tmux, vifm, wallpaper, waybar
+from generators import bash, foot, hypr, kitty, lazygit, nvim, tmux, vifm, wallpaper, waybar
 from generators.common import prepare_palette
 
 
@@ -59,6 +60,10 @@ def main() -> int:
             "out": home / ".dotfiles/.config/hypr/colors.generated.conf",
             "render": hypr.render,
         },
+        "lazygit": {
+            "out": home / ".dotfiles/.config/lazygit/theme.generated.yml",
+            "render": lazygit.render,
+        },
     }
 
     source_path = str(palette_path)
@@ -70,13 +75,16 @@ def main() -> int:
 
     wallpaper_in = home / ".dotfiles/media/zen-wallpaper.png"
     wallpaper_out = home / ".dotfiles/media/zen-wallpaper.generated.png"
-    wallpaper.generate(
-        palette,
-        source_path,
-        input_path=wallpaper_in,
-        output_path=wallpaper_out,
-    )
-    print(f"Generated {wallpaper_out}")
+    try:
+        wallpaper.generate(
+            palette,
+            source_path,
+            input_path=wallpaper_in,
+            output_path=wallpaper_out,
+        )
+        print(f"Generated {wallpaper_out}")
+    except (RuntimeError, FileNotFoundError, subprocess.CalledProcessError) as err:
+        print(f"WARNING: skipped wallpaper generation: {err}", file=sys.stderr)
 
     return 0
 

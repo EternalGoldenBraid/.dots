@@ -15,7 +15,7 @@ foreground={_hex6(c['terminal_fg'])}
 # Cursor is: <text> <cursor>
 cursor={_hex6(c['terminal_bg'])} {_hex6(c['text'])}
 
-selection-background={_hex6(c['surface0'])}
+selection-background={_hex6(c['selection_bg'])}
 selection-foreground={_hex6(c['text'])}
 
 urls={_hex6(c['accent_end'])}
@@ -23,20 +23,20 @@ urls={_hex6(c['accent_end'])}
 # normal
 regular0={_hex6(c['surface0'])}
 regular1={_hex6(c['red'])}
-regular2={_hex6(c['accent_start'])}
+regular2={_hex6(c['terminal_green'])}
 regular3={_hex6(c['peach'])}
 regular4={_hex6(c['accent_end'])}
 regular5={_hex6(c['overlay1'])}
-regular6={_hex6(c['accent_end'])}
+regular6={_hex6(c['terminal_cyan'])}
 regular7={_hex6(c['text'])}
 
 # bright
 bright0={_hex6(c['surface1'])}
 bright1={_hex6(c['red'])}
-bright2={_hex6(c['accent_start'])}
+bright2={_hex6(c['terminal_green'])}
 bright3={_hex6(c['peach'])}
 bright4={_hex6(c['accent_end'])}
 bright5={_hex6(c['overlay1'])}
-bright6={_hex6(c['accent_end'])}
+bright6={_hex6(c['terminal_cyan'])}
 bright7={_hex6(c['accent_text_right'])}
 """

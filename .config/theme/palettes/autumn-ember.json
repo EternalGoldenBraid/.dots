@@ -6,9 +6,12 @@
   "text": "#f0ddd4",
   "surface0": "#3a2e29",
   "surface1": "#4d3d35",
+  "selection_bg": "#3a2e29",
   "overlay1": "#a88c7f",
   "accent_start": "#b5654d",
   "accent_end": "#d98b4f",
+  "terminal_green": "#8fa76a",
+  "terminal_cyan": "#6fb3a8",
   "accent_text_left": "#fff2e8",
   "accent_text_right": "#fff8f2"
 }
