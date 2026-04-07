@@ -6,3 +6,6 @@ bin/logs/nvim.log
 .config/nvim/lazy-lock.json
 .local/share/rofi/rofi_calc_history
 .config/theme/scripts/generators/__pycache__
+/.config/hypr/workspaces.conf
+/.config/hypr/workspaces.conf
+/.config/hypr/monitors.conf
