@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-note_file="${HOME}/daily.md"
+note_file="${HOME}/Daily/daily.md"
 state_dir="${XDG_STATE_HOME:-${HOME}/.local/state}"
 read_stamp="${state_dir}/daily-note.last_read"
 terminal="${TERMINAL:-kitty}"
