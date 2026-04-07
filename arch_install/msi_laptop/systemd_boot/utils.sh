@@ -38,3 +38,44 @@ setup_tmux() {
     tmux source ~/.tmux.conf
     echo "Tmux setup complete."
 }
+
+setup_fingerprint_auth() {
+    local pam_file="/etc/pam.d/system-local-login"
+    local pam_line="auth      sufficient   pam_fprintd.so"
+    local tmp_file
+    local backup_file
+
+    if ! pacman -Qq fprintd >/dev/null 2>&1; then
+        echo "Skipping fingerprint PAM setup: fprintd is not installed."
+        return 0
+    fi
+
+    if [ ! -f "${pam_file}" ]; then
+        echo "Skipping fingerprint PAM setup: ${pam_file} was not found."
+        return 0
+    fi
+
+    if grep -Fqx "${pam_line}" "${pam_file}"; then
+        echo "Fingerprint PAM entry already present in ${pam_file}."
+        return 0
+    fi
+
+    tmp_file=$(mktemp)
+    backup_file="${pam_file}.bak.$(date +%Y%m%d%H%M%S)"
+
+    # Insert fingerprint auth before the standard system-login include.
+    awk -v pam_line="${pam_line}" '
+        !inserted && /^auth[[:space:]]+include[[:space:]]+system-login$/ {
+            print pam_line
+            inserted = 1
+        }
+        { print }
+    ' "${pam_file}" > "${tmp_file}"
+
+    sudo cp "${pam_file}" "${backup_file}"
+    sudo install -m 644 "${tmp_file}" "${pam_file}"
+    rm -f "${tmp_file}"
+
+    echo "Fingerprint PAM enabled in ${pam_file}."
+    echo "Backup saved to ${backup_file}."
+}

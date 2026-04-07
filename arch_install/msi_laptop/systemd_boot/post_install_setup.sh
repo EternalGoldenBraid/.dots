@@ -63,7 +63,7 @@ CORE_PKGS=(
     "kitty" "exa" 
     "cups" "cups-pdf" "avahi" "nss-mdns"
     "firewalld" "nftables" "polkit-gnome" "network-manager-applet" "lsof"
-    "brightnessctl"
+    "brightnessctl" "fprintd"
     # texlive-latexrecommended texlive-latexextra texlive-fontsrecommended texlive-fontsextra \
     # texlive-mathscience texlive-plaingeneric texlive-langgreek biber texlive-binextra \
 )
@@ -124,6 +124,7 @@ paru -S --needed --noconfirm "${ALL_PKGS[@]}"
 
 # 4. Post-Install Configuration
 
+setup_fingerprint_auth
 setup_neovim
 setup_tmux
 
@@ -151,4 +152,5 @@ echo "#### Setup Complete! ####"
 
 echo "
     Go ahead and setup 1password by enabling cli and ssh-agent integration in the developer settings.
+    Fingerprint enrollment is still manual: run 'fprintd-enroll' and then 'fprintd-verify'.
 "
