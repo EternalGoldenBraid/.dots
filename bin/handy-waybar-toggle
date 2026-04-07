@@ -47,6 +47,7 @@ watch_for_completion() {
     signal_waybar
 }
 
+# --- Main toggle logic ---
 if [[ "${1:-}" == "--watch" ]]; then
     watch_for_completion "${2:-0}"
     exit 0
@@ -58,6 +59,7 @@ if [[ "${STATUS:-idle}" == "recording" ]]; then
     previous_mtime="$(stat -c %Y "$DB_PATH" 2>/dev/null || echo 0)"
     save_state "transcribing"
     signal_waybar
+
     if handy --toggle-transcription; then
         nohup "$0" --watch "$previous_mtime" >/dev/null 2>&1 &
     else
