@@ -4,3 +4,6 @@
 [submodule ".ssh/ssh_configs"]
 	path = .ssh/ssh_configs
 	url = git@github.com:EternalGoldenBraid/.ssh_configs.git
+[submodule ".config/rofi/themes/Tokyonight-rofi-theme"]
+	path = .config/rofi/themes/Tokyonight-rofi-theme
+	url = git@github.com:w8ste/Tokyonight-rofi-theme.git

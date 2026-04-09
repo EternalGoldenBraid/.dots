@@ -9,3 +9,4 @@ bin/logs/nvim.log
 /.config/hypr/workspaces.conf
 /.config/hypr/workspaces.conf
 /.config/hypr/monitors.conf
+.config/hypr/hyprvim/
