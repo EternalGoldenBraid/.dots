@@ -47,6 +47,65 @@ for f in docs/**/*.drawio; do python scripts/validate-drawio.py "$f"; done
 
 ---
 
+### `extract-graph-spec.py`
+
+Extracts a lean agent-facing graph brief from a `.drawio` page. The output is
+semantic rather than layout-faithful and is optimized for prompt context rather
+than human editing fidelity.
+
+**Usage**
+
+```bash
+python scripts/extract-graph-spec.py <diagram.drawio> [options]
+```
+
+**Options**
+
+| Option | Default | Description |
+|--------|---------|-------------|
+| `--diagram-name` | first page | Extract the page with the given draw.io page name |
+| `--diagram-index` | unset | Extract the 0-based page index |
+| `--format {yaml,json}` | `yaml` | Output format |
+| `--output <path>` | stdout | Write output to a file instead of stdout |
+
+**Examples**
+
+```bash
+# Extract the semantic graph for a specific page
+python scripts/extract-graph-spec.py docs/architecture.drawio \
+  --diagram-name "Experiment agent brief"
+
+# Save a YAML graph brief
+python scripts/extract-graph-spec.py docs/architecture.drawio \
+  --diagram-name "Experiment agent brief" \
+  --output docs/architecture.graph.yaml
+
+# Emit JSON instead
+python scripts/extract-graph-spec.py docs/architecture.drawio \
+  --diagram-index 0 \
+  --format json
+```
+
+**Output shape**
+
+The extracted artifact includes:
+
+- `source` metadata
+- `agent_brief.sections`
+- `agent_brief.notes`
+- `agent_brief.relationships`
+
+This makes it easier to compare:
+
+- raw prompt only
+- prompt plus draw.io
+- prompt plus derived graph-spec
+
+This script always emits the lean agent-oriented representation. If you need the
+full visual fidelity, use the original `.drawio` file for humans.
+
+---
+
 ### `add-shape.py`
 
 Adds a new shape (vertex cell) to an existing `.drawio` diagram file.
@@ -121,4 +180,11 @@ python scripts/add-shape.py docs/architecture.drawio "TODO: Service" 800 400 \
 
 ```bash
 python scripts/validate-drawio.py ../assets/templates/flowchart.drawio
+```
+
+### Generate a graph-spec from a diagram
+
+```bash
+python scripts/extract-graph-spec.py ../assets/templates/architecture.drawio \
+  --diagram-index 0
 ```
