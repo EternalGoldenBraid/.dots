@@ -25,6 +25,7 @@ else
   require("nicklas.lazy")
   require('general')
   require('gui')
+  require("commands").setup()
 
   require('plugin_settings.coding.init')
   require('plugin_settings/plugins_settings')
