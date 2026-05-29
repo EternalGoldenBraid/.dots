@@ -7,6 +7,7 @@ import argparse
 import json
 import subprocess
 import sys
+from collections import defaultdict
 from dataclasses import asdict, dataclass
 from pathlib import PurePosixPath
 from typing import Any
@@ -33,6 +34,21 @@ def gh_json(*args: str) -> Any:
     return json.loads(run_gh(*args))
 
 
+def gh_paginated_json(*args: str) -> list[Any]:
+    """Run gh with pagination and flatten paginated JSON arrays."""
+    payload = gh_json("api", "--paginate", "--slurp", *args)
+    if not isinstance(payload, list):
+        raise RuntimeError("Expected paginated gh api call to return a JSON list.")
+
+    items: list[Any] = []
+    for page in payload:
+        if isinstance(page, list):
+            items.extend(page)
+        else:
+            items.append(page)
+    return items
+
+
 def parse_repo(repo: str) -> tuple[str, str]:
     """Split owner/repo."""
     parts = repo.split("/", 1)
@@ -44,6 +60,29 @@ def parse_repo(repo: str) -> tuple[str, str]:
 def normalize_body(body: str) -> str:
     """Strip trailing whitespace while preserving internal formatting."""
     return body.replace("\r\n", "\n").strip()
+
+
+def extract_inline_tag_context(body: str, tag: str) -> str | None:
+    """Remove tag markers from a comment body and return any remaining context."""
+    lines = normalize_body(body).split("\n")
+    cleaned_lines: list[str] = []
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            if cleaned_lines and cleaned_lines[-1] != "":
+                cleaned_lines.append("")
+            continue
+
+        cleaned = stripped.replace(tag, "").strip(" -:\t")
+        if cleaned:
+            cleaned_lines.append(cleaned)
+
+    while cleaned_lines and cleaned_lines[-1] == "":
+        cleaned_lines.pop()
+
+    context = "\n".join(cleaned_lines).strip()
+    return context or None
 
 
 def line_fragment(start_line: int | None, end_line: int | None) -> str:
@@ -107,17 +146,22 @@ class ThreadMatch:
     source_commit: str | None
     source_start_line: int | None
     source_end_line: int | None
+    pending_review: bool
 
 
 def fetch_review_threads(repo: str, pr: int, comment_page_size: int) -> tuple[str, list[dict[str, Any]]]:
-    """Fetch review threads for a PR."""
+    """Fetch all submitted review threads for a PR."""
     owner, repo_name = parse_repo(repo)
     query = """
-query($owner:String!, $repo:String!, $pr:Int!, $commentPageSize:Int!) {
+query($owner:String!, $repo:String!, $pr:Int!, $commentPageSize:Int!, $cursor:String) {
   repository(owner:$owner, name:$repo) {
     url
     pullRequest(number:$pr) {
-      reviewThreads(first:100) {
+      reviewThreads(first:100, after:$cursor) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
         nodes {
           isResolved
           isOutdated
@@ -128,6 +172,7 @@ query($owner:String!, $repo:String!, $pr:Int!, $commentPageSize:Int!) {
               url
               body
               createdAt
+              databaseId
               path
               line
               originalLine
@@ -143,25 +188,133 @@ query($owner:String!, $repo:String!, $pr:Int!, $commentPageSize:Int!) {
   }
 }
 """
-    payload = gh_json(
-        "api",
-        "graphql",
-        "-f",
-        f"owner={owner}",
-        "-f",
-        f"repo={repo_name}",
-        "-F",
-        f"pr={pr}",
-        "-F",
-        f"commentPageSize={comment_page_size}",
-        "-f",
-        f"query={query}",
-    )
-    repository = payload["data"]["repository"]
-    pull_request = repository["pullRequest"]
-    if pull_request is None:
+    cursor: str | None = None
+    all_threads: list[dict[str, Any]] = []
+    repo_url: str | None = None
+
+    while True:
+        args = [
+            "api",
+            "graphql",
+            "-f",
+            f"owner={owner}",
+            "-f",
+            f"repo={repo_name}",
+            "-F",
+            f"pr={pr}",
+            "-F",
+            f"commentPageSize={comment_page_size}",
+            "-f",
+            f"query={query}",
+        ]
+        if cursor is not None:
+            args.extend(["-f", f"cursor={cursor}"])
+
+        payload = gh_json(*args)
+        repository = payload["data"]["repository"]
+        pull_request = repository["pullRequest"]
+        if pull_request is None:
+            raise RuntimeError(f"Pull request #{pr} was not found in {repo}.")
+
+        repo_url = repository["url"]
+        review_threads = pull_request["reviewThreads"]
+        all_threads.extend(review_threads["nodes"])
+        if not review_threads["pageInfo"]["hasNextPage"]:
+            break
+        cursor = review_threads["pageInfo"]["endCursor"]
+
+    if repo_url is None:
         raise RuntimeError(f"Pull request #{pr} was not found in {repo}.")
-    return repository["url"], pull_request["reviewThreads"]["nodes"]
+    return repo_url, all_threads
+
+
+def normalize_rest_review_comment(comment: dict[str, Any], pending_review: bool) -> dict[str, Any]:
+    """Normalize REST review comments to the GraphQL-like shape used by the matcher."""
+    commit_oid = comment.get("commit_id")
+    original_commit_oid = comment.get("original_commit_id")
+    return {
+        "author": {"login": ((comment.get("user") or {}).get("login"))},
+        "url": comment["html_url"],
+        "body": comment.get("body") or "",
+        "createdAt": comment.get("created_at"),
+        "databaseId": comment["id"],
+        "path": comment.get("path"),
+        "line": comment.get("line"),
+        "originalLine": comment.get("original_line"),
+        "startLine": comment.get("start_line"),
+        "originalStartLine": comment.get("original_start_line"),
+        "commit": {"oid": commit_oid} if commit_oid is not None else None,
+        "originalCommit": (
+            {"oid": original_commit_oid} if original_commit_oid is not None else None
+        ),
+        "inReplyToDatabaseId": comment.get("in_reply_to_id"),
+        "pendingReview": pending_review,
+    }
+
+
+def build_supplemental_threads(comments: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Build synthetic threads for comments not present in GraphQL reviewThreads."""
+    by_root_id: dict[int, list[dict[str, Any]]] = defaultdict(list)
+
+    for comment in comments:
+        root_id = comment.get("inReplyToDatabaseId") or comment["databaseId"]
+        by_root_id[root_id].append(comment)
+
+    threads: list[dict[str, Any]] = []
+    for thread_comments in by_root_id.values():
+        thread_comments.sort(
+            key=lambda comment: (
+                comment.get("createdAt") or "",
+                comment["databaseId"],
+            )
+        )
+        threads.append(
+            {
+                "isResolved": False,
+                "isOutdated": False,
+                "pendingReview": any(
+                    comment.get("pendingReview", False) for comment in thread_comments
+                ),
+                "path": thread_comments[0].get("path") or "",
+                "comments": {"nodes": thread_comments},
+            }
+        )
+    return threads
+
+
+def fetch_pending_review_comments(repo: str, pr: int) -> list[dict[str, Any]]:
+    """Fetch comments from pending PR reviews."""
+    reviews = gh_paginated_json(f"repos/{repo}/pulls/{pr}/reviews?per_page=100")
+    pending_review_ids = [
+        review["id"] for review in reviews if review.get("state") == "PENDING"
+    ]
+
+    pending_comments: list[dict[str, Any]] = []
+    for review_id in pending_review_ids:
+        pending_comments.extend(
+            gh_paginated_json(
+            f"repos/{repo}/pulls/{pr}/reviews/{review_id}/comments?per_page=100"
+        )
+        )
+    return [
+        normalize_rest_review_comment(comment=comment, pending_review=True)
+        for comment in pending_comments
+    ]
+
+
+def fetch_additional_review_threads(repo: str, pr: int, known_urls: set[str]) -> list[dict[str, Any]]:
+    """Fetch review comments not exposed via GraphQL reviewThreads."""
+    submitted_comments = gh_paginated_json(f"repos/{repo}/pulls/{pr}/comments?per_page=100")
+    normalized_comments = [
+        normalize_rest_review_comment(comment=comment, pending_review=False)
+        for comment in submitted_comments
+    ]
+    normalized_comments.extend(fetch_pending_review_comments(repo=repo, pr=pr))
+
+    supplemental_comments = [
+        comment for comment in normalized_comments if comment["url"] not in known_urls
+    ]
+    return build_supplemental_threads(comments=supplemental_comments)
 
 
 def find_tagged_review_threads(
@@ -173,6 +326,20 @@ def find_tagged_review_threads(
 ) -> list[ThreadMatch]:
     """Find exact tagged review-thread matches and their prior context comments."""
     repo_url, threads = fetch_review_threads(repo=repo, pr=pr, comment_page_size=comment_page_size)
+    pending_review_urls = {
+        comment["url"] for comment in fetch_pending_review_comments(repo=repo, pr=pr)
+    }
+    for thread in threads:
+        thread["pendingReview"] = any(
+            comment["url"] in pending_review_urls
+            for comment in thread["comments"]["nodes"]
+        )
+    known_urls = {
+        comment["url"]
+        for thread in threads
+        for comment in thread["comments"]["nodes"]
+    }
+    threads.extend(fetch_additional_review_threads(repo=repo, pr=pr, known_urls=known_urls))
     matches: list[ThreadMatch] = []
 
     for thread in threads:
@@ -194,6 +361,7 @@ def find_tagged_review_threads(
                 context_comment = previous
                 break
 
+            inline_context = extract_inline_tag_context(body=body, tag=tag)
             source_comment = context_comment or comment
             source_start_line, source_end_line = comment_line_range(source_comment)
             source_commit = None
@@ -210,12 +378,14 @@ def find_tagged_review_threads(
                     tag_comment_url=comment["url"],
                     tag_comment_body=body,
                     context_comment_url=(
-                        context_comment["url"] if context_comment is not None else None
+                        context_comment["url"]
+                        if context_comment is not None
+                        else (comment["url"] if inline_context is not None else None)
                     ),
                     context_body=(
                         normalize_body(context_comment["body"])
                         if context_comment is not None
-                        else None
+                        else inline_context
                     ),
                     source_permalink=build_source_permalink(
                         repo_url=repo_url,
@@ -227,6 +397,7 @@ def find_tagged_review_threads(
                     source_commit=source_commit,
                     source_start_line=source_start_line,
                     source_end_line=source_end_line,
+                    pending_review=thread.get("pendingReview", False),
                 )
             )
 
@@ -248,7 +419,10 @@ def format_tagged_review_threads_markdown(matches: list[ThreadMatch]) -> str:
         if match.source_permalink:
             lines.append(f"   - Source permalink: {match.source_permalink}")
         lines.append(
-            f"   - Thread state: resolved={str(match.resolved).lower()}, outdated={str(match.outdated).lower()}"
+            "   - Thread state: "
+            f"resolved={str(match.resolved).lower()}, "
+            f"outdated={str(match.outdated).lower()}, "
+            f"pending_review={str(match.pending_review).lower()}"
         )
     return "\n".join(lines)
 
