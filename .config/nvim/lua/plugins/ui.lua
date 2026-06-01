@@ -7,7 +7,13 @@ return {
     opts = function()
       local ok, p = pcall(require, "theme.generated_palette")
       if not ok then
-        return { style = "moon" }
+        return {
+          style = "moon",
+          on_highlights = function(hl, c)
+            hl.LineNr = { fg = c.blue }
+            hl.CursorLineNr = { fg = c.fg, bold = true }
+          end,
+        }
       end
 
       return {
@@ -26,6 +32,10 @@ return {
           c.red = p.red
           c.magenta = p.violet
           c.teal = p.green
+        end,
+        on_highlights = function(hl)
+          hl.LineNr = { fg = p.orange }
+          hl.CursorLineNr = { fg = p.fg, bold = true }
         end,
       }
     end,
