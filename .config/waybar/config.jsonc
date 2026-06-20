@@ -130,6 +130,7 @@
         "interval": 1,
         "signal": 11,
         "exec": "$HOME/.config/waybar/scripts/handy-status.sh",
+        "on-click": "$HOME/.dotfiles/bin/hypridle-bypass-toggle",
         "tooltip": false
     },
     "cpu": {

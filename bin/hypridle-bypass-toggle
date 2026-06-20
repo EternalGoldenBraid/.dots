@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/waybar"
+STATE_FILE="$STATE_DIR/idle-bypass.enabled"
+SIGNAL=11
+
+mkdir -p "$STATE_DIR"
+
+signal_waybar() {
+    pkill -RTMIN+"$SIGNAL" waybar 2>/dev/null || true
+}
+
+hypridle_pids() {
+    pgrep -xu "$USER" hypridle || true
+}
+
+stop_hypridle() {
+    local pids pid
+
+    pids="$(hypridle_pids)"
+    [[ -n "$pids" ]] || return 0
+
+    while IFS= read -r pid; do
+        [[ -n "$pid" ]] || continue
+        kill "$pid"
+    done <<< "$pids"
+
+    for _ in {1..20}; do
+        sleep 0.1
+        [[ -z "$(hypridle_pids)" ]] && return 0
+    done
+
+    echo "Failed to stop hypridle." >&2
+    return 1
+}
+
+start_hypridle() {
+    [[ -z "$(hypridle_pids)" ]] || return 0
+
+    nohup hypridle >/dev/null 2>&1 &
+
+    for _ in {1..20}; do
+        sleep 0.1
+        [[ -n "$(hypridle_pids)" ]] && return 0
+    done
+
+    echo "Failed to start hypridle." >&2
+    return 1
+}
+
+enable_bypass() {
+    stop_hypridle
+    : > "$STATE_FILE"
+    signal_waybar
+}
+
+disable_bypass() {
+    start_hypridle
+    rm -f "$STATE_FILE"
+    signal_waybar
+}
+
+status() {
+    if [[ -f "$STATE_FILE" ]]; then
+        printf 'enabled\n'
+    else
+        printf 'disabled\n'
+    fi
+}
+
+case "${1:-toggle}" in
+    on|enable)
+        enable_bypass
+        ;;
+    off|disable)
+        disable_bypass
+        ;;
+    toggle)
+        if [[ -f "$STATE_FILE" ]]; then
+            disable_bypass
+        else
+            enable_bypass
+        fi
+        ;;
+    status)
+        status
+        ;;
+    *)
+        echo "Usage: $0 [toggle|on|off|status]" >&2
+        exit 1
+        ;;
+esac
