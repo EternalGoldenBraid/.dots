@@ -10,3 +10,17 @@ bin/logs/nvim.log
 /.config/hypr/workspaces.conf
 /.config/hypr/monitors.conf
 .config/hypr/hyprvim/
+.config/acli
+.config/draw.io/Cache
+.config/draw.io/Code Cache
+.config/draw.io/Crashpad
+.config/draw.io/DawnGraphiteCache
+.config/draw.io/DawnWebGPUCache
+.config/draw.io/Dictionaries
+.config/draw.io/GPUCache
+.config/draw.io/Local Storage/leveldb
+.config/draw.io/Session Storage
+.config/draw.io/Shared Dictionary
+.config/draw.io
+.config/gh
+.config/github-copilot
