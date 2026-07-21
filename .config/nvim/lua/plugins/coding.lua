@@ -1,4 +1,17 @@
 -- ultisnips.lua
+local treesitter_languages = {
+  "bash", "c", "cpp", "markdown", "markdown_inline",
+  "css", "html", "javascript", "toml",
+  "yaml", "json", "lua", "regex",
+  "python", "rust", "latex",
+}
+
+local treesitter_filetypes = {
+  "bash", "c", "cpp", "css", "html", "javascript",
+  "json", "lua", "markdown", "python", "rust",
+  "sh", "tex", "toml", "yaml", "zsh",
+}
+
 return {
   {
     "folke/zen-mode.nvim",
@@ -138,24 +151,26 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",  -- This runs TSUpdate after installation
+    branch = "main",
+    lazy = false,
+    build = function()
+      local treesitter = require("nvim-treesitter")
+      treesitter.install(treesitter_languages):wait(300000)
+      treesitter.update(treesitter_languages):wait(300000)
+    end,
     config = function()
-      require("nvim-treesitter.configs").setup({
-        -- ensure_installed = "all",  -- Automatically install all maintained parsers
-        ensure_installed = {
-          "bash", "c", "cpp", "markdown",
-          "css", "html", "javascript", "toml",
-          "yaml", "json", "lua", "regex",
-          "python", "rust", "latex",
-        },
-        highlight = { 
-          enable = true,
-          -- disable = {"tex", "latex"}, 
-        },
-        indent = { 
-          enable = true,
-          -- disable = {"tex", "latex"}, 
-        },
+      local treesitter = require("nvim-treesitter")
+      treesitter.setup()
+
+      local group = vim.api.nvim_create_augroup("nfianda-treesitter", { clear = true })
+
+      vim.api.nvim_create_autocmd("FileType", {
+        group = group,
+        pattern = treesitter_filetypes,
+        callback = function(args)
+          vim.treesitter.start(args.buf)
+          vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
       })
     end
   },
