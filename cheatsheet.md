@@ -81,3 +81,18 @@ Resume:
 ```
 > bg 1
 ```
+
+# Fingerprint
+
+## Setup
+```
+sudo pacman -S --needed fprintd
+fprintd-enroll
+fprintd-verify
+```
+
+## PAM
+For login and `hyprlock`, add this near the top of `/etc/pam.d/system-local-login`:
+```
+auth      sufficient   pam_fprintd.so
+```
