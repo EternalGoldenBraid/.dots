@@ -17,8 +17,8 @@ else
   require('keys')
 
   -- vim.env.PATH = os.getenv("HOME") .. "/bin/bin:" .. vim.env.PATH
-  require("nicklas.lazy")
   require('general')
+  require("nicklas.lazy")
   require('gui')
   require("commands").setup()
 
