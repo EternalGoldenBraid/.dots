@@ -4,8 +4,8 @@ set -euo pipefail
 
 HYPR_DIR="${HOME}/.config/hypr"
 PROFILE_ROOT="${HYPR_DIR}/monitor-profiles"
-ACTIVE_MONITORS_CONF="${HYPR_DIR}/monitors.conf"
-ACTIVE_WORKSPACES_CONF="${HYPR_DIR}/workspaces.conf"
+ACTIVE_MONITORS_CONFIG="${HYPR_DIR}/monitors.lua"
+ACTIVE_WORKSPACES_CONFIG="${HYPR_DIR}/workspaces.lua"
 STATE_FILE="${HYPR_DIR}/.last-monitor-profile"
 
 log() {
@@ -74,15 +74,15 @@ apply_profile() {
     profile_name="$1"
     profile_dir="${PROFILE_ROOT}/${profile_name}"
 
-    [ -f "${profile_dir}/monitors.conf" ] || {
-        log "missing ${profile_dir}/monitors.conf"
+    [ -f "${profile_dir}/monitors.lua" ] || {
+        log "missing ${profile_dir}/monitors.lua"
         return 1
     }
 
-    cp "${profile_dir}/monitors.conf" "$ACTIVE_MONITORS_CONF"
+    cp "${profile_dir}/monitors.lua" "$ACTIVE_MONITORS_CONFIG"
 
-    if [ -f "${profile_dir}/workspaces.conf" ]; then
-        cp "${profile_dir}/workspaces.conf" "$ACTIVE_WORKSPACES_CONF"
+    if [ -f "${profile_dir}/workspaces.lua" ]; then
+        cp "${profile_dir}/workspaces.lua" "$ACTIVE_WORKSPACES_CONFIG"
     fi
 
     printf '%s\n' "$profile_name" > "$STATE_FILE"
@@ -123,11 +123,11 @@ capture_profile() {
 
     mkdir -p "$profile_dir"
 
-    if [ -f "$ACTIVE_MONITORS_CONF" ]; then
-        cp "$ACTIVE_MONITORS_CONF" "${profile_dir}/monitors.conf"
+    if [ -f "$ACTIVE_MONITORS_CONFIG" ]; then
+        cp "$ACTIVE_MONITORS_CONFIG" "${profile_dir}/monitors.lua"
     fi
-    if [ -f "$ACTIVE_WORKSPACES_CONF" ]; then
-        cp "$ACTIVE_WORKSPACES_CONF" "${profile_dir}/workspaces.conf"
+    if [ -f "$ACTIVE_WORKSPACES_CONFIG" ]; then
+        cp "$ACTIVE_WORKSPACES_CONFIG" "${profile_dir}/workspaces.lua"
     fi
 
     case "$mode" in

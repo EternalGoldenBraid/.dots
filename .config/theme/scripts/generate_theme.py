@@ -57,7 +57,7 @@ def main() -> int:
             "render": bash.render,
         },
         "hypr": {
-            "out": home / ".dotfiles/.config/hypr/colors.generated.conf",
+            "out": home / ".dotfiles/.config/hypr/colors.generated.lua",
             "render": hypr.render,
         },
         "lazygit": {

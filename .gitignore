@@ -10,6 +10,9 @@ bin/logs/nvim.log
 /.config/hypr/workspaces.conf
 /.config/hypr/monitors.conf
 .config/hypr/hyprvim/
+!/.config/hypr/
+!/.config/hypr/*.lua
+!/.config/hypr/monitor-profiles/*/*.lua
 .config/acli
 .config/draw.io/Cache
 .config/draw.io/Code Cache

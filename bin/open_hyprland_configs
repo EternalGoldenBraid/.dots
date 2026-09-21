@@ -10,7 +10,7 @@ log_file=~/bin/logs/nvim.log
 log_message "INFO" "Starting nvim script" $log_file
 
 # Command
-$DEFAULT_TERMINAL nvim ~/.config/hypr/hyprland.conf 2>&1 | tee -a $log_file
+$DEFAULT_TERMINAL nvim ~/.config/hypr/hyprland.lua 2>&1 | tee -a $log_file
 
 if [ $? -ne 0 ]; then
     log_message "ERROR" "Failed to start nvim in kitty" $log_file
