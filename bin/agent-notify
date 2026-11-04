@@ -6,6 +6,7 @@
 #   agent-notify ack                                              pane focused: drop "idle" marker
 #   agent-notify waybar                                           JSON for a waybar custom module
 #   agent-notify focus [PANE_ID]                                  jump to oldest pane needing attention
+#   agent-notify dnd                                              toggle desktop popups
 #
 # States: working (busy), idle (finished, unseen), waiting (needs approval), asking (needs an answer).
 # State lives in $XDG_RUNTIME_DIR/agent-notify/<pane>.json and is a no-op outside tmux.
@@ -15,6 +16,8 @@ set -euo pipefail
 DIR="${XDG_RUNTIME_DIR:-/tmp}/agent-notify"
 WAYBAR_SIGNAL="${AGENT_NOTIFY_WAYBAR_SIGNAL:-12}"
 DESKTOP="${AGENT_NOTIFY_DESKTOP:-all}" # all | waiting | off
+DND_FILE="$DIR/dnd"
+TYPING_QUIET_SECS="${AGENT_NOTIFY_TYPING_QUIET_SECS:-3}"
 mkdir -p "$DIR"
 
 tmx() { tmux ${AGENT_NOTIFY_SOCKET:+-S "$AGENT_NOTIFY_SOCKET"} "$@"; }
@@ -69,6 +72,10 @@ cmd_set() {
             local urgency=normal msg="finished"
             [[ $state == waiting ]] && urgency=critical msg="needs approval"
             [[ $state == asking ]] && urgency=critical msg="has a question"
+            local idle_for
+            idle_for=$(( $(date +%s) - $(tmx list-clients -F '#{client_activity}' | sort -n | tail -n1) ))
+            # no popups in do-not-disturb or while you are actively typing elsewhere
+            [[ -f $DND_FILE ]] || ((idle_for < TYPING_QUIET_SECS)) ||
             notify-send -a agent-notify -u "$urgency" "$agent $msg" "$where  ${PWD/#$HOME/~}" 2>/dev/null || true
         fi
     fi
@@ -172,8 +179,15 @@ cmd_waybar() {
     pct=$(intensity "$state" $(($(date +%s) - ts)))
     # style.css defines .glow-0 .. .glow-$GLOW_LEVELS as gaussian radial gradients
     level=$(((pct * GLOW_LEVELS + 50) / 100))
-    jq -c --arg c "$state" --arg l "$level" \
-        'if ($c == "waiting" or $c == "asking" or $c == "idle") then .class = [$c, "glow-\($l)"] else . end | del(.gts)' <<<"$out"
+    jq -c --arg c "$state" --arg l "$level" --argjson age "$(($(date +%s) - ts))" --argjson dnd "$([[ -f $DND_FILE ]] && echo true || echo false)" '
+        (if ($c == "waiting" or $c == "asking" or $c == "idle") then .class = [$c, "glow-\($l)"] + (if $age < 4 then ["fresh"] else [] end) else . end)
+        | (if $dnd then .class = ([.class] | flatten) + ["dnd"] | .tooltip = "do not disturb\n" + .tooltip else . end)
+        | del(.gts)' <<<"$out"
+}
+
+cmd_dnd() {
+    if [[ -f $DND_FILE ]]; then rm -f "$DND_FILE"; else : >"$DND_FILE"; fi
+    signal_waybar
 }
 
 # Switch the tmux client to the pane, then raise the terminal window in Hyprland.
@@ -217,5 +231,6 @@ case "${1:-}" in
     waybar) cmd_waybar ;;
     focus) shift; cmd_focus "$@" ;;
     color) shift; cmd_color "$@" ;;
+    dnd) cmd_dnd ;;
     *) sed -n '2,11p' "$0"; exit 2 ;;
 esac

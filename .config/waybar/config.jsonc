@@ -128,10 +128,11 @@
     },
     "custom/agents": {
         "return-type": "json",
-        "interval": 10,
+        "interval": 5,
         "signal": 12,
         "exec": "$HOME/.local/bin/agent-notify waybar",
-        "on-click": "$HOME/.local/bin/agent-notify focus"
+        "on-click": "$HOME/.local/bin/agent-notify focus",
+        "on-click-right": "$HOME/.local/bin/agent-notify dnd; pkill -RTMIN+12 waybar"
     },
     "custom/handy-status": {
         "return-type": "json",
