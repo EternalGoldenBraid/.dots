@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+# agent-notify: agent-agnostic pane state for tmux + waybar + Hyprland.
+#
+#   agent-notify set <working|idle|waiting|done> [--agent NAME]   called from agent hooks
+#   agent-notify clear                                            pane no longer has an active agent
+#   agent-notify ack                                              pane focused: drop "idle" marker
+#   agent-notify waybar                                           JSON for a waybar custom module
+#   agent-notify focus [PANE_ID]                                  jump to oldest pane needing attention
+#
+# States: working (busy), idle (finished, unseen), waiting (needs permission/input).
+# State lives in $XDG_RUNTIME_DIR/agent-notify/<pane>.json and is a no-op outside tmux.
+
+set -euo pipefail
+
+DIR="${XDG_RUNTIME_DIR:-/tmp}/agent-notify"
+WAYBAR_SIGNAL="${AGENT_NOTIFY_WAYBAR_SIGNAL:-12}"
+DESKTOP="${AGENT_NOTIFY_DESKTOP:-all}" # all | waiting | off
+mkdir -p "$DIR"
+
+tmx() { tmux ${AGENT_NOTIFY_SOCKET:+-S "$AGENT_NOTIFY_SOCKET"} "$@"; }
+
+signal_waybar() { pkill -RTMIN+"$WAYBAR_SIGNAL" -x waybar 2>/dev/null || true; }
+
+# Mirror state onto tmux: pane option plus a per-window summary for window-status-format.
+paint_tmux() {
+    local pane=$1 win best="" bestts=0
+    win=$(tmx display-message -p -t "$pane" '#{window_id}' 2>/dev/null) || return 0
+    local p s ts rank=0 r
+    for p in $(tmx list-panes -t "$win" -F '#{pane_id}'); do
+        read -r s ts < <(jq -r '"\(.state // "") \(.ts // 0)"' "$DIR/${p#%}.json" 2>/dev/null || true) || true
+        case "$s" in
+            waiting) r=3 ;;
+            idle) r=2 ;;
+            working) r=1 ;;
+            *) continue ;;
+        esac
+        if ((r > rank || (r == rank && ts > bestts))); then rank=$r best=$s bestts=$ts; fi
+    done
+    tmx set-option -w -t "$win" @agent_state "$best" 2>/dev/null || true
+    tmx set-option -w -t "$win" @agent_ts "$bestts" 2>/dev/null || true
+    tmx refresh-client -S 2>/dev/null || true
+}
+
+cmd_set() {
+    local state=${1:?state} agent=agent
+    shift
+    [[ ${1:-} == --agent ]] && agent=${2:-agent}
+    [[ -n ${TMUX_PANE:-} ]] || exit 0
+    [[ $state == done ]] && state=idle
+
+    local file="$DIR/${TMUX_PANE#%}.json" prev=""
+    [[ -f $file ]] && prev=$(jq -r '.state' "$file" 2>/dev/null || true)
+    [[ $prev == "$state" ]] && exit 0
+
+    local sock=${TMUX%%,*} where
+    where=$(tmx display-message -p -t "$TMUX_PANE" '#{session_name}:#{window_index}.#{pane_index}')
+    jq -n --arg state "$state" --arg agent "$agent" --arg pane "$TMUX_PANE" \
+        --arg where "$where" --arg cwd "$PWD" --arg sock "$sock" --argjson ts "$(date +%s)" \
+        '{state:$state,agent:$agent,pane:$pane,where:$where,cwd:$cwd,sock:$sock,ts:$ts}' \
+        >"$file.tmp" && mv "$file.tmp" "$file"
+
+    paint_tmux "$TMUX_PANE"
+    signal_waybar
+
+    if [[ $state == idle || $state == waiting ]]; then
+        local focused
+        focused=$(tmx display-message -p -t "$TMUX_PANE" '#{&&:#{&&:#{pane_active},#{window_active}},#{session_attached}}')
+        if [[ $focused != 1 && $DESKTOP != off && ( $DESKTOP == all || $state == waiting ) ]]; then
+            local urgency=normal msg="finished"
+            [[ $state == waiting ]] && urgency=critical msg="needs your input"
+            notify-send -a agent-notify -u "$urgency" "$agent $msg" "$where  ${PWD/#$HOME/~}" 2>/dev/null || true
+        fi
+    fi
+}
+
+cmd_clear() {
+    [[ -n ${TMUX_PANE:-} ]] || exit 0
+    rm -f "$DIR/${TMUX_PANE#%}.json"
+    paint_tmux "$TMUX_PANE"
+    signal_waybar
+}
+
+cmd_ack() {
+    [[ -n ${TMUX_PANE:-} ]] || exit 0
+    local file="$DIR/${TMUX_PANE#%}.json"
+    [[ -f $file && $(jq -r '.state' "$file") == idle ]] || exit 0
+    rm -f "$file"
+    paint_tmux "$TMUX_PANE"
+    signal_waybar
+}
+
+# Löyly: a warm glow that hits on completion and diffuses into the bar background.
+FADE_SECS="${AGENT_NOTIFY_FADE_SECS:-180}"
+GLOW="${AGENT_NOTIFY_GLOW:-ebcb8b}"
+WAIT_GLOW="${AGENT_NOTIFY_WAIT_GLOW:-bf616a}"
+GLOW_LEVELS=16 # keep in sync with the .glow-N rules in waybar style.css
+
+# intensity 0-100 for a state/age: waiting is steady, idle decays quadratically.
+intensity() {
+    local state=$1 age=$2
+    case "$state" in
+        waiting) echo 100 ;;
+        idle)
+            ((age >= FADE_SECS)) && { echo 6; return; }
+            local left=$((FADE_SECS - age))
+            echo $((6 + 94 * left * left / (FADE_SECS * FADE_SECS)))
+            ;;
+        *) echo 0 ;;
+    esac
+}
+
+# Blend glow colour over tmux bar background (#1b1f2a) for the given intensity.
+blend() {
+    local hex=$1 pct=$2 bg=(27 31 42) out="" i c
+    for i in 0 1 2; do
+        c=$((16#${hex:$((i * 2)):2}))
+        out+=$(printf '%02x' $(((bg[i] * (100 - pct) + c * pct) / 100)))
+    done
+    echo "#$out"
+}
+
+cmd_color() {
+    local state=${1:-} ts=${2:-0} glow=$GLOW
+    [[ $state == idle || $state == waiting ]] || { echo "#1b1f2a"; return; }
+    [[ $state == waiting ]] && glow=$WAIT_GLOW
+    blend "$glow" "$(( $(intensity "$state" $(($(date +%s) - ts))) * 70 / 100 ))"
+}
+
+# Drop state for panes that no longer exist so crashed agents do not linger.
+prune() {
+    local f sock live
+    for f in "$DIR"/*.json; do
+        [[ -e $f ]] || return 0
+        sock=$(jq -r '.sock' "$f")
+        live=$(tmux -S "$sock" list-panes -a -F '#{pane_id}' 2>/dev/null || true)
+        grep -qxF "$(jq -r '.pane' "$f")" <<<"$live" || rm -f "$f"
+    done
+}
+
+cmd_waybar() {
+    prune
+    shopt -s nullglob
+    local files=("$DIR"/*.json)
+    if ((${#files[@]} == 0)); then
+        printf '{"text":"","class":"none","tooltip":""}\n'
+        return
+    fi
+    local out state ts pct level
+    out=$(jq -cs --argjson now "$(date +%s)" '
+        def age: ($now - .ts) | if . < 60 then "\(.)s" elif . < 3600 then "\(./60|floor)m" else "\(./3600|floor)h" end;
+        def n($s): map(select(.state == $s)) | length;
+        def newest($s): map(select(.state == $s) | .ts) | max // 0;
+        {text: ([ (if n("waiting") > 0 then "⚠ \(n("waiting"))" else empty end),
+                  (if n("idle") > 0 then "✔ \(n("idle"))" else empty end),
+                  (if n("working") > 0 then "⟳ \(n("working"))" else empty end) ] | join("  ")),
+         class: (if n("waiting") > 0 then "waiting" elif n("idle") > 0 then "idle" else "working" end),
+         gts: (if n("waiting") > 0 then newest("waiting") else newest("idle") end),
+         tooltip: (sort_by(.ts) | map("\(.state)\t\(.agent)  \(.where)  \(age)\n    \(.cwd)") | join("\n"))}
+    ' "${files[@]}")
+    state=$(jq -r .class <<<"$out")
+    ts=$(jq -r .gts <<<"$out")
+    pct=$(intensity "$state" $(($(date +%s) - ts)))
+    # style.css defines .glow-0 .. .glow-$GLOW_LEVELS as gaussian radial gradients
+    level=$(((pct * GLOW_LEVELS + 50) / 100))
+    jq -c --arg c "$state" --arg l "$level" \
+        'if ($c == "waiting" or $c == "idle") then .class = [$c, "glow-\($l)"] else . end | del(.gts)' <<<"$out"
+}
+
+# Switch the tmux client to the pane, then raise the terminal window in Hyprland.
+cmd_focus() {
+    prune
+    local pane=${1:-} f
+    if [[ -z $pane ]]; then
+        shopt -s nullglob
+        local files=("$DIR"/*.json)
+        ((${#files[@]})) || exit 0
+        f=$(jq -rs 'map(select(.state != "working")) | sort_by(.state != "waiting", .ts) | .[0].pane // empty' "${files[@]}")
+        [[ -n $f ]] || exit 0
+        pane=$f
+    fi
+    local sock
+    sock=$(jq -r '.sock' "$DIR/${pane#%}.json" 2>/dev/null || true)
+    [[ -n $sock ]] && AGENT_NOTIFY_SOCKET=$sock
+
+    local client_pid client_tty
+    read -r client_tty client_pid < <(tmx list-clients -F '#{client_tty} #{client_pid}' | head -n1)
+    tmx switch-client -c "$client_tty" -t "$pane" 2>/dev/null || true
+    tmx select-window -t "$pane"
+    tmx select-pane -t "$pane"
+
+    # Find the Hyprland window whose process is an ancestor of the tmux client.
+    local pid=$client_pid addr
+    while [[ -n $pid && $pid -gt 1 ]]; do
+        addr=$(hyprctl clients -j | jq -r --argjson p "$pid" '.[] | select(.pid == $p) | .address' | head -n1)
+        if [[ -n $addr ]]; then
+            hyprctl dispatch focuswindow "address:$addr" >/dev/null || true
+            return 0
+        fi
+        pid=$(ps -o ppid= -p "$pid" | tr -d ' ')
+    done
+}
+
+case "${1:-}" in
+    set) shift; cmd_set "$@" ;;
+    clear) cmd_clear ;;
+    ack) cmd_ack ;;
+    waybar) cmd_waybar ;;
+    focus) shift; cmd_focus "$@" ;;
+    color) shift; cmd_color "$@" ;;
+    *) sed -n '2,11p' "$0"; exit 2 ;;
+esac

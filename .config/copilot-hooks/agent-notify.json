@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [{ "type": "command", "bash": "agent-notify clear", "timeoutSec": 5 }],
+    "userPromptSubmitted": [{ "type": "command", "bash": "agent-notify set working --agent copilot", "timeoutSec": 5 }],
+    "postToolUse": [{ "type": "command", "bash": "agent-notify set working --agent copilot", "timeoutSec": 5 }],
+    "agentStop": [{ "type": "command", "bash": "agent-notify set idle --agent copilot", "timeoutSec": 5 }],
+    "notification": [
+      {
+        "matcher": "permission_prompt|elicitation_dialog",
+        "type": "command",
+        "bash": "agent-notify set waiting --agent copilot",
+        "timeoutSec": 5
+      }
+    ],
+    "sessionEnd": [{ "type": "command", "bash": "agent-notify clear", "timeoutSec": 5 }]
+  }
+}
