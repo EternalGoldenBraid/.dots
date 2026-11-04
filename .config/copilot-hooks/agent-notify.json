@@ -7,9 +7,15 @@
     "agentStop": [{ "type": "command", "bash": "agent-notify set idle --agent copilot", "timeoutSec": 5 }],
     "notification": [
       {
-        "matcher": "permission_prompt|elicitation_dialog",
+        "matcher": "permission_prompt",
         "type": "command",
         "bash": "agent-notify set waiting --agent copilot",
+        "timeoutSec": 5
+      },
+      {
+        "matcher": "elicitation_dialog",
+        "type": "command",
+        "bash": "agent-notify set asking --agent copilot",
         "timeoutSec": 5
       }
     ],

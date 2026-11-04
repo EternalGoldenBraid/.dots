@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # agent-notify: agent-agnostic pane state for tmux + waybar + Hyprland.
 #
-#   agent-notify set <working|idle|waiting|done> [--agent NAME]   called from agent hooks
+#   agent-notify set <working|idle|waiting|asking|done> [--agent NAME]   called from agent hooks
 #   agent-notify clear                                            pane no longer has an active agent
 #   agent-notify ack                                              pane focused: drop "idle" marker
 #   agent-notify waybar                                           JSON for a waybar custom module
 #   agent-notify focus [PANE_ID]                                  jump to oldest pane needing attention
 #
-# States: working (busy), idle (finished, unseen), waiting (needs permission/input).
+# States: working (busy), idle (finished, unseen), waiting (needs approval), asking (needs an answer).
 # State lives in $XDG_RUNTIME_DIR/agent-notify/<pane>.json and is a no-op outside tmux.
 
 set -euo pipefail
@@ -29,7 +29,7 @@ paint_tmux() {
     for p in $(tmx list-panes -t "$win" -F '#{pane_id}'); do
         read -r s ts < <(jq -r '"\(.state // "") \(.ts // 0)"' "$DIR/${p#%}.json" 2>/dev/null || true) || true
         case "$s" in
-            waiting) r=3 ;;
+            waiting|asking) r=3 ;;
             idle) r=2 ;;
             working) r=1 ;;
             *) continue ;;
@@ -50,7 +50,7 @@ cmd_set() {
 
     local file="$DIR/${TMUX_PANE#%}.json" prev=""
     [[ -f $file ]] && prev=$(jq -r '.state' "$file" 2>/dev/null || true)
-    [[ $prev == "$state" ]] && exit 0
+    [[ $prev == "$state" ]] && { [[ $state == working ]] && touch "$file"; exit 0; }
 
     local sock=${TMUX%%,*} where
     where=$(tmx display-message -p -t "$TMUX_PANE" '#{session_name}:#{window_index}.#{pane_index}')
@@ -62,12 +62,13 @@ cmd_set() {
     paint_tmux "$TMUX_PANE"
     signal_waybar
 
-    if [[ $state == idle || $state == waiting ]]; then
+    if [[ $state == idle || $state == waiting || $state == asking ]]; then
         local focused
         focused=$(tmx display-message -p -t "$TMUX_PANE" '#{&&:#{&&:#{pane_active},#{window_active}},#{session_attached}}')
-        if [[ $focused != 1 && $DESKTOP != off && ( $DESKTOP == all || $state == waiting ) ]]; then
+        if [[ $focused != 1 && $DESKTOP != off && ( $DESKTOP == all || $state != idle ) ]]; then
             local urgency=normal msg="finished"
-            [[ $state == waiting ]] && urgency=critical msg="needs your input"
+            [[ $state == waiting ]] && urgency=critical msg="needs approval"
+            [[ $state == asking ]] && urgency=critical msg="has a question"
             notify-send -a agent-notify -u "$urgency" "$agent $msg" "$where  ${PWD/#$HOME/~}" 2>/dev/null || true
         fi
     fi
@@ -93,13 +94,15 @@ cmd_ack() {
 FADE_SECS="${AGENT_NOTIFY_FADE_SECS:-180}"
 GLOW="${AGENT_NOTIFY_GLOW:-ebcb8b}"
 WAIT_GLOW="${AGENT_NOTIFY_WAIT_GLOW:-bf616a}"
+ASK_GLOW="${AGENT_NOTIFY_ASK_GLOW:-81a1c1}"
 GLOW_LEVELS=16 # keep in sync with the .glow-N rules in waybar style.css
+STALE_WORKING_SECS="${AGENT_NOTIFY_STALE_WORKING_SECS:-1800}" # a working pane with no hook activity this long is dropped
 
 # intensity 0-100 for a state/age: waiting is steady, idle decays quadratically.
 intensity() {
     local state=$1 age=$2
     case "$state" in
-        waiting) echo 100 ;;
+        waiting|asking) echo 100 ;;
         idle)
             ((age >= FADE_SECS)) && { echo 6; return; }
             local left=$((FADE_SECS - age))
@@ -121,16 +124,22 @@ blend() {
 
 cmd_color() {
     local state=${1:-} ts=${2:-0} glow=$GLOW
-    [[ $state == idle || $state == waiting ]] || { echo "#1b1f2a"; return; }
+    [[ $state == idle || $state == waiting || $state == asking ]] || { echo "#1b1f2a"; return; }
     [[ $state == waiting ]] && glow=$WAIT_GLOW
+    [[ $state == asking ]] && glow=$ASK_GLOW
     blend "$glow" "$(( $(intensity "$state" $(($(date +%s) - ts))) * 70 / 100 ))"
 }
 
 # Drop state for panes that no longer exist so crashed agents do not linger.
 prune() {
-    local f sock live
+    local f sock live now
+    now=$(date +%s)
     for f in "$DIR"/*.json; do
         [[ -e $f ]] || return 0
+        if [[ $(jq -r '.state' "$f") == working ]] && ((now - $(stat -c %Y "$f") > STALE_WORKING_SECS)); then
+            rm -f "$f"
+            continue
+        fi
         sock=$(jq -r '.sock' "$f")
         live=$(tmux -S "$sock" list-panes -a -F '#{pane_id}' 2>/dev/null || true)
         grep -qxF "$(jq -r '.pane' "$f")" <<<"$live" || rm -f "$f"
@@ -151,10 +160,11 @@ cmd_waybar() {
         def n($s): map(select(.state == $s)) | length;
         def newest($s): map(select(.state == $s) | .ts) | max // 0;
         {text: ([ (if n("waiting") > 0 then "⚠ \(n("waiting"))" else empty end),
+                  (if n("asking") > 0 then "? \(n("asking"))" else empty end),
                   (if n("idle") > 0 then "✔ \(n("idle"))" else empty end),
                   (if n("working") > 0 then "⟳ \(n("working"))" else empty end) ] | join("  ")),
-         class: (if n("waiting") > 0 then "waiting" elif n("idle") > 0 then "idle" else "working" end),
-         gts: (if n("waiting") > 0 then newest("waiting") else newest("idle") end),
+         class: (if n("waiting") > 0 then "waiting" elif n("asking") > 0 then "asking" elif n("idle") > 0 then "idle" else "working" end),
+         gts: (if n("waiting") > 0 then newest("waiting") elif n("asking") > 0 then newest("asking") else newest("idle") end),
          tooltip: (sort_by(.ts) | map("\(.state)\t\(.agent)  \(.where)  \(age)\n    \(.cwd)") | join("\n"))}
     ' "${files[@]}")
     state=$(jq -r .class <<<"$out")
@@ -163,7 +173,7 @@ cmd_waybar() {
     # style.css defines .glow-0 .. .glow-$GLOW_LEVELS as gaussian radial gradients
     level=$(((pct * GLOW_LEVELS + 50) / 100))
     jq -c --arg c "$state" --arg l "$level" \
-        'if ($c == "waiting" or $c == "idle") then .class = [$c, "glow-\($l)"] else . end | del(.gts)' <<<"$out"
+        'if ($c == "waiting" or $c == "asking" or $c == "idle") then .class = [$c, "glow-\($l)"] else . end | del(.gts)' <<<"$out"
 }
 
 # Switch the tmux client to the pane, then raise the terminal window in Hyprland.
@@ -174,7 +184,7 @@ cmd_focus() {
         shopt -s nullglob
         local files=("$DIR"/*.json)
         ((${#files[@]})) || exit 0
-        f=$(jq -rs 'map(select(.state != "working")) | sort_by(.state != "waiting", .ts) | .[0].pane // empty' "${files[@]}")
+        f=$(jq -rs 'map(select(.state != "working")) | sort_by(.state == "idle", .ts) | .[0].pane // empty' "${files[@]}")
         [[ -n $f ]] || exit 0
         pane=$f
     fi
