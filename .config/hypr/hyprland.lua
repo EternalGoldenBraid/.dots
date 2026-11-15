@@ -120,6 +120,41 @@ for workspace = 1, 10 do
     hl.bind(main_mod .. " + SHIFT + " .. key, hl.dsp.window.move({ workspace = workspace }))
 end
 
+-- Workspace grid: 2 rows x 5 columns over workspaces 1-10. SUPER+W enters the
+-- grid submap; hjkl move cyclically, SHIFT+hjkl carry the active window.
+local grid_cols, grid_rows = 5, 2
+
+local function grid_target(dx, dy)
+    local ws = hl.get_active_workspace()
+    local n = (ws and ws.id or 1) - 1
+    local col = (n % grid_cols + dx) % grid_cols
+    local row = (n // grid_cols + dy) % grid_rows
+    return row * grid_cols + col + 1
+end
+
+local function grid_go(dx, dy)
+    return function() hl.dispatch(hl.dsp.focus({ workspace = grid_target(dx, dy) })) end
+end
+
+local function grid_carry(dx, dy)
+    return function()
+        local target = grid_target(dx, dy)
+        hl.dispatch(hl.dsp.window.move({ workspace = target }))
+        hl.dispatch(hl.dsp.focus({ workspace = target }))
+    end
+end
+
+hl.bind(main_mod .. " + W", hl.dsp.submap("grid"))
+hl.define_submap("grid", function()
+    local moves = { H = { -1, 0 }, L = { 1, 0 }, K = { 0, -1 }, J = { 0, 1 } }
+    for key, d in pairs(moves) do
+        hl.bind(key, grid_go(d[1], d[2]))
+        hl.bind("SHIFT + " .. key, grid_carry(d[1], d[2]))
+    end
+    hl.bind("escape", hl.dsp.submap("reset"))
+    hl.bind("Return", hl.dsp.submap("reset"))
+end)
+
 -- Resize submap.
 hl.bind(main_mod .. " + R", hl.dsp.submap("resize"))
 hl.define_submap("resize", function()

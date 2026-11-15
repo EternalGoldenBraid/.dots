@@ -223,7 +223,7 @@ PanelWindow {
             spacing: 4
             leftPadding: 6
             Repeater {
-                model: SystemTray.items
+                model: SystemTray.items.values.filter(i => i.id !== "nm-applet")
                 Item {
                     id: trayItem
                     required property var modelData
