@@ -92,6 +92,20 @@ configure_server() {
     tmux -L "$SOCKET_NAME" set-option -gq @resurrect-dir "$RESURRECT_DIR"
     tmux -L "$SOCKET_NAME" set-option -gq @continuum-save-interval 15
     tmux -L "$SOCKET_NAME" set-option -gq @continuum-restore off
+    enable_autosave
+}
+
+# tmux-continuum skips autosave when other tmux servers exist, which is always
+# the case with one server per project, so hook its save script in directly.
+enable_autosave() {
+    local save_script status_right
+    save_script="$(plugin_script tmux-continuum scripts/continuum_save.sh)"
+    [ -x "$save_script" ] || return 0
+    status_right="$(tmux -L "$SOCKET_NAME" show-option -gqv status-right)"
+    case "$status_right" in
+        *"$save_script"*) ;;
+        *) tmux -L "$SOCKET_NAME" set-option -gq status-right "#($save_script)$status_right" ;;
+    esac
 }
 
 session_exists() {

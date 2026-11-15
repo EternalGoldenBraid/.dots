@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# tmux-resurrect post-save-layout hook: rewrite each Copilot pane's saved
+# command to `copilot --resume <session-id>` so restore reopens that session.
+# The pane -> session link is Copilot's `inuse.<pid>.lock` in its session dir.
+set -euo pipefail
+
+save_file="$1"
+state_dir="$HOME/.copilot/session-state"
+
+descendants() {
+    local pid="$1" child
+    for child in $(pgrep -P "$pid" 2>/dev/null); do
+        printf '%s\n' "$child"
+        descendants "$child"
+    done
+}
+
+session_for_pane() {
+    local pid lock
+    for pid in $(descendants "$1"); do
+        for lock in "$state_dir"/*/inuse."$pid".lock; do
+            [ -e "$lock" ] && basename "$(dirname "$lock")" && return 0
+        done
+    done
+    return 1
+}
+
+declare -A ids=()
+while IFS=$'\t' read -r target pane_pid; do
+    if id="$(session_for_pane "$pane_pid")"; then
+        ids["$target"]="$id"
+    fi
+done < <(tmux list-panes -a -F "#{session_name}:#{window_index}.#{pane_index}	#{pane_pid}")
+
+[ "${#ids[@]}" -gt 0 ] || exit 0
+
+tmp="$(mktemp "$save_file.XXXX")"
+while IFS= read -r line; do
+    IFS=$'\t' read -r -a f <<<"$line"
+    if [ "${f[0]}" = pane ] && [ "${#f[@]}" -ge 11 ]; then
+        key="${f[1]}:${f[2]}.${f[5]}"
+        if [ -n "${ids[$key]:-}" ]; then
+            f[10]=":copilot --resume ${ids[$key]}"
+            line="$(IFS=$'\t'; printf '%s' "${f[*]}")"
+        fi
+    fi
+    printf '%s\n' "$line"
+done <"$save_file" >"$tmp"
+mv "$tmp" "$save_file"
