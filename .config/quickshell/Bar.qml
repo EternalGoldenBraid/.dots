@@ -180,7 +180,7 @@ PanelWindow {
             onClicked: mouse => mouse.button === Qt.RightButton
                 ? (bar.source.audio.muted = !bar.source.audio.muted)
                 : bar.run(["pavucontrol"])
-            onScrolled: d => bar.sink.audio.volume = Math.max(0, Math.min(1.5, bar.sink.audio.volume + d * 0.05))
+            onScrolled: n => bar.sink.audio.volume = Math.max(0, Math.min(1.5, bar.sink.audio.volume + n * 0.03))
         }
         Module {
             text: Sys.net.kind === "wifi" ? Sys.net.name + " (" + Sys.net.signal + "%) \uf1eb"
@@ -254,7 +254,5 @@ PanelWindow {
                 }
             }
         }
-
-        Module { text: "\uf011" }
     }
 }

@@ -9,7 +9,7 @@ Item {
     property bool bold: false
     property real fontSize: 13
     signal clicked(var mouse)
-    signal scrolled(int delta)
+    signal scrolled(real notches)
 
     implicitWidth: label.implicitWidth + 16
     implicitHeight: 30
@@ -29,6 +29,6 @@ Item {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         onClicked: mouse => mod.clicked(mouse)
-        onWheel: wheel => mod.scrolled(wheel.angleDelta.y > 0 ? 1 : -1)
+        onWheel: wheel => mod.scrolled(wheel.angleDelta.y / 120)
     }
 }

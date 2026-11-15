@@ -54,6 +54,8 @@ hl.config({
     },
 })
 
+hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+
 -- Calendar popup.
 hl.window_rule({
     name = "calendar-popup",
