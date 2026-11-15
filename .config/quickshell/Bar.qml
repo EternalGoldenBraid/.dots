@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Hyprland
+import Quickshell.Io
 import Quickshell.Services.Pipewire
 import Quickshell.Services.SystemTray
 import Quickshell.Services.UPower
@@ -26,6 +27,13 @@ PanelWindow {
     readonly property string home: Quickshell.env("HOME")
 
     PwObjectTracker { objects: [bar.sink, bar.source] }
+
+    Calendar { id: calendar; target: clockModule }
+
+    IpcHandler {
+        target: "calendar-" + bar.screen.name
+        function toggle(): void { calendar.toggle(); }
+    }
 
     function run(cmd) { Quickshell.execDetached(cmd); }
 
@@ -204,7 +212,9 @@ PanelWindow {
                 mouse.button === Qt.RightButton ? "mark-unread" : "open"])
         }
         Module {
-            text: Qt.formatDateTime(clock.date, "HH:mm")
+            id: clockModule
+            text: Qt.formatDateTime(clock.date, "ddd d MMM  HH:mm")
+            onClicked: calendar.toggle()
             SystemClock { id: clock; precision: SystemClock.Minutes }
         }
 
