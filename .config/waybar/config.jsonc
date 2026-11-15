@@ -12,6 +12,7 @@
     ],
     "modules-center": [
         "custom/agents",
+        "custom/idle-bypass",
         "custom/handy-status",
         "hyprland/window"
     ],
@@ -139,6 +140,13 @@
         "interval": 1,
         "signal": 11,
         "exec": "$HOME/.config/waybar/scripts/handy-status.sh",
+        "tooltip": false
+    },
+    "custom/idle-bypass": {
+        "return-type": "json",
+        "interval": 5,
+        "signal": 11,
+        "exec": "$HOME/.config/waybar/scripts/idle-bypass-status.sh",
         "on-click": "$HOME/.dotfiles/bin/hypridle-bypass-toggle",
         "tooltip": false
     },
