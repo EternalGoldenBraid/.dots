@@ -4,7 +4,7 @@ import pathlib
 import subprocess
 import sys
 
-from generators import bash, foot, hypr, kitty, lazygit, nvim, tmux, vifm, wallpaper, waybar
+from generators import bash, foot, hypr, kitty, lazygit, nvim, quickshell, tmux, vifm, wallpaper, waybar
 from generators.common import prepare_palette
 
 
@@ -35,6 +35,10 @@ def main() -> int:
         "waybar": {
             "out": home / ".dotfiles/.config/waybar/colors.generated.css",
             "render": waybar.render,
+        },
+        "quickshell": {
+            "out": home / ".dotfiles/.config/quickshell/Theme.qml",
+            "render": quickshell.render,
         },
         "nvim": {
             "out": home / ".dotfiles/.config/nvim/lua/theme/generated_palette.lua",

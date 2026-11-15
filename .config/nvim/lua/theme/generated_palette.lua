@@ -3,14 +3,14 @@
 -- Do not edit by hand; edit ~/.dotfiles/.config/theme/palette.json instead.
 
 return {
-  green = "#5e81ac",
-  orange = "#88c0d0",
-  brown = "#3a4356",
-  violet = "#7f8ea3",
-  mantle = "#161a24",
+  green = "#0057b7",
+  orange = "#2f7fd8",
+  brown = "#1f3a66",
+  violet = "#7a8fb0",
+  mantle = "#08111f",
   red = "#f38ba8",
-  fg = "#d8dee9",
-  bg = "#1b1f2a",
-  inactive_bg = "#2a3140",
-  semilightgray = "#7f8ea3",
+  fg = "#e6edf7",
+  bg = "#0a1628",
+  inactive_bg = "#14284a",
+  semilightgray = "#7a8fb0",
 }
