@@ -11,9 +11,6 @@
         "hyprland/submap"
     ],
     "modules-center": [
-        "custom/agents",
-        "custom/idle-bypass",
-        "custom/handy-status",
         "hyprland/window"
     ],
     "modules-right": [

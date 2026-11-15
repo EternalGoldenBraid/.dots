@@ -1,0 +1,6 @@
+singleton Theme Theme.qml
+singleton Sys Sys.qml
+Pill 1.0 Pill.qml
+Module 1.0 Module.qml
+Bar 1.0 Bar.qml
+LivePanel 1.0 LivePanel.qml
