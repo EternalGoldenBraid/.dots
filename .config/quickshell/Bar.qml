@@ -29,6 +29,12 @@ PanelWindow {
     PwObjectTracker { objects: [bar.sink, bar.source] }
 
     Calendar { id: calendar; target: clockModule }
+    NetPopup { id: netPopup; target: netModule }
+
+    IpcHandler {
+        target: "net-" + bar.screen.name
+        function toggle(): void { netPopup.toggle(); }
+    }
 
     IpcHandler {
         target: "calendar-" + bar.screen.name
@@ -183,6 +189,8 @@ PanelWindow {
             onScrolled: n => bar.sink.audio.volume = Math.max(0, Math.min(1.5, bar.sink.audio.volume + n * 0.03))
         }
         Module {
+            id: netModule
+            onClicked: netPopup.toggle()
             text: Sys.net.kind === "wifi" ? Sys.net.name + " (" + Sys.net.signal + "%) \uf1eb"
                 : Sys.net.kind === "ethernet" ? "\uf796" : "Disconnected \u26a0"
         }
