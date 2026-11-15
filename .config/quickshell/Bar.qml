@@ -139,6 +139,7 @@ PanelWindow {
             pulse: Sys.agentState === "waiting" || Sys.agentState === "asking"
             anchors.verticalCenter: parent.verticalCenter
             onClicked: bar.run([bar.home + "/.local/bin/agent-notify", "focus"])
+            onRightClicked: bar.run([bar.home + "/.local/bin/agent-notify", "dnd"])
         }
         Pill {
             visible: Sys.bypass
@@ -194,14 +195,20 @@ PanelWindow {
             text: Sys.net.kind === "wifi" ? Sys.net.name + " (" + Sys.net.signal + "%) \uf1eb"
                 : Sys.net.kind === "ethernet" ? "\uf796" : "Disconnected \u26a0"
         }
-        Module { text: Sys.profile === "performance" ? "\uf0e7" : Sys.profile === "power-saver" ? "\uf06c" : "\uf24e" }
+        Module {
+            text: Sys.profile === "performance" ? "\uf0e7" : Sys.profile === "power-saver" ? "\uf06c" : "\uf24e"
+            onClicked: bar.run(["sh", "-c", "case $(powerprofilesctl get) in performance) n=balanced;; balanced) n=power-saver;; *) n=performance;; esac; powerprofilesctl set $n"])
+        }
         Module { text: Sys.cpu + "% \uf2db" }
         Module { text: Sys.mem + "% \uf233" }
         Module {
             text: Sys.temp + "\u00b0C \uf2c9"
             color: Sys.temp >= 80 ? Theme.waiting : Theme.textRight
         }
-        Module { text: Sys.backlight >= 0 ? Sys.backlight + "% \uf185" : "" }
+        Module {
+            text: Sys.backlight >= 0 ? Sys.backlight + "% \uf185" : ""
+            onScrolled: n => bar.run(["brightnessctl", "-n1", "set", Math.max(1, Math.abs(Math.round(n * 3))) + (n > 0 ? "%+" : "%-")])
+        }
         Module {
             text: "\uf186"
             color: Sys.shade ? Theme.peach : Theme.overlay1

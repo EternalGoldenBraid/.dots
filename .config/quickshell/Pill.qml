@@ -8,6 +8,7 @@ Rectangle {
     property color ink: "#11141d"
     property bool pulse: true
     signal clicked
+    signal rightClicked
 
     implicitHeight: 24
     implicitWidth: text.implicitWidth + 36
@@ -33,6 +34,7 @@ Rectangle {
 
     MouseArea {
         anchors.fill: parent
-        onClicked: pill.clicked()
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onClicked: mouse => mouse.button === Qt.RightButton ? pill.rightClicked() : pill.clicked()
     }
 }
