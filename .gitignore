@@ -27,3 +27,5 @@ bin/logs/nvim.log
 .config/draw.io
 .config/gh
 .config/github-copilot
+.config/vifm/vifminfo.json_*
+__pycache__/
