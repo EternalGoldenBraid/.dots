@@ -2,8 +2,8 @@ from generators.common import contrast_text, rotate_hue
 
 
 def render(c: dict[str, str], source_path: str) -> str:
-    recording = rotate_hue(c["accent_start"], 90, saturation_scale=1.12, lightness_scale=1.02)
-    transcribing = rotate_hue(c["accent_end"], 210, saturation_scale=0.92, lightness_scale=1.04)
+    recording = c.get("recording") or rotate_hue(c["accent_start"], 90, saturation_scale=1.12, lightness_scale=1.02)
+    transcribing = c.get("transcribing") or rotate_hue(c["accent_end"], 210, saturation_scale=0.92, lightness_scale=1.04)
 
     return f"""pragma Singleton
 import QtQuick
