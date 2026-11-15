@@ -30,6 +30,14 @@ PopupWindow {
         return ms < 80 ? Theme.done : ms < 200 ? Theme.peach : Theme.waiting;
     }
 
+    function stats(arr) {
+        if (arr.length === 0) return "...";
+        const ok = arr.filter(v => v !== null);
+        const loss = Math.round((arr.length - ok.length) / arr.length * 100);
+        const avg = ok.length ? Math.round(ok.reduce((a, b) => a + b, 0) / ok.length) : 0;
+        return "avg " + avg + " ms, " + loss + "% lost";
+    }
+
     function last(arr) { return arr.length ? arr[arr.length - 1] : null; }
 
     anchor.window: bar
@@ -87,8 +95,8 @@ PopupWindow {
                 pen = true;
             });
             ctx.stroke();
-            ctx.fillStyle = Theme.waiting;
-            series.forEach((v, i) => { if (v === null) ctx.fillRect(x0 + i * dx - 1, 0, 2, height); });
+            ctx.fillStyle = Qt.alpha(Theme.waiting, 0.7);
+            series.forEach((v, i) => { if (v === null) ctx.fillRect(x0 + i * dx - 1, height - 8, 2, 8); });
         }
     }
 
@@ -119,8 +127,8 @@ PopupWindow {
                 Repeater {
                     model: [
                         { label: "you", x: 0.12, ms: 0 },
-                        { label: pop.info.gwip || "gateway", x: 0.5, ms: pop.last(pop.gw) },
-                        { label: "1.1.1.1", x: 0.88, ms: pop.last(pop.inet) }
+                        { label: "router", x: 0.5, ms: pop.last(pop.gw) },
+                        { label: "internet", x: 0.88, ms: pop.last(pop.inet) }
                     ]
                     Item {
                         required property var modelData
@@ -158,10 +166,11 @@ PopupWindow {
                 Rectangle { x: parent.width * 0.5 + 9; y: 8; width: parent.width * 0.38 - 18; height: 2; color: pop.health(pop.last(pop.inet)) }
             }
 
-            Text { text: "gateway"; color: Theme.textRight; opacity: 0.55; font.family: Theme.font; font.pixelSize: 11 }
+            Text { text: "to your router (" + pop.stats(pop.gw) + ")"; color: Theme.textRight; opacity: 0.7; font.family: Theme.font; font.pixelSize: 11 }
             Spark { series: pop.gw; tint: pop.health(pop.last(pop.gw)) }
-            Text { text: "internet"; color: Theme.textRight; opacity: 0.55; font.family: Theme.font; font.pixelSize: 11 }
+            Text { text: "to the internet, 1.1.1.1 (" + pop.stats(pop.inet) + ")"; color: Theme.textRight; opacity: 0.7; font.family: Theme.font; font.pixelSize: 11 }
             Spark { series: pop.inet; tint: pop.health(pop.last(pop.inet)) }
+            Text { text: "line = round-trip time, last 60 s. red tick = lost ping"; color: Theme.textRight; opacity: 0.45; font.family: Theme.font; font.pixelSize: 10 }
 
             Text { text: "neighbours"; color: Theme.textRight; opacity: 0.55; font.family: Theme.font; font.pixelSize: 11 }
             Repeater {
