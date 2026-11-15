@@ -2,16 +2,16 @@
 # Source: /home/nicklas/.dotfiles/.config/theme/palette.json
 # Do not edit by hand; edit ~/.dotfiles/.config/theme/palette.json instead.
 
-THEME_BASE="#1b1f2a"
-THEME_TERMINAL_BG="#1e2230"
-THEME_TEXT_HEX="#d8dee9"
-THEME_ACCENT_START_HEX="#5e81ac"
-THEME_ACCENT_END_HEX="#88c0d0"
+THEME_BASE="#0a1628"
+THEME_TERMINAL_BG="#0d1b30"
+THEME_TEXT_HEX="#e6edf7"
+THEME_ACCENT_START_HEX="#0057b7"
+THEME_ACCENT_END_HEX="#2f7fd8"
 THEME_RED_HEX="#f38ba8"
 
-THEME_TEXT="\[\e[38;2;216;222;233m\]"
-THEME_ACCENT_START="\[\e[38;2;94;129;172m\]"
-THEME_ACCENT_END="\[\e[38;2;136;192;208m\]"
+THEME_TEXT="\[\e[38;2;230;237;247m\]"
+THEME_ACCENT_START="\[\e[38;2;0;87;183m\]"
+THEME_ACCENT_END="\[\e[38;2;47;127;216m\]"
 THEME_RED="\[\e[38;2;243;139;168m\]"
 THEME_RESET="\[\e[0m\]"
 

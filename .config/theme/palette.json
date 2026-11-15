@@ -13,6 +13,8 @@
   "terminal_green": "#9ccc65",
   "terminal_cyan": "#6fb7e8",
   "peach": "#ffd500",
+  "recording": "#9ccc65",
+  "transcribing": "#6fb7e8",
   "accent_text_left": "#ffffff",
   "accent_text_right": "#ffffff"
 }

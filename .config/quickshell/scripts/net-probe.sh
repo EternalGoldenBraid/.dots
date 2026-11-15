@@ -19,7 +19,7 @@ while :; do
         --arg gwip "$gwip" --arg dev "$dev" \
         --arg gw "$(cat "$tmp/gw" 2>/dev/null)" --arg inet "$(cat "$tmp/inet" 2>/dev/null)" \
         --argjson neigh "$(ip -j neigh 2>/dev/null | jq -c '[.[] | select(.lladdr) | {ip: .dst, mac: .lladdr, dev: .dev, state: .state[0]}]')" \
-        '{gwip:$gwip, dev:$dev, gw:($gw|tonumber? // null), inet:($inet|tonumber? // null), neigh:$neigh}'
+        '{gwip:$gwip, dev:$dev, gw:($gw|tonumber? // null), inet:($inet|tonumber? // null), neigh:$neigh}' || exit
     rm -rf "$tmp"
     sleep 1
 done
