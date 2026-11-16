@@ -8,6 +8,7 @@ import glob
 import json
 import os
 import sqlite3
+import sys
 import time
 from datetime import datetime, timezone
 
@@ -35,7 +36,7 @@ def pane_states():
     return by_cwd
 
 
-def snapshot(db, last_id):
+def snapshot(db, last_id, edge_secs):
     now = time.time()
     states = pane_states()
     nodes = []
@@ -59,7 +60,7 @@ def snapshot(db, last_id):
     for a, b, n in db.execute(
         "SELECT sender_session_id, recipient_session_id, COUNT(*) FROM agent_messages "
         "WHERE created_at > ? GROUP BY 1, 2",
-        (datetime.fromtimestamp(now - 86400, timezone.utc).isoformat(),),
+        (datetime.fromtimestamp(now - edge_secs, timezone.utc).isoformat(),),
     ):
         if a in ids and b in ids:
             edges[(a, b)] = n
@@ -80,11 +81,12 @@ def snapshot(db, last_id):
 
 
 def main():
+    edge_secs = float(sys.argv[1]) * 3600 if len(sys.argv) > 1 else 86400
     last = None
     while True:
         db = sqlite3.connect(f"file:{DB}?mode=ro", uri=True, timeout=2)
         try:
-            last_new, snap = snapshot(db, last)
+            last_new, snap = snapshot(db, last, edge_secs)
             last = last_new
             print(json.dumps(snap, separators=(",", ":")), flush=True)
         except sqlite3.Error:

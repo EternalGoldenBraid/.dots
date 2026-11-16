@@ -13,6 +13,10 @@ Scope {
     property var nodes: []
     property var edges: []
     property var pulses: []
+    property real hours: 24
+    property bool probeOn: true
+
+    onHoursChanged: { probeOn = false; Qt.callLater(() => probeOn = true); }
 
     readonly property real flight: 1400
     readonly property real ripple: 700
@@ -45,8 +49,8 @@ Scope {
     }
 
     Process {
-        running: root.open
-        command: [Quickshell.env("HOME") + "/.config/quickshell/scripts/mesh-probe.py"]
+        running: root.open && root.probeOn
+        command: [Quickshell.env("HOME") + "/.config/quickshell/scripts/mesh-probe.py", String(root.hours)]
         stdout: SplitParser {
             onRead: line => {
                 try {
@@ -86,6 +90,41 @@ Scope {
             }
 
             Row {
+                x: 20
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 14
+                spacing: 6
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: "edges: last"
+                    color: Theme.text
+                    opacity: 0.6
+                    font.family: Theme.font
+                    font.pixelSize: 11
+                }
+                Repeater {
+                    model: [{ l: "1h", h: 1 }, { l: "6h", h: 6 }, { l: "24h", h: 24 }, { l: "7d", h: 168 }]
+                    Rectangle {
+                        required property var modelData
+                        width: 38
+                        height: 22
+                        radius: 11
+                        color: root.hours === modelData.h ? Theme.peach : "transparent"
+                        border.width: 1
+                        border.color: root.hours === modelData.h ? Theme.peach : Theme.overlay1
+                        Text {
+                            anchors.centerIn: parent
+                            text: modelData.l
+                            color: root.hours === modelData.h ? Theme.crust : Theme.text
+                            font.family: Theme.font
+                            font.pixelSize: 11
+                        }
+                        MouseArea { anchors.fill: parent; onClicked: root.hours = modelData.h }
+                    }
+                }
+            }
+
+            Row {
                 anchors { right: parent.right; top: parent.top; margins: 16 }
                 spacing: 14
                 Repeater {
@@ -93,7 +132,13 @@ Scope {
                     Row {
                         required property string modelData
                         spacing: 5
-                        Rectangle { width: 10; height: 10; radius: 5; color: root.stateColor(modelData); anchors.verticalCenter: parent.verticalCenter }
+                        Rectangle {
+                            width: 10; height: 10; radius: 5
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: modelData === "active" ? "transparent" : root.stateColor(modelData)
+                            border.width: 2
+                            border.color: root.stateColor(modelData)
+                        }
                         Text { text: modelData; color: Theme.text; opacity: 0.7; font.family: Theme.font; font.pixelSize: 11 }
                     }
                 }
@@ -170,15 +215,33 @@ Scope {
                     Object.keys(pos).forEach(id => {
                         const q = pos[id];
                         const col = root.stateColor(q.n.state);
-                        const beat = q.n.state === "working" ? 1 + 0.12 * Math.sin(now / 250) : 1;
-                        ctx.fillStyle = Qt.alpha(col, 0.22);
-                        ctx.beginPath();
-                        ctx.arc(q.x, q.y, 20 * beat, 0, 2 * Math.PI);
-                        ctx.fill();
-                        ctx.fillStyle = col;
+                        const st = q.n.state;
+                        const beat = st === "working" ? 1 + 0.12 * Math.sin(now / 250)
+                            : st === "waiting" || st === "asking" ? 1 + 0.25 * Math.abs(Math.sin(now / 400)) : 1;
+                        if (st !== "active") {
+                            ctx.fillStyle = Qt.alpha(col, 0.22);
+                            ctx.beginPath();
+                            ctx.arc(q.x, q.y, 20 * beat, 0, 2 * Math.PI);
+                            ctx.fill();
+                        }
                         ctx.beginPath();
                         ctx.arc(q.x, q.y, 11, 0, 2 * Math.PI);
-                        ctx.fill();
+                        if (st === "active") {
+                            ctx.strokeStyle = col;
+                            ctx.lineWidth = 2;
+                            ctx.stroke();
+                        } else {
+                            ctx.fillStyle = col;
+                            ctx.fill();
+                        }
+                        if (st === "working") {
+                            const spin = now / 500;
+                            ctx.strokeStyle = Theme.text;
+                            ctx.lineWidth = 2.5;
+                            ctx.beginPath();
+                            ctx.arc(q.x, q.y, 17, spin, spin + 1.6);
+                            ctx.stroke();
+                        }
                         ctx.fillStyle = Theme.text;
                         ctx.font = "12px '" + Theme.font + "'";
                         ctx.fillText(q.n.repo, q.x, q.y + 34);
