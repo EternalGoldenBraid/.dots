@@ -176,6 +176,11 @@ PanelWindow {
         height: 30
 
         Module {
+            text: "\uf0e8"
+            color: Theme.overlay1
+            onClicked: bar.run(["qs", "ipc", "call", "mesh", "toggle"])
+        }
+        Module {
             text: Sys.bypass ? "\uf06e" : "\uf070"
             onClicked: bar.run([bar.home + "/.dotfiles/bin/hypridle-bypass-toggle"])
         }

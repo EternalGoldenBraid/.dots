@@ -6,4 +6,5 @@ Bar 1.0 Bar.qml
 LivePanel 1.0 LivePanel.qml
 Calendar 1.0 Calendar.qml
 NetPopup 1.0 NetPopup.qml
+MeshPanel 1.0 MeshPanel.qml
 GridOverlay 1.0 GridOverlay.qml
